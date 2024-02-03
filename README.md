@@ -1,1 +1,1 @@
-# Team-14
+# Journal Buddy
