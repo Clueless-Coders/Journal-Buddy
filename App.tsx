@@ -1,13 +1,12 @@
 import { StatusBar } from 'expo-status-bar';
 import { SafeAreaView, StyleSheet, Text, View } from 'react-native';
 import DailyPrompt from './src/Components/DailyPrompt'
+import Menu from './src/Components/HamburgerMenu/Menu'
 
 export default function App() {
   return (
     <SafeAreaView style={styles.wrapper}>
-      <View style={styles.container}>
-        <DailyPrompt />
-      </View>
+      <Menu />
     </SafeAreaView>
   );
 }
@@ -19,7 +18,7 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    alignItems: 'center',
+    alignItems: 'baseline',
     justifyContent: 'center',
   },
 });
