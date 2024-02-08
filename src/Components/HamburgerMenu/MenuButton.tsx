@@ -1,10 +1,16 @@
 import React from 'react'
 import { View, Text, StyleSheet } from 'react-native'
 
-export default function MenuButton({ ...props }, children: any) {
+interface ButtonInput {
+    buttonText: string,
+    style: any
+
+}
+
+export default function MenuButton(props: ButtonInput ) {
     return(
         <View style={styles.container}>
-            <Text style={styles.button}>Test.</Text>
+            <Text style={props.style}>{props.buttonText}</Text>
         </View>
     )
 }
@@ -18,10 +24,12 @@ const styles = StyleSheet.create({
         borderRadius: 50,
         marginLeft: 5,
         width: 200,
-        flexBasis: 75
+        flexBasis: 75,
+        flexDirection: 'column',
+        alignItems: 'center'
     },
-    button: {
+    text: {
         flex: 1,
-        fontSize: 20
+        fontSize: 20,
     }
 })

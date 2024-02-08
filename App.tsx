@@ -5,16 +5,21 @@ import Menu from './src/Components/HamburgerMenu/Menu'
 
 export default function App() {
   return (
-    <SafeAreaView style={styles.wrapper}>
-      <Menu />
-    </SafeAreaView>
+    <View style={styles.background}>
+      <SafeAreaView style={styles.wrapper}>
+        <Menu />
+        <DailyPrompt />
+      </SafeAreaView>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
+  background: {
+    backgroundColor: '#17171a'
+  },
   wrapper: {
-    flex: 1,
-    backgroundColor: "#dcdede"
+    flex: 1
   },
   container: {
     flex: 1,
