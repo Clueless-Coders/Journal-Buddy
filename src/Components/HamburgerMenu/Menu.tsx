@@ -1,22 +1,21 @@
 import React from 'react'
-import { Text, View, SafeAreaView, StyleSheet } from 'react-native'
+import { Text, View, SafeAreaView, StyleSheet, FlatList } from 'react-native'
 import { Ionicons } from '@expo/vector-icons';
 import MenuButton from './MenuButton'
 
 export default function Menu() {
     return(
-        <View style={styles.wrapper}>
-            <View style={styles.container}>
-                <Ionicons name="menu-sharp" size={50} color="black" />
-                <MenuButton style={styles.button} buttonText="test."></MenuButton>
-                <MenuButton style={styles.button} buttonText="test."></MenuButton>
-                <MenuButton style={styles.button} buttonText="test."></MenuButton>
-                <MenuButton style={styles.button} buttonText="test."></MenuButton>
-            </View>
+        <View style={styles.container}>
+            <Ionicons name="menu-sharp" size={50} color="black" />
+            <FlatList 
+                renderItem={({item}) => <MenuButton style={styles.button} buttonText={item}/>}
+                data={DATA}
+            />
         </View>
-        
     )
 }
+
+const DATA = ["test.", "test.", "test.", "test."]
 
 const styles = StyleSheet.create( {
     wrapper: {
@@ -31,13 +30,12 @@ const styles = StyleSheet.create( {
         borderRightWidth: 5,
         borderBottomWidth: 5,
         borderBottomColor: 'black',
-        width: 215,
-        gap: 50,
         height: 1000,
         marginTop: 60
     },
     button: {
         flex: 1,
-        fontSize: 20
+        fontSize: 20,
+        marginBottom: 20
     }
 })

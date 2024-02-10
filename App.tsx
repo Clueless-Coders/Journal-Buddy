@@ -5,12 +5,10 @@ import Menu from './src/Components/HamburgerMenu/Menu'
 
 export default function App() {
   return (
-    <View style={styles.background}>
       <SafeAreaView style={styles.wrapper}>
-        <Menu />
         <DailyPrompt />
+        <Menu />
       </SafeAreaView>
-    </View>
   );
 }
 
