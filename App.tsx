@@ -4,7 +4,6 @@ import DailyPrompt from './src/Components/DailyPrompt'
 import Menu from './src/Components/HamburgerMenu/Menu'
 
 //This is a comment
-//here is another comment
 export default function App() {
   return (
       <SafeAreaView style={styles.wrapper}>
