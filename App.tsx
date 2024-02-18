@@ -1,8 +1,7 @@
 import { SafeAreaView, StyleSheet, Text, View , Platform, StatusBar } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import DailyPrompt from './src/Components/DailyPrompt';
+import DailyPrompt from './src/Components/DailyPrompt/DailyPrompt';
 import Menu from './src/Components/HamburgerMenu/Menu';
-import { setStatusBarBackgroundColor } from 'expo-status-bar';
 import React from 'react';
 
 export default function App() {

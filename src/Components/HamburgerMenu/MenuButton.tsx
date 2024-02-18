@@ -1,11 +1,6 @@
 import React from 'react'
 import { View, Text, StyleSheet } from 'react-native'
 
-interface ButtonInput {
-    buttonText: string,
-    style: any
-
-}
 
 export default function MenuButton(props: ButtonInput ) {
     //allows text to be customizable through both dynamic input and stylesheet
