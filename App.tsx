@@ -6,8 +6,8 @@ import { setStatusBarBackgroundColor } from 'expo-status-bar';
 import React from 'react';
 
 export default function App() {
+  //using state to determine if the menu should be visible or not
    let [menuVisible, updateMenuVisible] = React.useState(false);
-   let menu = <Menu />
 
   return (
       <SafeAreaView style={styles.wrapper}>

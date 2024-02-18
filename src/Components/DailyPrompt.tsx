@@ -2,6 +2,8 @@ import React from 'react'
 import { SafeAreaView, View, Text, Image, StyleSheet, ViewStyle } from 'react-native'
 
 export default function DailyPrompt() {
+    //TODO: Match the styling of this page to the Canva
+    // Maybe? Dynamically retrieve the daily quote from ChatGPT
     return (
         <View style={styles.container}>
             <Text style={styles.header}>

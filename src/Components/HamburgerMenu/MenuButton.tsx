@@ -8,6 +8,7 @@ interface ButtonInput {
 }
 
 export default function MenuButton(props: ButtonInput ) {
+    //allows text to be customizable through both dynamic input and stylesheet
     return(
         <View style={styles.container}>
             <Text style={props.style}>{props.buttonText}</Text>
