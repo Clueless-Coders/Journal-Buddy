@@ -6,6 +6,7 @@ import MenuButton from './MenuButton'
 
 //Hamburger menu that shows all of the options for accessing other features of the app
 //IMPORTANT!: When using this menu, wrap it with a view with the style "zIndex: (the largest zIndex on the page)" applied to it. It will not function otherwise!
+//Additionally, it must be the FIRST element rendered.
 export default function Menu(): React.JSX.Element {
     let [menuVisible, updateMenuVisible] = React.useState(false);
 
@@ -16,10 +17,10 @@ export default function Menu(): React.JSX.Element {
             <View style={styles.wrapper}>
                 <View style={styles.container}>
                     <Text style={styles.header}>
-                         Journal Buddy
+                        Journal Buddy
                     </Text>
                     <FlatList 
-                        renderItem={({item}) => <MenuButton style={styles.button} buttonText={item}/>}
+                        renderItem={({item}) => <MenuButton style={styles.button} buttonText={item} onPress={() => null}/>}
                         data={DATA}
                     />
                 </View>
