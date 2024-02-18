@@ -1,20 +1,19 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import DailyPrompt from './src/Components/Journal-Pages/DailyPrompt';
+import { View } from 'react-native';
+import React from 'react';
 
+
+//TODO: Allow each page to change the currentPage state in order to switch which page is being displayed.
+//TODO: Create bottom taskbar
 export default function App() {
+  var [currentPageID, setCurrentPage] = React.useState(0);
+  let currentPage: React.JSX.Element = <View />;
+
+  switch(currentPageID){
+    case 0: currentPage = <DailyPrompt />; break;
+    default: currentPage = <DailyPrompt />;
+  }
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+      currentPage
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
