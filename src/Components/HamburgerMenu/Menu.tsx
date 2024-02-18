@@ -39,7 +39,6 @@ const styles = StyleSheet.create( {
         backgroundColor: '#dcdede',
         borderRightColor: 'black',
         borderRightWidth: 5,
-        borderBottomWidth: 5,
         borderBottomColor: 'black',
         height: 1000,
         flex: 1,

@@ -20,6 +20,7 @@
     "@babel/core": "^7.20.0",
     "@tsconfig/react-native": "^3.0.3",
     "@types/jest": "^29.5.12",
+    "@types/node": "^20.11.19",
     "@types/react": "^18.2.52",
     "@types/react-test-renderer": "^18.0.7",
     "typescript": "^5.3.3"
