@@ -1,15 +1,23 @@
-import { StatusBar } from 'expo-status-bar';
-import { SafeAreaView, StyleSheet, Text, View } from 'react-native';
+import { SafeAreaView, StyleSheet, Text, View , Platform, StatusBar } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
 import DailyPrompt from './src/Components/DailyPrompt'
 import Menu from './src/Components/HamburgerMenu/Menu'
+import { setStatusBarBackgroundColor } from 'expo-status-bar';
 
 export default function App() {
   return (
       <SafeAreaView style={styles.wrapper}>
-        <DailyPrompt />
-        <Menu />
+        <View>
+          
+          <Menu />
+          <Ionicons name="menu-sharp" size={50} color="white" style={{position: 'absolute'}} />
+        </View>
       </SafeAreaView>
   );
+}
+
+function handleMenuButtonTap() {
+
 }
 
 const styles = StyleSheet.create({
@@ -17,11 +25,12 @@ const styles = StyleSheet.create({
     backgroundColor: '#17171a'
   },
   wrapper: {
+    paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0,
+    backgroundColor: '#17171a',
     flex: 1
   },
-  container: {
-    flex: 1,
-    alignItems: 'baseline',
-    justifyContent: 'center',
-  },
+  HamburgerMenuIcon: {
+    paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight : 50,
+    position: 'absolute'
+  }
 });
