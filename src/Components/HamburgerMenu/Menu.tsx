@@ -34,15 +34,18 @@ const styles = StyleSheet.create( {
         borderBottomColor: 'black',
         width: 225,
         height: 1000,
-        flex: 1
+        flex: 1,
+        
     },
     button: {
         flex: 1,
         fontSize: 20,
         marginBottom: 20
+        
     },
     header: {
         fontSize: 25,
-        paddingLeft: 50
+        paddingLeft: 50,
+        marginBottom: 20 
     }
 })

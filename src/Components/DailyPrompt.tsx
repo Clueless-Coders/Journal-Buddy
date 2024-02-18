@@ -22,7 +22,8 @@ const styles = StyleSheet.create({
             flex: 1
         },
         container: {
-            flex: 1
+            flex: 1,
+            zIndex: 0
         },
         header: {
             fontSize: 30,

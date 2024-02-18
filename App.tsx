@@ -1,24 +1,26 @@
 import { SafeAreaView, StyleSheet, Text, View , Platform, StatusBar } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import DailyPrompt from './src/Components/DailyPrompt'
-import Menu from './src/Components/HamburgerMenu/Menu'
+import DailyPrompt from './src/Components/DailyPrompt';
+import Menu from './src/Components/HamburgerMenu/Menu';
 import { setStatusBarBackgroundColor } from 'expo-status-bar';
+import React from 'react';
 
 export default function App() {
+   let [menuVisible, updateMenuVisible] = React.useState(false);
+   let menu = <Menu />
+
   return (
       <SafeAreaView style={styles.wrapper}>
-        <View>
-          
-          <Menu />
-          <Ionicons name="menu-sharp" size={50} color="white" style={{position: 'absolute'}} />
+        <View style={{zIndex: 1}}>
+          {menuVisible ? <Menu /> : null}
+          <Ionicons name="menu-sharp" size={50} color="white" style={{position: 'absolute'}} onPress={() => updateMenuVisible(!menuVisible)} />
         </View>
+        <DailyPrompt></DailyPrompt>
       </SafeAreaView>
   );
 }
 
-function handleMenuButtonTap() {
 
-}
 
 const styles = StyleSheet.create({
   background: {
