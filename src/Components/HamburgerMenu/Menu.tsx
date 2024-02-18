@@ -7,15 +7,19 @@ import MenuButton from './MenuButton'
 //Hamburger menu that shows all of the options for accessing other features of the app
 export default function Menu() {
     return(
-        <View style={styles.container}>
-            <Text style={styles.header}>
-                Journal Buddy
-            </Text>
-            <FlatList 
-                renderItem={({item}) => <MenuButton style={styles.button} buttonText={item}/>}
-                data={DATA}
-            />
+        <View style={styles.wrapper}>
+            <View style={styles.container}>
+                <Text style={styles.header}>
+                    Journal Buddy
+                </Text>
+                <FlatList 
+                    renderItem={({item}) => <MenuButton style={styles.button} buttonText={item}/>}
+                    data={DATA}
+                />
+            </View>
+            <View style={{backgroundColor: '#00000050', flex: .75}}/>
         </View>
+        
     )
 }
 
@@ -24,8 +28,12 @@ export default function Menu() {
 const DATA = ["test.", "test.", "test.", "test."]
 
 const styles = StyleSheet.create( {
-    container: {
+    wrapper: {
+        flex: 1,
+        flexDirection: 'row',
         position: 'absolute',
+    },
+    container: {
         flexDirection: 'column',
         alignItems: 'baseline',
         backgroundColor: '#dcdede',
@@ -33,16 +41,13 @@ const styles = StyleSheet.create( {
         borderRightWidth: 5,
         borderBottomWidth: 5,
         borderBottomColor: 'black',
-        width: 225,
         height: 1000,
         flex: 1,
-        
     },
     button: {
         flex: 1,
         fontSize: 20,
         marginBottom: 20
-        
     },
     header: {
         fontSize: 25,

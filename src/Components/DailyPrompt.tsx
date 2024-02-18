@@ -7,7 +7,7 @@ export default function DailyPrompt() {
     return (
         <View style={styles.container}>
             <Text style={styles.header}>
-                Your journal prompt for the day:
+                Daily Prompt:
             </Text>
             <Text style={styles.prompt}>
                 Recall a moment from your past that still lingers in your memory. 
@@ -25,16 +25,21 @@ const styles = StyleSheet.create({
         },
         container: {
             flex: 1,
-            zIndex: 0
+            zIndex: 0,
+            alignItems: 'center'
         },
         header: {
             fontSize: 30,
             fontWeight: 'bold',
-            color: '#dcdede'
+            color: 'black',
+            borderBottomWidth: 2,
+            marginBottom: 10
         },
         prompt: {
             fontSize: 15,
-            color: '#dcdede'
+            color: 'black',
+            padding: 10,
+            backgroundColor: '#f2f9ff'
         }
     }
 )

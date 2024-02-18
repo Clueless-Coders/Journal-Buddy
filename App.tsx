@@ -13,7 +13,7 @@ export default function App() {
       <SafeAreaView style={styles.wrapper}>
         <View style={{zIndex: 1}}>
           {menuVisible ? <Menu /> : null}
-          <Ionicons name="menu-sharp" size={50} color="white" style={{position: 'absolute'}} onPress={() => updateMenuVisible(!menuVisible)} />
+          <Ionicons name="menu-sharp" size={50} color="black" style={{position: 'absolute'}} onPress={() => updateMenuVisible(!menuVisible)} />
         </View>
         <DailyPrompt></DailyPrompt>
       </SafeAreaView>
@@ -28,11 +28,10 @@ const styles = StyleSheet.create({
   },
   wrapper: {
     paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0,
-    backgroundColor: '#17171a',
+    backgroundColor: 'white',
     flex: 1
   },
   HamburgerMenuIcon: {
-    paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight : 50,
     position: 'absolute'
   }
 });
