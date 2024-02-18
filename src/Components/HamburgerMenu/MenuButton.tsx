@@ -14,7 +14,6 @@ export default function MenuButton(props: ButtonInput ) {
 const styles = StyleSheet.create({
     container: {
         backgroundColor: '#BFDAF6',
-        alignContent: 'center',
         borderRadius: 5,
         marginLeft: 5,
         width: 200,

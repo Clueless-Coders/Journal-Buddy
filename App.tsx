@@ -6,14 +6,10 @@ import React from 'react';
 
 export default function App() {
   //using state to determine if the menu should be visible or not
-   let [menuVisible, updateMenuVisible] = React.useState(false);
+   
 
   return (
       <SafeAreaView style={styles.wrapper}>
-        <View style={{zIndex: 1}}>
-          {menuVisible ? <Menu /> : null}
-          <Ionicons name="menu-sharp" size={50} color="black" style={{position: 'absolute'}} onPress={() => updateMenuVisible(!menuVisible)} />
-        </View>
         <DailyPrompt></DailyPrompt>
       </SafeAreaView>
   );

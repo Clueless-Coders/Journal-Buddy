@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, Image, StyleSheet, TextInput, ScrollView } from 'react-native';
-import PromptButton from './PromptButton';
+import GeneralButton from '../GeneralButtonDark';
 
 export default function DailyPrompt() {
     //TODO: Match the styling of this page to the Canva
@@ -9,21 +9,32 @@ export default function DailyPrompt() {
     return (
         <ScrollView style={styles.wrapper}>
             <View style={styles.container}>
+                <View>
+                    <Text>
+                        Hi
+                    </Text>
+                </View>
                 <View style={styles.headerWrapper}>
                     <Text style={styles.header}>
                         Daily Prompt:
                     </Text>
+                    <Text style={styles.prompt}>
+                        Recall a moment from your past that still lingers in your memory. 
+                        Explore the details of that moment, the emotions it evoked, and the lessons you may have learned. 
+                        How does that memory shape your present perspectives or decisions?
+                        Reflect on the impact it had on your personal growth and the person you've become today.
+                    </Text>
                 </View>
-                
-                <Text style={styles.prompt}>
-                    Recall a moment from your past that still lingers in your memory. 
-                    Explore the details of that moment, the emotions it evoked, and the lessons you may have learned. 
-                    How does that memory shape your present perspectives or decisions?
-                    Reflect on the impact it had on your personal growth and the person you've become today.
-                </Text>
-                <PromptButton buttonText={"Save Response"}></PromptButton>
+                <GeneralButton buttonText={"Save Response"}></GeneralButton>
             </View>
-            <TextInput editable multiline onChangeText={text => onChangeInput(text)} value={input} placeholder="Enter your response here." style={styles.inputField} numberOfLines={20}/>
+            <TextInput 
+                editable 
+                multiline 
+                onChangeText={text => onChangeInput(text)} 
+                value={input} placeholder="Enter your response here." 
+                style={styles.inputField} 
+                numberOfLines={20}
+            />
         </ScrollView>
         
     );
@@ -45,18 +56,22 @@ const styles = StyleSheet.create({
         },
         headerWrapper: {
             borderBottomWidth: 2,
-            marginBottom: 10
+            marginBottom: 10,
+            alignItems: 'center',
+            backgroundColor: '#f2f9ff'
         },
         prompt: {
             fontSize: 15,
             color: 'black',
             padding: 10,
-            backgroundColor: '#f2f9ff'
+            
         },
         inputField: {
+            marginLeft: 5,
+            marginRight: 5,
             textAlign: 'left',
             borderWidth: 1,
-            flex: 1
+            padding: 10
         }
     }
 )

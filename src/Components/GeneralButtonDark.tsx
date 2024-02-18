@@ -1,7 +1,7 @@
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 
-export default function PromptButton(props: ButtonInput) {
+export default function GeneralButtonDark(props: ButtonInput) {
     return(
         <View style={styles.wrapper}>
             <Text style={props.style ? props.style : styles.textStyleDefault}>
