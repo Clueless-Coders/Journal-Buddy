@@ -4,7 +4,7 @@ import { Ionicons } from '@expo/vector-icons';
 import MenuButton from './MenuButton'
 
 
-
+//Hamburger menu that shows all of the options for accessing other features of the app
 export default function Menu() {
     return(
         <View style={styles.container}>
@@ -19,7 +19,8 @@ export default function Menu() {
     )
 }
 
-
+//Array of strings that will be the title of the buttons
+//I will probably change this later because it's not a good system :p
 const DATA = ["test.", "test.", "test.", "test."]
 
 const styles = StyleSheet.create( {
