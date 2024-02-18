@@ -1,17 +1,16 @@
 import React from 'react';
-import { View, Text, Image, StyleSheet, TextInput, ScrollView, SafeAreaView, Platform, StatusBar } from 'react-native';
+import { View, Text, StyleSheet, TextInput, ScrollView, SafeAreaView, Platform, StatusBar } from 'react-native';
 import GeneralButtonDark from '../GeneralButtonDark';
-import Menu from '../HamburgerMenu/Menu';
 
 export default function DailyPrompt() {
-    //TODO: Match the styling of this page to the Canva
-    // Maybe? Dynamically retrieve the daily quote from ChatGPT
+    //TODO: Add functions to do their respective tasks once they are implemented
+    //TODO: Interface with the backend in order to save the user's response.
     let [input, onChangeInput] = React.useState('');
     return (
         <SafeAreaView style={styles.overlord}>
             <ScrollView style={styles.wrapper}>
                 <View style={styles.top}>
-                    <Text style={styles.backButton}>
+                    <Text style={styles.backButton} onPress={() => null}>
                         {"< Past Entries"}
                     </Text>
                     <Text style={styles.date}>

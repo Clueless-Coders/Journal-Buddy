@@ -1,5 +1,5 @@
-import React, { useState } from 'react'
-import { Text, View, SafeAreaView, StyleSheet, FlatList, StatusBar, Platform } from 'react-native'
+import React from 'react';
+import { Text, View, StyleSheet, FlatList } from 'react-native'
 import { Ionicons } from '@expo/vector-icons';
 import MenuButton from './MenuButton'
 
@@ -33,7 +33,7 @@ export default function Menu(): React.JSX.Element {
 }
 
 //Array of strings that will be the title of the buttons
-//I will probably change this later because it's not a good system :p
+//TODO: Figure out a different system for this because it sucks 👎
 const DATA = ["test.", "test.", "test.", "test."]
 
 const styles = StyleSheet.create( {
