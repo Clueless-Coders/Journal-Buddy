@@ -1,5 +1,6 @@
 import React from 'react';
-import { View, Text, StyleSheet, TextInput, ScrollView, SafeAreaView, Platform, StatusBar } from 'react-native';
+import { View, Text, StyleSheet, TextInput, ScrollView, SafeAreaView, Platform, StatusBar, TouchableHighlight, Pressable } from 'react-native';
+import { AntDesign } from '@expo/vector-icons';
 import GeneralButtonDark from '../GeneralButtonDark';
 
 export default function DailyPrompt() {
@@ -10,9 +11,12 @@ export default function DailyPrompt() {
         <SafeAreaView style={styles.overlord}>
             <ScrollView style={styles.wrapper}>
                 <View style={styles.top}>
-                    <Text style={styles.backButton} onPress={() => null}>
-                        {"< Past Entries"}
-                    </Text>
+                    <Pressable onPress={() => console.log('hello!')} style={{flexDirection: 'row', flex: 1}}> 
+                        <AntDesign name="left" size={30} color="#23395b" style={{maxWidth: 50}}/>        
+                            <Text style={styles.backButton} >
+                                {"Past Entries"}
+                            </Text>        
+                    </Pressable>
                     <Text style={styles.date}>
                         {new Date().toDateString()}
                     </Text>
@@ -41,7 +45,6 @@ export default function DailyPrompt() {
                     numberOfLines={20}
                 />
             </ScrollView>
-            
         </SafeAreaView>
     );
 }
@@ -81,7 +84,7 @@ const styles = StyleSheet.create({
         backButton: {
             fontSize: 20,
             color: '#23395b',
-            flex: 1
+            flexWrap: 'nowrap'
         },
         date: {
             fontSize: 20
