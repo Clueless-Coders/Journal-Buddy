@@ -1,9 +1,9 @@
 import React from 'react';
 import { Text, View, StyleSheet, FlatList } from 'react-native'
 import { Ionicons } from '@expo/vector-icons';
-import MenuButton from '../GeneralButtonLight'
-import GeneralButtonDark from '../GeneralButtonDark';
-import GeneralButtonLight from '../GeneralButtonLight';
+import MenuButton from '../Buttons/GeneralButtonLight'
+import GeneralButtonDark from '../Buttons/GeneralButtonDark';
+import GeneralButtonLight from '../Buttons/GeneralButtonLight';
 
 
 //Hamburger menu that shows all of the options for accessing other features of the app
@@ -22,7 +22,7 @@ export default function Menu(): React.JSX.Element {
                         Journal Buddy
                     </Text>
                     <FlatList 
-                        renderItem={({item}) => <GeneralButtonLight containerStyle={styles.containterDimensions} buttonText={item} onPress={() => console.log("hello!")}/>}
+                        renderItem={({item}) => <GeneralButtonLight containerStyle={styles.containterDimensions} textStyle={styles.textStyle} buttonText={item} onPress={() => console.log("hello!")}/>}
                         data={DATA}
                     />
                 </View>

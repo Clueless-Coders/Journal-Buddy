@@ -3,10 +3,10 @@ import { Pressable, StyleSheet, Text, View } from 'react-native';
 
 export default function GeneralButtonDark(props: ButtonInput) {
     return(
-        <Pressable onPress={props.onPress}>
+        <Pressable onPress={ props.onPress }>
             <View style={{ ...styles.containerStyleDefault, ...props.containerStyle }}>
                 <Text style={ props.textStyle }>
-                    {props.buttonText}
+                    {props.buttonText} Dark
                 </Text>
             </View>
         </Pressable>
@@ -17,15 +17,16 @@ export default function GeneralButtonDark(props: ButtonInput) {
 
 const styles = StyleSheet.create({
     containerStyleDefault: {
-        width: 150,
-        height: 30,
-        borderWidth: 1,
+        borderRadius: 5,
+        width: 200,
+        height: 50,
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
         margin: 10,
-        borderRadius: 12,
         backgroundColor: "#8EA8C3"
     },
     textStyleDefault: {
-        fontSize: 20,
-        textAlign: 'center'
+        fontSize: 20
     }
 });

@@ -1,7 +1,8 @@
 import React from 'react';
 import { View, Text, StyleSheet, TextInput, ScrollView, SafeAreaView, Platform, StatusBar, TouchableHighlight, Pressable } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
-import GeneralButtonDark from '../GeneralButtonDark';
+import GeneralButtonDark from '../Buttons/GeneralButtonDark';
+import BackButton from '../Buttons/BackButton';
 
 export default function DailyPrompt() {
     //TODO: Add functions to do their respective tasks once they are implemented
@@ -11,12 +12,7 @@ export default function DailyPrompt() {
         <SafeAreaView style={styles.overlord}>
             <ScrollView style={styles.wrapper}>
                 <View style={styles.top}>
-                    <Pressable onPress={() => console.log('hello!')} style={{flexDirection: 'row', flex: 1}}> 
-                        <AntDesign name="left" size={30} color="#23395b" style={{maxWidth: 50}}/>        
-                            <Text style={styles.backButton} >
-                                {"Past Entries"}
-                            </Text>        
-                    </Pressable>
+                    <BackButton onPress={() => console.log("hello")} buttonText='Past Entries'/>
                     <Text style={styles.date}>
                         {new Date().toDateString()}
                     </Text>
