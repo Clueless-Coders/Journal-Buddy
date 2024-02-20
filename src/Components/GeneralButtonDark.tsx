@@ -1,19 +1,22 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { Pressable, StyleSheet, Text, View } from 'react-native';
 
 export default function GeneralButtonDark(props: ButtonInput) {
     return(
-        <View style={styles.wrapper}>
-            <Text onPress={props.onPress} style={props.style ? props.style : styles.textStyleDefault}>
-                {props.buttonText}
-            </Text>
-        </View>
+        <Pressable onPress={props.onPress}>
+            <View style={{ ...styles.containerStyleDefault, ...props.containerStyle }}>
+                <Text style={ props.textStyle }>
+                    {props.buttonText}
+                </Text>
+            </View>
+        </Pressable>
+        
     )
     
 }
 
 const styles = StyleSheet.create({
-    wrapper: {
+    containerStyleDefault: {
         width: 150,
         height: 30,
         borderWidth: 1,
@@ -22,7 +25,7 @@ const styles = StyleSheet.create({
         backgroundColor: "#8EA8C3"
     },
     textStyleDefault: {
-        fontSize: 15,
+        fontSize: 20,
         textAlign: 'center'
     }
 });
