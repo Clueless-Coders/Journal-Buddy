@@ -83,10 +83,12 @@ const styles = StyleSheet.create({
             flexWrap: 'nowrap'
         },
         date: {
-            fontSize: 20
+            fontSize: 20,
+            alignSelf: 'flex-end'
         },
         top: {
             flexDirection: 'row',
+            justifyContent: 'space-between',
             padding: 5
         },
         overlord: {
