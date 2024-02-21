@@ -16,6 +16,7 @@ export default function BackButton(props: ButtonInput) {
 const styles = StyleSheet.create( {
     backButton: {
         fontSize: 20,
+        paddingTop: 2,
         color: '#23395b',
     },
 })

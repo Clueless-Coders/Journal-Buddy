@@ -7,7 +7,7 @@ import JournalEntries from './src/Components/Journal-Pages/JournalEntries';
 //TODO: Allow each page to change the currentPage state in order to switch which page is being displayed.
 //TODO: Create bottom taskbar
 export default function App() {
-  var [currentPageID, setCurrentPage] = React.useState(1);
+  var [currentPageID, setCurrentPage] = React.useState(0);
   let currentPage: React.JSX.Element = <View />;
 
   switch(currentPageID){
