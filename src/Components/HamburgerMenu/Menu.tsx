@@ -26,7 +26,8 @@ export default function Menu(): React.JSX.Element {
                         data={DATA}
                     />
                 </View>
-                <Pressable style={{backgroundColor: '#00000050', flex: .75} } />                {menuIcon}
+                <Pressable style={{backgroundColor: '#00000050', flex: .75}} onPress={() => updateMenuVisible(!menuVisible)}/>
+                {menuIcon}
             </View>
         </View>);
 
@@ -47,8 +48,6 @@ const styles = StyleSheet.create( {
         flexDirection: 'column',
         alignItems: 'baseline',
         backgroundColor: 'white',
-        borderRightColor: 'black',
-        borderRightWidth: 5,
         borderBottomColor: 'black',
         height: 1000,
         flex: 1,
