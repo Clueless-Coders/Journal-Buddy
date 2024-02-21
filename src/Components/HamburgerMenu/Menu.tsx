@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, View, StyleSheet, FlatList } from 'react-native'
+import { Text, View, StyleSheet, FlatList, Pressable } from 'react-native'
 import { Ionicons } from '@expo/vector-icons';
 import MenuButton from '../Buttons/GeneralButtonLight'
 import GeneralButtonDark from '../Buttons/GeneralButtonDark';
@@ -26,7 +26,7 @@ export default function Menu(): React.JSX.Element {
                         data={DATA}
                     />
                 </View>
-                <View style={{backgroundColor: '#00000050', flex: .75}}/>
+                <Pressable style={{backgroundColor: '#00000050', flex: .75}} onPress={() => updateMenuVisible(!menuVisible)}/>
                 {menuIcon}
             </View>
         </View>);
@@ -48,8 +48,6 @@ const styles = StyleSheet.create( {
         flexDirection: 'column',
         alignItems: 'baseline',
         backgroundColor: 'white',
-        borderRightColor: 'black',
-        borderRightWidth: 5,
         borderBottomColor: 'black',
         height: 1000,
         flex: 1,
