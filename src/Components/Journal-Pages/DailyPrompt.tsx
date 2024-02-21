@@ -1,6 +1,8 @@
 import React from 'react';
-import { View, Text, StyleSheet, TextInput, ScrollView, SafeAreaView, Platform, StatusBar } from 'react-native';
-import GeneralButtonDark from '../GeneralButtonDark';
+import { View, Text, StyleSheet, TextInput, ScrollView, SafeAreaView, Platform, StatusBar, TouchableHighlight, Pressable } from 'react-native';
+import { AntDesign } from '@expo/vector-icons';
+import GeneralButtonDark from '../Buttons/GeneralButtonDark';
+import BackButton from '../Buttons/BackButton';
 
 export default function DailyPrompt() {
     //TODO: Add functions to do their respective tasks once they are implemented
@@ -10,9 +12,7 @@ export default function DailyPrompt() {
         <SafeAreaView style={styles.overlord}>
             <ScrollView style={styles.wrapper}>
                 <View style={styles.top}>
-                    <Text style={styles.backButton} onPress={() => null}>
-                        {"< Past Entries"}
-                    </Text>
+                    <BackButton onPress={() => console.log("hello")} buttonText='Past Entries'/>
                     <Text style={styles.date}>
                         {new Date().toDateString()}
                     </Text>
@@ -41,7 +41,6 @@ export default function DailyPrompt() {
                     numberOfLines={20}
                 />
             </ScrollView>
-            
         </SafeAreaView>
     );
 }
@@ -81,13 +80,15 @@ const styles = StyleSheet.create({
         backButton: {
             fontSize: 20,
             color: '#23395b',
-            flex: 1
+            flexWrap: 'nowrap'
         },
         date: {
-            fontSize: 20
+            fontSize: 20,
+            alignSelf: 'flex-end'
         },
         top: {
             flexDirection: 'row',
+            justifyContent: 'space-between',
             padding: 5
         },
         overlord: {
