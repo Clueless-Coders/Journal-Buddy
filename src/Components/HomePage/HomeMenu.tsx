@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, StyleSheet, ScrollView, SafeAreaView, Platform, StatusBar, Button, Alert } from 'react-native';
-import GeneralButton from '../Components/GeneralButton';
+// import GeneralButton from '../Components/GeneralButton';
 
 export default function HomeMenu() {
     //TODO: Add functions to do their respective tasks once they are implemented
@@ -39,12 +39,13 @@ export default function HomeMenu() {
                     </View>
                     
                     <View style = {styles.buttonBox}>
-                        <GeneralButton buttonText={"Start Today's Entry"} onPress={() => null}/>
+                        {/* <GeneralButton buttonText={"Start Today's Entry"} onPress={() => null}/> */}
+
                     </View>
                     <View style = {styles.habitBox}>
-                        <GeneralButton buttonText={"Habit 1"} onPress={() => null}/>
-                        <GeneralButton buttonText={"Habit 2"} onPress={() => null}/>
-                        <GeneralButton buttonText={"Habit 3"} onPress={() => null}/>
+                        {/* <GeneralButton buttonText={"Habit 1"} onPress={() => null}/> */}
+                        {/* <GeneralButton buttonText={"Habit 2"} onPress={() => null}/> */}
+                        {/* <GeneralButton buttonText={"Habit 3"} onPress={() => null}/> */}
                     </View>
                 </View>
             </ScrollView>
@@ -97,6 +98,17 @@ const styles = StyleSheet.create({
         // backgroundColor:'black',
         width:'100%',
         alignItems:'center'
+    },
+    Button: {
+            height: 50,
+            width: '90%',
+            borderWidth: 1,
+            margin: 10,
+            borderRadius: 12,
+    },
+    textStyleDefault: {
+            fontSize: 15,
+            textAlign: 'center'
     },
     habitBox:{
         // backgroundColor:'blue',
