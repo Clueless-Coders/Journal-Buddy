@@ -1,5 +1,12 @@
 type ButtonInput = {
     buttonText: string,
     onPress(): void,
-    style?: any
+    textStyle?: any,
+    containerStyle?: {
+        width?: number,
+        height?: number,
+        flex?: number,
+        flexBasis?: number
+    }
+    
 }
