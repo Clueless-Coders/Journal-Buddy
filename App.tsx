@@ -1,4 +1,5 @@
 import DailyPrompt from './src/Components/Journal-Pages/DailyPrompt';
+import HomeMenu from './src/HomePage/HomeMenu';
 import { View } from 'react-native';
 import React from 'react';
 
@@ -10,8 +11,9 @@ export default function App() {
   let currentPage: React.JSX.Element = <View />;
 
   switch(currentPageID){
-    case 0: currentPage = <DailyPrompt />; break;
-    default: currentPage = <DailyPrompt />;
+    case 0: currentPage = <HomeMenu/>; break;
+    case 1: currentPage =  <DailyPrompt />; break;
+    default: currentPage = <HomeMenu />;
   }
   return (
       currentPage

@@ -1,7 +1,11 @@
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 
-export default function GeneralButtonDark(props: ButtonInput) {
+let buttonColor: string = "#8EA8C3";
+
+export default function GeneralButton(props: ButtonInput, color: string) {
+    buttonColor = color;
+
     return(
         <View style={styles.wrapper}>
             <Text onPress={props.onPress} style={props.style ? props.style : styles.textStyleDefault}>
@@ -14,15 +18,15 @@ export default function GeneralButtonDark(props: ButtonInput) {
 
 const styles = StyleSheet.create({
     wrapper: {
-        width: 150,
-        height: 30,
+        height: 50,
+        width: '90%',
         borderWidth: 1,
         margin: 10,
         borderRadius: 12,
-        backgroundColor: "#8EA8C3"
+        backgroundColor: buttonColor,
     },
     textStyleDefault: {
-        fontSize: 20,
+        fontSize: 15,
         textAlign: 'center'
     }
 });
