@@ -1,9 +1,9 @@
 import React from 'react';
 import { Text, View, StyleSheet, FlatList, Pressable } from 'react-native'
 import { Ionicons } from '@expo/vector-icons';
-import MenuButton from '../Buttons/GeneralButtonLight'
-import GeneralButtonDark from '../Buttons/GeneralButtonDark';
-import GeneralButtonLight from '../Buttons/GeneralButtonLight';
+import MenuButton from '../Components/Buttons/GeneralButtonLight'
+import GeneralButtonDark from '../Components/Buttons/GeneralButtonDark';
+import GeneralButtonLight from '../Components/Buttons/GeneralButtonLight';
 
 
 //Hamburger menu that shows all of the options for accessing other features of the app

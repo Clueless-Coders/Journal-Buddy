@@ -10,9 +10,10 @@ import { View, Text, StyleSheet, Pressable } from 'react-native'
 */
 export default function GeneralButtonLight(props: ButtonInput ) {
     //allows text to be customizable through both dynamic input and stylesheet
+    let currentViewStyle = props.containerStyle != null ? props.containerStyle : styles.containerDefault;
     return(
         <Pressable onPress={props.onPress}>
-            <View style={{ ...styles.containerDefault, ...props.containerStyle }}>
+            <View style={ currentViewStyle }>
                 <Text style={ props.textStyle }>
                     {props.buttonText} 
                 </Text>

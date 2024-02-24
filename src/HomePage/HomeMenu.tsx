@@ -1,6 +1,8 @@
 import React from 'react';
 import { View, Text, StyleSheet, ScrollView, SafeAreaView, Platform, StatusBar, Button, Alert } from 'react-native';
-// import GeneralButton from '../Components/GeneralButton';
+import GeneralButtonDark from '../Components/Buttons/GeneralButtonDark';
+import GeneralButtonLight from '../Components/Buttons/GeneralButtonLight';
+// import GeneralButton from '../Components/Buttons/GeneralButton';
 
 export default function HomeMenu() {
     //TODO: Add functions to do their respective tasks once they are implemented
@@ -39,8 +41,8 @@ export default function HomeMenu() {
                     </View>
                     
                     <View style = {styles.buttonBox}>
-                        {/* <GeneralButton buttonText={"Start Today's Entry"} onPress={() => null}/> */}
-
+                        {/* <GeneralButton buttonText={"Start Today's Entry"} onPress = {() => null}/> */}
+                        <GeneralButtonDark onPress={() => console.log('hello!')} buttonText="Start Today's Entry" textStyle={styles.buttonText}/>
                     </View>
                     <View style = {styles.habitBox}>
                         {/* <GeneralButton buttonText={"Habit 1"} onPress={() => null}/> */}
@@ -83,11 +85,6 @@ const styles = StyleSheet.create({
         padding: 10,
         
     },
-    backButton: {
-        fontSize: 20,
-        color: '#23395b',
-        flex: 1
-    },
     top: {
         fontSize: 30,
         // flexDirection: 'row',
@@ -95,18 +92,16 @@ const styles = StyleSheet.create({
         alignItems: 'center'
     },
     buttonBox:{
-        // backgroundColor:'black',
         width:'100%',
         alignItems:'center'
     },
-    Button: {
+    button: {
             height: 50,
-            width: '90%',
             borderWidth: 1,
             margin: 10,
             borderRadius: 12,
     },
-    textStyleDefault: {
+    buttonText: {
             fontSize: 15,
             textAlign: 'center'
     },
