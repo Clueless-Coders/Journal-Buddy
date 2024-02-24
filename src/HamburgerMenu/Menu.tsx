@@ -55,7 +55,8 @@ const styles = StyleSheet.create( {
     containterDimensions: {
         flex: 1,
         flexBasis: 75,
-        marginBottom: 20
+        marginBottom: 20,
+        margin: 10
     },
     textStyle: {
         fontSize: 20,

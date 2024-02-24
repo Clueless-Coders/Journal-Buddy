@@ -1,6 +1,7 @@
+import { CSSProperties } from "react"
+import { StyleProp, TextStyle, ViewStyle, StyleSheet } from "react-native"
 
-
-type ButtonInput = {
+export type ButtonInput = {
     buttonText: string,
     onPress(): void,
     textStyle?: any,

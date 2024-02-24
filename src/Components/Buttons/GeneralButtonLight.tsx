@@ -1,5 +1,6 @@
 import React from 'react'
 import { View, Text, StyleSheet, Pressable } from 'react-native'
+import { ButtonInput } from '../../Types'
 
 /* A button that can be used as a navigation backwards. 
 *  REQUIRED PARAMETERS: onPress -> a function that executes when the button is clicked,
@@ -12,8 +13,8 @@ export default function GeneralButtonLight(props: ButtonInput ) {
     //allows text to be customizable through both dynamic input and stylesheet
     let currentViewStyle = props.containerStyle != null ? props.containerStyle : styles.containerDefault;
     return(
-        <Pressable onPress={props.onPress}>
-            <View style={ currentViewStyle }>
+        <Pressable onPress={props.onPress} style={{ ...styles.containerStyleDefault, ...props.containerStyle }}>
+            <View>
                 <Text style={ props.textStyle }>
                     {props.buttonText} 
                 </Text>
@@ -23,7 +24,7 @@ export default function GeneralButtonLight(props: ButtonInput ) {
 }
 
 const styles = StyleSheet.create({
-    containerDefault: {
+    containerStyleDefault: {
         backgroundColor: '#BFDAF6',
         borderRadius: 5,
         width: 200,
@@ -31,7 +32,6 @@ const styles = StyleSheet.create({
         flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'center',
-        margin: 10,
     },
     text: {
         flex: 1,

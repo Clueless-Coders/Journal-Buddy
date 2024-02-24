@@ -1,5 +1,6 @@
-import React from 'react';
-import { Pressable, StyleSheet, Text, View } from 'react-native';
+import React, { CSSProperties } from 'react';
+import { Pressable, StyleProp, StyleSheet, Text, View, ViewStyle } from 'react-native';
+import { ButtonInput } from '../../Types';
 
 /* A button that can be used as a navigation backwards. 
 *  REQUIRED PARAMETERS: onPress -> a function that executes when the button is clicked,
@@ -30,7 +31,6 @@ const styles = StyleSheet.create({
         flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'center',
-        margin: 10,
         backgroundColor: "#8EA8C3"
     },
     textStyleDefault: {
