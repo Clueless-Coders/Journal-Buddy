@@ -1,12 +1,9 @@
-type ButtonInput = {
+import { CSSProperties } from "react"
+import { StyleProp, TextStyle, ViewStyle, StyleSheet } from "react-native"
+
+export type ButtonInput = {
     buttonText: string,
     onPress(): void,
     textStyle?: any,
-    containerStyle?: {
-        width?: number,
-        height?: number,
-        flex?: number,
-        flexBasis?: number
-    }
-    
+    containerStyle?: any
 }
