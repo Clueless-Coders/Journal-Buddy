@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text, StyleSheet, ScrollView, SafeAreaView, Platform, StatusBar, Button, Alert } from 'react-native';
-import GeneralButtonDark from '../Components/Buttons/GeneralButtonDark';
-import GeneralButtonLight from '../Components/Buttons/GeneralButtonLight';
+import GeneralButtonDark from '../Buttons/GeneralButtonDark';
+import GeneralButtonLight from '../Buttons/GeneralButtonLight';
 // import GeneralButton from '../Components/Buttons/GeneralButton';
 
 export default function HomeMenu() {

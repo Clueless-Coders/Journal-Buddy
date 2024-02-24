@@ -1,5 +1,5 @@
 import DailyPrompt from './src/Components/Journal-Pages/DailyPrompt';
-import HomeMenu from './src/HomePage/HomeMenu';
+import HomeMenu from './src/Components/HomePage/HomeMenu';
 import { View } from 'react-native';
 import React from 'react';
 import JournalEntries from './src/Components/Journal-Pages/JournalEntries';

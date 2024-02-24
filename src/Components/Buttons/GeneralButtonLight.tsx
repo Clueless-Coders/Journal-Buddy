@@ -11,7 +11,6 @@ import { ButtonInput } from '../../Types'
 */
 export default function GeneralButtonLight(props: ButtonInput ) {
     //allows text to be customizable through both dynamic input and stylesheet
-    let currentViewStyle = props.containerStyle != null ? props.containerStyle : styles.containerDefault;
     return(
         <Pressable onPress={props.onPress} style={{ ...styles.containerStyleDefault, ...props.containerStyle }}>
             <View>
