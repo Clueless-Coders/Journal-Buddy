@@ -13,7 +13,7 @@ export default function App() {
 
   switch(currentPageID){
     case 0: currentPage = <HomeMenu/>; break;
-    case 1: currentPage =  <DailyPrompt />; break;
+    // case 1: currentPage =  <DailyPrompt />; break;
     default: currentPage = <HomeMenu />;
   }
   return (
