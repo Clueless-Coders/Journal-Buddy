@@ -1,6 +1,7 @@
 import React from "react";
 import { Pressable, StyleSheet, Text } from "react-native";
 import AntDesign from '@expo/vector-icons/AntDesign';
+import { ButtonInput } from "../../Types";
 
 /* A button that can be used as a navigation backwards. 
 *  REQUIRED PARAMETERS: onPress -> a function that executes when the button is clicked,

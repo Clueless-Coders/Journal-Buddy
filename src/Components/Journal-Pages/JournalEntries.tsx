@@ -1,9 +1,11 @@
 import React from 'react';
-import { View, Text, StyleSheet, SafeAreaView, Platform, StatusBar, TextInput, FlatList } from 'react-native';
+import { View, Text, StyleSheet, SafeAreaView, Platform, StatusBar, TextInput, FlatList, ScrollView } from 'react-native';
 import Menu from '../HamburgerMenu/Menu';
 import GeneralButtonLight from '../Buttons/GeneralButtonLight';
+import GeneralButtonDark from '../Buttons/GeneralButtonDark';
 
 export default function JournalEntries() {
+    
     return (
         <SafeAreaView style={styles.overlord}>
             <View style={{zIndex: 1}}>
@@ -13,19 +15,14 @@ export default function JournalEntries() {
                 <Text style={styles.headerText}>
                     Journal Entries
                 </Text>
-                
             </View>
-            <View style={styles.mainContent}>
-                <TextInput placeholder='Search' style={styles.inputBox}/>
-                <FlatList data={DATA} renderItem={
-                    ({item}) => 
-                        <GeneralButtonLight 
-                            onPress={() => console.log(item.toJSON())} 
-                            buttonText={item.toDateString()} 
-                            containerStyle={styles.containerStyle}
-                        />
-                }/>
-            </View>
+            <TextInput placeholder='Search' style={styles.inputBox}/>
+            <ScrollView contentContainerStyle = {styles.mainContent}>
+                <GeneralButtonDark  onPress={() => console.log('hello')} buttonText={'Start today\'s journal!'} containerStyle={styles.containerStyle} />
+                { DATA.map((item) => {
+                    return <GeneralButtonLight  onPress={() => console.log('hello')} buttonText={item.toDateString()} containerStyle={styles.containerStyle}/>;
+                }) }
+            </ScrollView>
             
         </SafeAreaView>
         
@@ -39,7 +36,6 @@ const styles = StyleSheet.create({
         paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0,
         backgroundColor: 'white',
         flex: 1,
-        
     },
     container: {
         alignItems: 'center',
@@ -62,9 +58,11 @@ const styles = StyleSheet.create({
         backgroundColor: '#f2f9ff',
         padding: 5,
         borderRadius: 25,
-        margin: 5
+        margin: 5,
+        alignSelf: "center"
     },
     containerStyle: {
-        width: 315
+        width: '90%',
+        margin: 5
     }
 });
