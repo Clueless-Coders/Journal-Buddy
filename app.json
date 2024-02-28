@@ -16,16 +16,32 @@
     ],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.anonymous.JournalBuddy"
+      "bundleIdentifier": "com.anonymous.JournalBuddy",
+      "googleServicesFile": "./GoogleService-Info.plist"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "googleServicesFile": "./google-services.json",
+      "package": "com.anonymous.JournalBuddy"
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "plugins": [
+      "@react-native-firebase/app",
+      "@react-native-firebase/auth",
+      "@react-native-firebase/crashlytics",
+      [
+        "expo-build-properties",
+        {
+          "ios": {
+            "useFrameworks": "static"
+          }
+        }
+      ]
+    ]
   }
 }
