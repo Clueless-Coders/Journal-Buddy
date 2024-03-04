@@ -1,5 +1,6 @@
-import React from 'react';
-import { Pressable, StyleSheet, Text, View } from 'react-native';
+import React, { CSSProperties } from 'react';
+import { Pressable, StyleProp, StyleSheet, Text, View, ViewStyle } from 'react-native';
+import { ButtonInput } from '../../Types';
 
 /* A button that can be used as a navigation backwards. 
 *  REQUIRED PARAMETERS: onPress -> a function that executes when the button is clicked,
@@ -10,8 +11,8 @@ import { Pressable, StyleSheet, Text, View } from 'react-native';
 */
 export default function GeneralButtonDark(props: ButtonInput) {
     return(
-        <Pressable onPress={ props.onPress }>
-            <View style={{ ...styles.containerStyleDefault, ...props.containerStyle }}>
+        <Pressable onPress={ props.onPress } style={{ ...styles.containerStyleDefault, ...props.containerStyle }}>
+            <View>
                 <Text style={ props.textStyle }>
                     {props.buttonText}
                 </Text>

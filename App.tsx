@@ -4,7 +4,6 @@ import React from 'react';
 import JournalEntries from './src/Components/Journal-Pages/JournalEntries';
 import LoginPage from './src/Components/Login/LoginPage';
 
-
 //TODO: Allow each page to change the currentPage state in order to switch which page is being displayed.
 //TODO: Create bottom taskbar
 export default function App() {
