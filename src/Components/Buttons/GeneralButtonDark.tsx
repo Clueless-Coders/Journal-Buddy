@@ -18,9 +18,8 @@ export default function GeneralButtonDark(props: ButtonInput){
                     {props.buttonText}
                 </Text>
             </View>
-
         </Pressable>
-        
+
     )
     
 }
