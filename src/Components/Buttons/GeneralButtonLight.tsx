@@ -9,7 +9,7 @@ import { ButtonInput } from '../../Types'
 *                       containerStyle -> define styling for the text in the button. Mainly used for font, color, and font size.
 *  Optional parameters have defaults defined 
 */
-export default function GeneralButtonLight(props: ButtonInput ) {
+export default function GeneralButtonLight(props: ButtonInput, children: React.JSX.Element ) {
     //allows text to be customizable through both dynamic input and stylesheet
     return(
         <Pressable onPress={props.onPress} style={{ ...styles.containerStyleDefault, ...props.containerStyle }}>
