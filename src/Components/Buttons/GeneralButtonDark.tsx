@@ -31,7 +31,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         margin: 10,
-        backgroundColor: "#8EA8C3"
+        backgroundColor: "#8DB1F7" //changed button color from #8EA8C3
     },
     textStyleDefault: {
         fontSize: 20
