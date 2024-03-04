@@ -6,7 +6,8 @@ import GeneralButtonLight from '../Buttons/GeneralButtonLight';
 
 
 export default function LoginPage() {
-    let [input, onChangeInput] = React.useState('');
+    let [username, setUsername] = React.useState('');
+    let [password, setPassword] = React.useState('');
     return (
         <SafeAreaView style={styles.overlord}>
         <View style={styles.top}>
@@ -15,29 +16,33 @@ export default function LoginPage() {
                 </Text>
         </View>
             <View style={styles.container}> 
+                <View style={styles.texboxWithLabel}>
                     <Text style={styles.prompt}>
                         Username:
                     </Text>
                     <TextInput 
                         editable 
                         multiline 
-                        onChangeText={text => onChangeInput(text)} 
-                        value={input} placeholder="will be empty" 
+                        onChangeText={text => setUsername(text)} 
+                        value={username} placeholder="" 
                         style={styles.inputField} 
                         numberOfLines={1}
                     />
+                </View>
+                <View style={styles.texboxWithLabel}>
                     <Text style={styles.prompt}>
                         Password:
                     </Text>
                     <TextInput 
                         editable 
                         multiline 
-                        onChangeText={text => onChangeInput(text)} 
-                        value={input} placeholder="will be empty" 
+                        onChangeText={text => setPassword(text)} 
+                        value={password} placeholder=""
                         style={styles.inputField} 
                         numberOfLines={1}
                     />
-                <GeneralButtonDark buttonText={"Log In"} onPress={() => null} textStyle={styles.textStyle}/>
+                </View>
+                <GeneralButtonDark buttonText={"Log In"} onPress={() => null} textStyle={styles.textStyle} containerStyle={{width: '78%', marginTop: 25}}/>
                 <Text style={styles.thin}>
                         Don't have an account? Sign Up!
                     </Text>
@@ -54,9 +59,9 @@ const styles = StyleSheet.create( {
         alignItems: 'center'
     },
     header: {
-        marginTop: 300,
-        marginBottom: 15,
-        fontSize: 50,
+        marginTop: '80%',
+        marginBottom: '5%',
+        fontSize: 55,
         fontWeight: 'bold',
         color: '#050B24',
         alignItems: 'center'
@@ -64,15 +69,14 @@ const styles = StyleSheet.create( {
     prompt: {
         color: '#050B24',
         marginBottom: 5,
-        textAlign: 'left' //how to align prompts to the left of the boxes, not screen??
+        textAlign: 'left' //how to align prompts to the left of the boxes, not screen?? use views!!
     },
     inputField: {
         marginLeft: 0,
         marginRight: 0,
         marginBottom: 15,
         borderRadius: 5,
-        //textAlign: 'center',  why are the input boxes tiny lol
-        backgroundColor: '#E7EFFF',
+        backgroundColor: '#E7EFFF70',
         padding: 10
     },
     thin: {
@@ -80,12 +84,16 @@ const styles = StyleSheet.create( {
         fontWeight: '100',
         color: '#050B24'
     },
+    texboxWithLabel: {
+        width: '78%',
+    },
+    textStyle: {
+        fontSize: 20,
+        color: 'white'
+    },
     overlord: {
         paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0,
         backgroundColor: 'white',
         flex: 1
-    },
-    textStyle: {
-        fontSize: 20
     }
 });
