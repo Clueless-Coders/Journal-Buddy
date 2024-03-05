@@ -11,7 +11,7 @@ import { ButtonInput } from '../../Types';
 */
 export default function GeneralButtonDark(props: ButtonInput){
     return(
-        <Pressable onPress={ props.onPress } style={{ ...styles.containerStyleDefault, ...props.containerStyle }}>
+        <Pressable onPress={ props.onPress } style={{ ...styles.containerStyleDefault, ...props.containerStyle }} disabled = {!props.enabled}>
             {props.children != undefined ? props.children : null}
             <View>
                 <Text style={ props.textStyle }>

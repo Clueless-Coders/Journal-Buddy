@@ -58,7 +58,7 @@ export default function HomeMenu() {
                     
                     <View style = {styles.buttonBox}>
                         {/* <GeneralButton buttonText={"Start Today's Entry"} onPress = {() => null}/> */}
-                        <GeneralButtonDark onPress={() => {getQuote();}} buttonText="Start Today's Entry" textStyle={styles.buttonText}/>
+                        <GeneralButtonDark onPress={() => {getQuote();}} buttonText="Start Today's Entry" textStyle={styles.buttonText} enabled = {true}/>
                     </View>
                     <View style = {styles.habitBox}>
                         {/* <GeneralButton buttonText={"Habit 1"} onPress={() => null}/> */}

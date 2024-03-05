@@ -4,6 +4,7 @@ export type ButtonInput = {
     textStyle?: any,
     containerStyle?: any,
     children?: React.JSX.Element
+    enabled?: boolean
 }
 
 export type Quotes = {
