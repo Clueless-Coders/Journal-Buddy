@@ -1,5 +1,5 @@
 import React, { CSSProperties } from 'react';
-import { Pressable, StyleProp, StyleSheet, Text, View, ViewStyle } from 'react-native';
+import { Pressable, StyleProp, StyleSheet, Text, View, ViewComponent, ViewStyle } from 'react-native';
 import { ButtonInput } from '../../Types';
 
 /* A button that can be used as a navigation backwards. 
@@ -9,9 +9,10 @@ import { ButtonInput } from '../../Types';
 *                       containerStyle -> define styling for the text in the button. Mainly used for font, color, and font size.
 *  Optional parameters have defaults defined 
 */
-export default function GeneralButtonDark(props: ButtonInput) {
+export default function GeneralButtonDark(props: ButtonInput){
     return(
         <Pressable onPress={ props.onPress } style={{ ...styles.containerStyleDefault, ...props.containerStyle }}>
+            {props.children != undefined ? props.children : null}
             <View>
                 <Text style={ props.textStyle }>
                     {props.buttonText}
@@ -28,10 +29,10 @@ const styles = StyleSheet.create({
         borderRadius: 5,
         width: '100%',
         height: 50,
-        flexDirection: 'column',
+        flexDirection: 'row',
         alignItems: 'center',
-        justifyContent: 'center',
-        backgroundColor: "#8EA8C3"
+        backgroundColor: "#8EA8C3",
+        justifyContent: 'space-evenly'
     },
     textStyleDefault: {
         fontSize: 20

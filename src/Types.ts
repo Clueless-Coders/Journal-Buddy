@@ -1,11 +1,9 @@
-import { CSSProperties } from "react"
-import { StyleProp, TextStyle, ViewStyle, StyleSheet } from "react-native"
-
 export type ButtonInput = {
     buttonText: string,
     onPress(): void,
     textStyle?: any,
-    containerStyle?: any
+    containerStyle?: any,
+    children?: React.JSX.Element
 }
 
 export type Quotes = {
