@@ -1,6 +1,5 @@
 import DailyPrompt from './src/Components/Journal-Pages/DailyPrompt';
-import HomeMenu from './src/Components/HomePage/HomeMenu';
-import { View } from 'react-native';
+import { Image, SafeAreaView, View } from 'react-native';
 import React from 'react';
 import JournalEntries from './src/Components/Journal-Pages/JournalEntries';
 import CheckboxButton from './src/Components/Buttons/CheckboxButton';
@@ -14,9 +13,9 @@ export default function App() {
   let currentPage: React.JSX.Element = <View />;
 
   switch(currentPageID){
-    case 0: currentPage = <HomeMenu/>; break;
-    // case 1: currentPage =  <DailyPrompt />; break;
-    default: currentPage = <HomeMenu />;
+    case 0: currentPage = <DailyPrompt />; break;
+    case 1: currentPage = <JournalEntries />; break;
+    default: currentPage = <DailyPrompt />;
   }
   return (
       currentPage
