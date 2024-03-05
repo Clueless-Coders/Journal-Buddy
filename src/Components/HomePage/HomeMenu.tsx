@@ -1,16 +1,32 @@
 import React from 'react';
 import { View, Text, StyleSheet, ScrollView, SafeAreaView, Platform, StatusBar, Button, Alert } from 'react-native';
 import GeneralButtonDark from '../Buttons/GeneralButtonDark';
+import { Quotes } from '../../Types';
 import GeneralButtonLight from '../Buttons/GeneralButtonLight';
-// import GeneralButton from '../Components/Buttons/GeneralButton';
+import DailyPrompt from '../Journal-Pages/DailyPrompt';
+import Menu from '../HamburgerMenu/Menu';
+// import { getapi } from '../../Quotes';
 
 export default function HomeMenu() {
     //TODO: Add functions to do their respective tasks once they are implemented
     //TODO: Interface with the backend in order to save the user's response.
+    let [quote, updateQuote] = React.useState({q: 'haiii', a: '- T'});
+
+    async function getQuote(){
+        const url:string ="https://zenquotes.io/api/random";
+        const response = await fetch(url);
+        let data = await response.json();
+        let quotes: Quotes = data[0];
+        updateQuote(quotes);
+    }
+
     let [input, onChangeInput] = React.useState('');
     return (
         <SafeAreaView style={styles.overlord}>
             <ScrollView style={styles.wrapper}>
+                <View style={{zIndex: 1}}>
+                    <Menu />
+                </View>
                 <View style={styles.top}>
                     {/* insert button here */}
                     <Text style={styles.header}>
@@ -19,14 +35,14 @@ export default function HomeMenu() {
                 </View>
                 <View style={styles.container}>
                     <Text style={styles.header2}>
-                            Hi, John! 
+                            Hi, John!
                     </Text>
                     <View style={styles.headerWrapper}>
                         <Text style={styles.header2}>
-                            Daily Quote:
+                            {"\"" + quote.q + "\""}
                         </Text>
                         <Text style={styles.prompt}>
-                            ":3" - T
+                            {"-" + quote.a}
                         </Text>
                     </View>
                     <View>
@@ -42,7 +58,7 @@ export default function HomeMenu() {
                     
                     <View style = {styles.buttonBox}>
                         {/* <GeneralButton buttonText={"Start Today's Entry"} onPress = {() => null}/> */}
-                        <GeneralButtonDark onPress={() => console.log('hello!')} buttonText="Start Today's Entry" textStyle={styles.buttonText}/>
+                        <GeneralButtonDark onPress={() => {getQuote();}} buttonText="Start Today's Entry" textStyle={styles.buttonText}/>
                     </View>
                     <View style = {styles.habitBox}>
                         {/* <GeneralButton buttonText={"Habit 1"} onPress={() => null}/> */}

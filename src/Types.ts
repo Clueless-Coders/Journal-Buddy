@@ -7,3 +7,8 @@ export type ButtonInput = {
     textStyle?: any,
     containerStyle?: any
 }
+
+export type Quotes = {
+    q: string,
+    a: string
+}
