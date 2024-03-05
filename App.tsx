@@ -1,5 +1,5 @@
 import DailyPrompt from './src/Components/Journal-Pages/DailyPrompt';
-import { View } from 'react-native';
+import { Image, SafeAreaView, View } from 'react-native';
 import React from 'react';
 import JournalEntries from './src/Components/Journal-Pages/JournalEntries';
 import LoginPage from './src/Components/Login/LoginPage';
@@ -18,4 +18,5 @@ export default function App() {
   return (
       currentPage
   );
+  
 }

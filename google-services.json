@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "750765241871",
+    "project_id": "journal-buddy-bfa71",
+    "storage_bucket": "journal-buddy-bfa71.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:750765241871:android:f6c36869d05204b69f957a",
+        "android_client_info": {
+          "package_name": "com.anonymous.JournalBuddy"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB_p_i-raeOS7BI1Kk3ohkk0XhiEAQua2c"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
