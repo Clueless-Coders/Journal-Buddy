@@ -64,7 +64,6 @@ const styles = StyleSheet.create({
             color: 'black',
         },
         headerWrapper: {
-            marginBottom: 10,
             alignItems: 'center',
             backgroundColor: '#f2f9ff'
         },
