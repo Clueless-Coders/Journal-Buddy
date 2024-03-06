@@ -25,6 +25,7 @@ export default function LoginPage() {
                         multiline 
                         onChangeText={text => setUsername(text)} 
                         value={username} placeholder="" 
+                        autoCapitalize="none"
                         style={styles.inputField} 
                         numberOfLines={1}
                     />
@@ -38,6 +39,7 @@ export default function LoginPage() {
                         multiline 
                         onChangeText={text => setPassword(text)} 
                         value={password} placeholder=""
+                        autoCapitalize="none"
                         style={styles.inputField} 
                         numberOfLines={1}
                     />
