@@ -30,7 +30,7 @@ export default function DailyPrompt() {
                             Reflect on the impact it had on your personal growth and the person you've become today.
                         </Text>
                     </View>
-                    <GeneralButtonDark buttonText={"Save Response"} onPress={() => null}/>
+                    <GeneralButtonDark buttonText={"Save Response"} onPress={() => null} containerStyle={styles.submit}/>
                 </View>
                 <TextInput 
                     editable 
@@ -48,6 +48,10 @@ export default function DailyPrompt() {
 const styles = StyleSheet.create({
         wrapper: {
             flex: 1
+        },
+        submit: {
+            width: '70%',
+            margin: 10
         },
         container: {
             flex: 1,
@@ -75,7 +79,8 @@ const styles = StyleSheet.create({
             marginRight: 5,
             textAlign: 'left',
             borderWidth: 1,
-            padding: 10
+            padding: 10,
+            height: '100%'
         },
         backButton: {
             fontSize: 20,
