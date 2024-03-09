@@ -29,7 +29,7 @@ export default function JournalEntries() {
     );
 }
 
-const DATA = [new Date(), new Date(), new Date(), new Date()];
+const DATA = [new Date(), new Date(), new Date(), new Date(), new Date(), new Date(), new Date(), new Date(), new Date(), new Date(), new Date(), new Date()];
 
 const styles = StyleSheet.create({
     overlord: {
