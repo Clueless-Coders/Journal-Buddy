@@ -7,7 +7,7 @@ import DailyPrompt from '../Journal-Pages/DailyPrompt';
 import Menu from '../HamburgerMenu/Menu';
 // import { getapi } from '../../Quotes';
 
-export default function HomeMenu() {
+export default function HomeMenu({ navigation }) {
     //TODO: Add functions to do their respective tasks once they are implemented
     //TODO: Interface with the backend in order to save the user's response.
     let [quote, updateQuote] = React.useState({q: 'haiii', a: '- T'});
@@ -23,10 +23,11 @@ export default function HomeMenu() {
     let [input, onChangeInput] = React.useState('');
     return (
         <SafeAreaView style={styles.overlord}>
+            {/*<View style={{zIndex: 1}}>
+                <Menu />
+            </View>*/}
             <ScrollView style={styles.wrapper}>
-                <View style={{zIndex: 1}}>
-                    <Menu />
-                </View>
+                
                 <View style={styles.top}>
                     {/* insert button here */}
                     <Text style={styles.header}>
@@ -58,7 +59,7 @@ export default function HomeMenu() {
                     
                     <View style = {styles.buttonBox}>
                         {/* <GeneralButton buttonText={"Start Today's Entry"} onPress = {() => null}/> */}
-                        <GeneralButtonDark onPress={() => {getQuote();}} buttonText="Start Today's Entry" textStyle={styles.buttonText} enabled = {true}/>
+                        <GeneralButtonDark onPress={() => {navigation.navigate("NewJournal")}} buttonText="Start Today's Entry" textStyle={styles.buttonText} enabled = {true}/>
                     </View>
                     <View style = {styles.habitBox}>
                         {/* <GeneralButton buttonText={"Habit 1"} onPress={() => null}/> */}

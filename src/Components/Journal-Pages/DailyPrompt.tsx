@@ -11,12 +11,12 @@ export default function DailyPrompt() {
     return (
         <SafeAreaView style={styles.overlord}>
             <ScrollView style={styles.wrapper}>
-                <View style={styles.top}>
+                {/*<View style={styles.top}>
                     <BackButton onPress={() => console.log("hello")} buttonText='Past Entries'/>
                     <Text style={styles.date}>
                         {new Date().toDateString()}
                     </Text>
-                </View>
+                </View>*/}
                 <View style={styles.container}>
                     
                     <View style={styles.headerWrapper}>
