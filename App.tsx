@@ -8,6 +8,7 @@ import { createDrawerNavigator } from '@react-navigation/drawer';
 import HomeMenu from './src/Components/HomePage/HomeMenu';
 import Menu from './src/Components/HamburgerMenu/Menu';
 import JournalEntries from './src/Components/Journal-Pages/JournalEntries';
+import { FontAwesome5 } from '@expo/vector-icons';
 
 //TODO: Allow each page to change the currentPage state in order to switch which page is being displayed.
 //TODO: Create bottom taskbar
@@ -19,12 +20,24 @@ const Drawer = createDrawerNavigator();
 function TabGroup() {
   return (
     <Tab.Navigator
-      screenOptions={{
-        headerShown: false
-      }}
+      initialRouteName='Home'
+      screenOptions={({ route, navigation }) => ({
+        tabBarIcon: (focused: boolean, color: string, size: number) => {
+          let iconName;
+          if (route.name === "Home")
+            iconName = "home";
+          else if (route.name === "NewJournal")
+            iconName = "plus-square";
+          else if (route.name === "Calendar")
+            iconName = "calendar";
+
+          return (<FontAwesome5 name={iconName} size={size} color={color} />);
+        }
+      })}
+      
     >
       <Tab.Screen name="Home" component={HomeMenu}/>
-      <Tab.Screen name="NewJournal" component={DailyPrompt}/>
+      <Stack.Screen name="NewJournal" component={DailyPrompt} />
       <Tab.Screen name="Calendar" component={HomeMenu}/>
     </Tab.Navigator>
   );
@@ -32,21 +45,16 @@ function TabGroup() {
 
 function HomeStack() {
   return(
-    <Stack.Navigator
-      screenOptions={{
-        headerShown: false
-      }}
-    >
-      <Stack.Screen name="HomeMenu" component={HomeMenu} />
-      <Stack.Screen name="JournalEntries" component={JournalEntries} />
+    <Stack.Navigator>
+      <Stack.Screen name="Tabs" component={TabGroup} />
     </Stack.Navigator>
   );
 }
 
 function DrawerGroup() {
   return(
-    <Drawer.Navigator>
-      <Drawer.Screen name="Tabs" component={TabGroup} />
+    <Drawer.Navigator initialRouteName='HomeStack'>
+      <Stack.Screen name="HomeStack" component={HomeStack} />
     </Drawer.Navigator>
   );
 }
