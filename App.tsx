@@ -20,7 +20,6 @@ const Drawer = createDrawerNavigator();
 function TabGroup() {
   return (
     <Tab.Navigator
-      initialRouteName='Home'
       screenOptions={({ route, navigation }) => ({
         tabBarIcon: (focused: boolean, color: string, size: number) => {
           let iconName;
@@ -31,30 +30,32 @@ function TabGroup() {
           else if (route.name === "Calendar")
             iconName = "calendar";
 
-          return (<FontAwesome5 name={iconName} size={size} color={color} />);
+          return (<FontAwesome5 name={iconName} size={20} color={color} />);
         }
       })}
       
     >
       <Tab.Screen name="Home" component={HomeMenu}/>
-      <Stack.Screen name="NewJournal" component={DailyPrompt} />
+      <Tab.Screen name="NewJournal" component={DailyPrompt} />
       <Tab.Screen name="Calendar" component={HomeMenu}/>
     </Tab.Navigator>
   );
 }
 
-function HomeStack() {
-  return(
+function JournalStack() {
+  return (
     <Stack.Navigator>
+      <Stack.Screen name="JournalEntries" component={JournalEntries} />
       <Stack.Screen name="Tabs" component={TabGroup} />
     </Stack.Navigator>
-  );
+  )
 }
 
 function DrawerGroup() {
   return(
     <Drawer.Navigator initialRouteName='HomeStack'>
-      <Stack.Screen name="HomeStack" component={HomeStack} />
+      <Stack.Screen name="Home" component={HomeMenu} />
+      <Stack.Screen name="JournalStack" component={JournalStack} />
     </Drawer.Navigator>
   );
 }
@@ -62,7 +63,7 @@ function DrawerGroup() {
 export default function App() {
   return(
     <NavigationContainer>
-      <DrawerGroup />
+      <TabGroup />
     </NavigationContainer>
   );
 }

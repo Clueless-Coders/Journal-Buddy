@@ -7,10 +7,7 @@ import GeneralButtonDark from '../Buttons/GeneralButtonDark';
 export default function JournalEntries() {
     
     return (
-        <SafeAreaView style={styles.overlord}>
-            <View style={{zIndex: 1}}>
-                <Menu />
-            </View>
+        <SafeAreaView style={styles.overlord}>  
             <View style={styles.container}>
                 <Text style={styles.headerText}>
                     Journal Entries
