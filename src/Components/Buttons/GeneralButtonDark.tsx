@@ -31,7 +31,8 @@ const styles = StyleSheet.create({
         height: 50,
         flexDirection: 'row',
         alignItems: 'center',
-        backgroundColor: "#8EA8C3",
+        margin: 10,
+        backgroundColor: "#8DB1F7", //changed button color from #8EA8C3,
         justifyContent: 'space-evenly'
     },
     textStyleDefault: {
