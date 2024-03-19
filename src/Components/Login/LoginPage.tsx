@@ -4,9 +4,12 @@ import { AntDesign } from '@expo/vector-icons';
 import GeneralButtonDark from '../Buttons/GeneralButtonDark';
 import GeneralButtonLight from '../Buttons/GeneralButtonLight';
 
+//password masking
+//add eye icon to mask and unmask
+//fix textbox scaling
 
 export default function LoginPage() {
-    let [username, setUsername] = React.useState('');
+    let [email, setEmail] = React.useState('');
     let [password, setPassword] = React.useState('');
     return (
         <SafeAreaView style={styles.overlord}>
@@ -18,13 +21,13 @@ export default function LoginPage() {
             <View style={styles.container}> 
                 <View style={styles.texboxWithLabel}>
                     <Text style={styles.prompt}>
-                        Username:
+                        Email:
                     </Text>
-                    <TextInput 
+                    <TextInput
                         editable 
                         multiline 
-                        onChangeText={text => setUsername(text)} 
-                        value={username} placeholder="" 
+                        onChangeText={text => setEmail(text)} 
+                        value={email} placeholder="" 
                         autoCapitalize="none"
                         style={styles.inputField} 
                         numberOfLines={1}
@@ -34,7 +37,7 @@ export default function LoginPage() {
                     <Text style={styles.prompt}>
                         Password:
                     </Text>
-                    <TextInput 
+                    <TextInput  
                         editable 
                         multiline 
                         onChangeText={text => setPassword(text)} 
