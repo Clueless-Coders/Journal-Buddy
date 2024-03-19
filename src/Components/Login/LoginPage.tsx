@@ -6,6 +6,7 @@ import GeneralButtonLight from '../Buttons/GeneralButtonLight';
 
 //password masking
 //add eye icon to mask and unmask
+//incorrect password/email
 //fix textbox scaling
 
 export default function LoginPage() {
@@ -25,7 +26,6 @@ export default function LoginPage() {
                     </Text>
                     <TextInput
                         editable 
-                        multiline 
                         onChangeText={text => setEmail(text)} 
                         value={email} placeholder="" 
                         autoCapitalize="none"
@@ -39,10 +39,10 @@ export default function LoginPage() {
                     </Text>
                     <TextInput  
                         editable 
-                        multiline 
                         onChangeText={text => setPassword(text)} 
                         value={password} placeholder=""
                         autoCapitalize="none"
+                        secureTextEntry={true}
                         style={styles.inputField} 
                         numberOfLines={1}
                     />
@@ -64,7 +64,7 @@ const styles = StyleSheet.create( {
         alignItems: 'center'
     },
     header: {
-        marginTop: '80%',
+        marginTop: '70%',
         marginBottom: '5%',
         fontSize: 55,
         fontWeight: 'bold',
