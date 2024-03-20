@@ -42,7 +42,7 @@ export default function LoginPage() {
                         onChangeText={text => setPassword(text)} 
                         value={password} placeholder=""
                         autoCapitalize="none"
-                        secureTextEntry={true}
+                        secureTextEntry
                         style={styles.inputField} 
                         numberOfLines={1}
                     />
