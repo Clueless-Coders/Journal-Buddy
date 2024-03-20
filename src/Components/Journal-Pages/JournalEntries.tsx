@@ -3,9 +3,12 @@ import { View, Text, StyleSheet, SafeAreaView, Platform, StatusBar, TextInput, F
 import Menu from '../HamburgerMenu/Menu';
 import GeneralButtonLight from '../Buttons/GeneralButtonLight';
 import GeneralButtonDark from '../Buttons/GeneralButtonDark';
+import { Inter_400Regular } from '@expo-google-fonts/inter';
+import { useFonts } from "expo-font";
 
 export default function JournalEntries() {
     
+    const [fontsLoaded] = useFonts({Inter_400Regular});
     return (
         <SafeAreaView style={styles.overlord}>
             <View style={{zIndex: 1}}>
@@ -36,6 +39,7 @@ const styles = StyleSheet.create({
         paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0,
         backgroundColor: 'white',
         flex: 1,
+        fontFamily: "Inter_400Regular"
     },
     container: {
         alignItems: 'center',
