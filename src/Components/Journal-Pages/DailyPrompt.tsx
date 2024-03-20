@@ -3,8 +3,7 @@ import { View, Text, StyleSheet, TextInput, ScrollView, SafeAreaView, Platform, 
 import { AntDesign } from '@expo/vector-icons';
 import GeneralButtonDark from '../Buttons/GeneralButtonDark';
 import BackButton from '../Buttons/BackButton';
-import { Inter_400Regular } from '@expo-google-fonts/inter';
-import { useFonts } from "expo-font";
+import { Inter_400Regular, useFonts } from '@expo-google-fonts/inter';
 
 export default function DailyPrompt() {
     //TODO: Add functions to do their respective tasks once they are implemented

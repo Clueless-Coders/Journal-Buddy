@@ -3,8 +3,7 @@ import { View, Text, StyleSheet, SafeAreaView, Platform, StatusBar, TextInput, F
 import Menu from '../HamburgerMenu/Menu';
 import GeneralButtonLight from '../Buttons/GeneralButtonLight';
 import GeneralButtonDark from '../Buttons/GeneralButtonDark';
-import { Inter_400Regular } from '@expo-google-fonts/inter';
-import { useFonts } from "expo-font";
+import { Inter_400Regular, useFonts } from '@expo-google-fonts/inter';
 
 export default function JournalEntries() {
     

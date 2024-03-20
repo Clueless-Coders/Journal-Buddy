@@ -4,8 +4,7 @@ import { Ionicons } from '@expo/vector-icons';
 import MenuButton from '../Buttons/GeneralButtonLight'
 import GeneralButtonDark from '../Buttons/GeneralButtonDark';
 import GeneralButtonLight from '../Buttons/GeneralButtonLight';
-import { Inter_400Regular } from '@expo-google-fonts/inter';
-import { useFonts } from "expo-font";
+import { Inter_400Regular, useFonts } from '@expo-google-fonts/inter';
 
 //Hamburger menu that shows all of the options for accessing other features of the app
 //IMPORTANT!: When using this menu, wrap it with a view with the style "zIndex: (the largest zIndex on the page)" applied to it. It will not function otherwise!

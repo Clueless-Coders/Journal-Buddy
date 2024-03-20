@@ -1,6 +1,5 @@
 import React from 'react';
-import { Inter_400Regular } from '@expo-google-fonts/inter';
-import { useFonts } from "expo-font";
+import { Inter_400Regular, useFonts } from '@expo-google-fonts/inter';
 import { View, Text, StyleSheet, ScrollView, SafeAreaView, Platform, StatusBar, Button, Alert } from 'react-native';
 import GeneralButtonDark from '../Buttons/GeneralButtonDark';
 import { Quotes } from '../../Types';
