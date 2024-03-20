@@ -3,7 +3,7 @@ import { View, Text, StyleSheet, Platform, StatusBar, TextInput, Alert } from 'r
 import { useState } from 'react';
 import {child, getDatabase, push, ref, set, update} from "firebase/database"
 import { Button } from 'react-native';
-import {db} from "../Database/Database";
+import {db} from "../dbconfig";
 
 
 
