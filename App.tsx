@@ -6,10 +6,10 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import { NavigationContainer } from '@react-navigation/native';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import HomeMenu from './src/Components/HomePage/HomeMenu';
-import Menu from './src/Components/HamburgerMenu/Menu';
 import JournalEntries from './src/Components/Journal-Pages/JournalEntries';
 import { FontAwesome5 } from '@expo/vector-icons';
 import LoginPage from './src/Components/Login/LoginPage';
+import { AuthenticationContext, AuthContext } from './src/AuthContext';
 
 //TODO: Allow each page to change the currentPage state in order to switch which page is being displayed.
 //TODO: Create bottom taskbar
@@ -72,8 +72,11 @@ function AuthenticationStack() {
 
 export default function App() {
   return(
-    <NavigationContainer>
-      <AuthenticationStack />
-    </NavigationContainer>
+    <AuthenticationContext>
+      <NavigationContainer>
+        <AuthenticationStack />
+      </NavigationContainer>
+    </AuthenticationContext>
+    
   );
 }
