@@ -1,15 +1,15 @@
 import DailyPrompt from './src/Components/Journal-Pages/DailyPrompt';
 import { Image, SafeAreaView, View } from 'react-native';
 import React from 'react';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { BottomTabBarProps, BottomTabNavigationOptions, createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import { NavigationContainer } from '@react-navigation/native';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import HomeMenu from './src/Components/HomePage/HomeMenu';
 import Menu from './src/Components/HamburgerMenu/Menu';
 import JournalEntries from './src/Components/Journal-Pages/JournalEntries';
-<<<<<<< HEAD
 import { FontAwesome5 } from '@expo/vector-icons';
+import LoginPage from './src/Components/Login/LoginPage';
 
 //TODO: Allow each page to change the currentPage state in order to switch which page is being displayed.
 //TODO: Create bottom taskbar
@@ -19,21 +19,7 @@ const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
 
 function TabGroup() {
-=======
-import LoginPage from './src/Components/Login/LoginPage';
 
-//TODO: Allow each page to change the currentPage state in order to switch which page is being displayed.
-//TODO: Create bottom taskbar
-export default function App() {
-  var [currentPageID, setCurrentPage] = React.useState(1);
-  let currentPage: React.JSX.Element = <View />
-
-  switch(currentPageID){
-    case 0: currentPage = <DailyPrompt />; break;
-    case 1: currentPage = <LoginPage />; break;
-    default: currentPage = <DailyPrompt />;
-  }
->>>>>>> LoginPage
   return (
     <Tab.Navigator
       screenOptions={({ route, navigation }) => ({
@@ -46,7 +32,7 @@ export default function App() {
           else if (route.name === "Calendar")
             iconName = "calendar";
 
-          return (<FontAwesome5 name={iconName} size={20} color={color} />);
+          return (<FontAwesome5 name={iconName} size={20} color={color} />) as BottomTabNavigationOptions;
         }
       })}
       
@@ -76,10 +62,18 @@ function DrawerGroup() {
   );
 }
 
+function AuthenticationStack() {
+  return(
+    <Stack.Navigator>
+      <Stack.Screen name="Login" component={LoginPage} />
+    </Stack.Navigator>
+  )
+}
+
 export default function App() {
   return(
     <NavigationContainer>
-      <TabGroup />
+      <AuthenticationStack />
     </NavigationContainer>
   );
 }
