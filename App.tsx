@@ -70,13 +70,16 @@ function AuthenticationStack() {
   )
 }
 
-export default function App() {
+function AuthLogic() {
   const auth = useContext(AuthContext);
+  return auth.user === null ? <AuthenticationStack /> : <TabGroup />
+}
 
+export default function App() {
   return(
     <AuthenticationContext>
       <NavigationContainer>
-        <AuthenticationStack />
+        <AuthLogic />
       </NavigationContainer>
     </AuthenticationContext>
     
