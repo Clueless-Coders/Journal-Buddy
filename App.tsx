@@ -1,9 +1,9 @@
 import DailyPrompt from './src/Components/Journal-Pages/DailyPrompt';
 import { Image, SafeAreaView, View } from 'react-native';
-import React from 'react';
+import React, { useContext } from 'react';
 import { BottomTabBarProps, BottomTabNavigationOptions, createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
-import { NavigationContainer } from '@react-navigation/native';
+import { NavigationContainer, NavigatorScreenParams } from '@react-navigation/native';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import HomeMenu from './src/Components/HomePage/HomeMenu';
 import JournalEntries from './src/Components/Journal-Pages/JournalEntries';
@@ -32,7 +32,7 @@ function TabGroup() {
           else if (route.name === "Calendar")
             iconName = "calendar";
 
-          return (<FontAwesome5 name={iconName} size={20} color={color} />) as BottomTabNavigationOptions;
+          return (<FontAwesome5 name={iconName} size={20} color={color} />) ;
         }
       })}
       
@@ -71,6 +71,8 @@ function AuthenticationStack() {
 }
 
 export default function App() {
+  const auth = useContext(AuthContext);
+
   return(
     <AuthenticationContext>
       <NavigationContainer>
