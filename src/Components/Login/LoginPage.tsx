@@ -1,18 +1,19 @@
 import React from 'react';
-import { View, Text, StyleSheet, TextInput, ScrollView, SafeAreaView, Platform, StatusBar, TouchableHighlight, Pressable } from 'react-native';
+import { View, Text, StyleSheet, TextInput, ScrollView, SafeAreaView, Platform, StatusBar, TouchableWithoutFeedback, Keyboard, TouchableHighlight, Pressable } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
 import GeneralButtonDark from '../Buttons/GeneralButtonDark';
 import GeneralButtonLight from '../Buttons/GeneralButtonLight';
 
-//password masking
-//add eye icon to mask and unmask
+//potentionally add eye icon to mask and unmask
 //incorrect password/email
+//if click outside keyboard get rid off, no worky in android?
 //fix textbox scaling
 
 export default function LoginPage() {
     let [email, setEmail] = React.useState('');
     let [password, setPassword] = React.useState('');
     return (
+        <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
         <SafeAreaView style={styles.overlord}>
         <View style={styles.top}>
                 <Text style={styles.header}>
@@ -53,6 +54,7 @@ export default function LoginPage() {
                     </Text>
             </View>
         </SafeAreaView>
+        </TouchableWithoutFeedback>
     )
 }
 
@@ -66,7 +68,7 @@ const styles = StyleSheet.create( {
     header: {
         marginTop: '70%',
         marginBottom: '5%',
-        fontSize: 55,
+        fontSize: 50,
         fontWeight: 'bold',
         color: '#050B24',
         alignItems: 'center'
@@ -82,7 +84,7 @@ const styles = StyleSheet.create( {
         marginBottom: 15,
         borderRadius: 5,
         backgroundColor: '#E7EFFF70',
-        padding: 10
+        padding: '3%'
     },
     thin: {
         alignItems: 'center',
