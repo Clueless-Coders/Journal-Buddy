@@ -52,7 +52,9 @@ export default function LoginPage() {
                         numberOfLines={1}
                     />
                 </View>
-                <GeneralButtonDark buttonText={"Log In"} onPress={handleLogin} textStyle={styles.textStyle} containerStyle={{width: '78%', marginTop: 25}}/>
+                <Pressable onPress={() => handleLogin()}>
+                    <GeneralButtonDark buttonText={"Log In"} onPress={() => null} textStyle={styles.textStyle} containerStyle={{width: '78%', marginTop: 25}}/>
+                </Pressable>
                 <Text style={styles.thin}>
                         Don't have an account? Sign Up!
                     </Text>
