@@ -1,6 +1,5 @@
 import React from 'react';
 import { View, Text, StyleSheet, TextInput, ScrollView, SafeAreaView, Platform, StatusBar, TouchableHighlight, Pressable } from 'react-native';
-import { AntDesign } from '@expo/vector-icons';
 import GeneralButtonDark from '../Buttons/GeneralButtonDark';
 import BackButton from '../Buttons/BackButton';
 import { Inter_400Regular, useFonts } from '@expo-google-fonts/inter';
@@ -13,12 +12,12 @@ export default function DailyPrompt() {
     return (
         <SafeAreaView style={styles.overlord}>
             <ScrollView style={styles.wrapper}>
-                <View style={styles.top}>
+                {/*<View style={styles.top}>
                     <BackButton onPress={() => console.log("hello")} buttonText='Past Entries'/>
                     <Text style={styles.date}>
                         {new Date().toDateString()}
                     </Text>
-                </View>
+                </View>*/}
                 <View style={styles.container}>
                     
                     <View style={styles.headerWrapper}>
@@ -32,7 +31,7 @@ export default function DailyPrompt() {
                             Reflect on the impact it had on your personal growth and the person you've become today.
                         </Text>
                     </View>
-                    <GeneralButtonDark buttonText={"Save Response"} onPress={() => null}/>
+                    <GeneralButtonDark buttonText={"Save Response"} onPress={() => null} containerStyle={styles.submit}/>
                 </View>
                 <TextInput 
                     editable 
@@ -52,6 +51,10 @@ const styles = StyleSheet.create({
             flex: 1,
             fontFamily: "Inter_400Regular"
         },
+        submit: {
+            width: '70%',
+            margin: 10
+        },
         container: {
             flex: 1,
             zIndex: 0,
@@ -63,7 +66,6 @@ const styles = StyleSheet.create({
             color: 'black',
         },
         headerWrapper: {
-            marginBottom: 10,
             alignItems: 'center',
             backgroundColor: '#f2f9ff'
         },
@@ -78,7 +80,8 @@ const styles = StyleSheet.create({
             marginRight: 5,
             textAlign: 'left',
             borderWidth: 1,
-            padding: 10
+            padding: 10,
+            height: '100%'
         },
         backButton: {
             fontSize: 20,

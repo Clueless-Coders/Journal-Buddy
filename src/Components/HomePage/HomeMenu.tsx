@@ -3,12 +3,13 @@ import { Inter_400Regular, useFonts } from '@expo-google-fonts/inter';
 import { View, Text, StyleSheet, ScrollView, SafeAreaView, Platform, StatusBar, Button, Alert } from 'react-native';
 import GeneralButtonDark from '../Buttons/GeneralButtonDark';
 import { Quotes } from '../../Types';
+
 import GeneralButtonLight from '../Buttons/GeneralButtonLight';
 import DailyPrompt from '../Journal-Pages/DailyPrompt';
 import Menu from '../HamburgerMenu/Menu';
 // import { getapi } from '../../Quotes';
 
-export default function HomeMenu() {
+export default function HomeMenu({ navigation }: any) {
     //TODO: Add functions to do their respective tasks once they are implemented
     //TODO: Interface with the backend in order to save the user's response.
     let [quote, updateQuote] = React.useState({q: 'haiii', a: '- T'});
@@ -25,9 +26,9 @@ export default function HomeMenu() {
     let [input, onChangeInput] = React.useState('');
     return (
         <SafeAreaView style={styles.overlord}>
-            <View style={{zIndex: 1}}>
+            {/*<View style={{zIndex: 1}}>
                 <Menu />
-            </View>
+            </View>*/}
             <ScrollView style={styles.wrapper}>
                 <View style={styles.top}>
                     {/* insert button here */}
@@ -60,7 +61,7 @@ export default function HomeMenu() {
                     
                     <View style = {styles.buttonBox}>
                         {/* <GeneralButton buttonText={"Start Today's Entry"} onPress = {() => null}/> */}
-                        <GeneralButtonDark onPress={() => {getQuote();}} buttonText="Start Today's Entry" textStyle={styles.buttonText} enabled = {true}/>
+                        <GeneralButtonDark onPress={() => navigation.navigate("NewJournal")} buttonText="Start Today's Entry" textStyle={styles.buttonText}/>
                     </View>
                     <View style = {styles.habitBox}>
                         {/* <GeneralButton buttonText={"Habit 1"} onPress={() => null}/> */}

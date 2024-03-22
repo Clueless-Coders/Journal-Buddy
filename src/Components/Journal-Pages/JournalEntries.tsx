@@ -1,6 +1,5 @@
 import React from 'react';
 import { View, Text, StyleSheet, SafeAreaView, Platform, StatusBar, TextInput, FlatList, ScrollView } from 'react-native';
-import Menu from '../HamburgerMenu/Menu';
 import GeneralButtonLight from '../Buttons/GeneralButtonLight';
 import GeneralButtonDark from '../Buttons/GeneralButtonDark';
 import { Inter_400Regular, useFonts } from '@expo-google-fonts/inter';
@@ -9,10 +8,7 @@ export default function JournalEntries() {
     
     const [fontsLoaded] = useFonts({Inter_400Regular});
     return (
-        <SafeAreaView style={styles.overlord}>
-            <View style={{zIndex: 1}}>
-                <Menu />
-            </View>
+        <SafeAreaView style={styles.overlord}>  
             <View style={styles.container}>
                 <Text style={styles.headerText}>
                     Journal Entries
