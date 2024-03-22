@@ -3,11 +3,13 @@ import { View, Text, StyleSheet, TextInput, ScrollView, SafeAreaView, Platform, 
 import { AntDesign } from '@expo/vector-icons';
 import GeneralButtonDark from '../Buttons/GeneralButtonDark';
 import BackButton from '../Buttons/BackButton';
+import { Inter_400Regular, useFonts } from '@expo-google-fonts/inter';
 
 export default function DailyPrompt() {
     //TODO: Add functions to do their respective tasks once they are implemented
     //TODO: Interface with the backend in order to save the user's response.
     let [input, onChangeInput] = React.useState('');
+    const [fontsLoaded] = useFonts({Inter_400Regular});
     return (
         <SafeAreaView style={styles.overlord}>
             <ScrollView style={styles.wrapper}>
@@ -47,7 +49,8 @@ export default function DailyPrompt() {
 
 const styles = StyleSheet.create({
         wrapper: {
-            flex: 1
+            flex: 1,
+            fontFamily: "Inter_400Regular"
         },
         container: {
             flex: 1,
