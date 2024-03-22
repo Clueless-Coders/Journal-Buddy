@@ -1,4 +1,5 @@
 import React from 'react';
+import { Inter_400Regular, useFonts } from '@expo-google-fonts/inter';
 import { View, Text, StyleSheet, ScrollView, SafeAreaView, Platform, StatusBar, Button, Alert } from 'react-native';
 import GeneralButtonDark from '../Buttons/GeneralButtonDark';
 import { Quotes } from '../../Types';
@@ -12,6 +13,7 @@ export default function HomeMenu({ navigation }: any) {
     //TODO: Add functions to do their respective tasks once they are implemented
     //TODO: Interface with the backend in order to save the user's response.
     let [quote, updateQuote] = React.useState({q: 'haiii', a: '- T'});
+    const [fontsLoaded] = useFonts({Inter_400Regular});
 
     async function getQuote(){
         const url:string ="https://zenquotes.io/api/random";
@@ -28,7 +30,6 @@ export default function HomeMenu({ navigation }: any) {
                 <Menu />
             </View>*/}
             <ScrollView style={styles.wrapper}>
-                
                 <View style={styles.top}>
                     {/* insert button here */}
                     <Text style={styles.header}>
@@ -124,7 +125,6 @@ const styles = StyleSheet.create({
             textAlign: 'center'
     },
     habitBox:{
-        // backgroundColor:'blue',
         borderWidth:1,
         borderRadius: 12,
         width:'90%',
@@ -133,7 +133,8 @@ const styles = StyleSheet.create({
     overlord: {
         paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0,
         backgroundColor: 'white',
-        flex: 1
+        flex: 1,
+        fontFamily: "Inter_400Regular"
     }
 }
 )
