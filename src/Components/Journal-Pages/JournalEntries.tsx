@@ -1,6 +1,5 @@
 import React from 'react';
 import { View, Text, StyleSheet, SafeAreaView, Platform, StatusBar, TextInput, FlatList, ScrollView } from 'react-native';
-import Menu from '../HamburgerMenu/Menu';
 import GeneralButtonLight from '../Buttons/GeneralButtonLight';
 import GeneralButtonDark from '../Buttons/GeneralButtonDark';
 

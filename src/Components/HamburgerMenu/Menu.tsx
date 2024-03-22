@@ -1,8 +1,6 @@
 import React from 'react';
 import { Text, View, StyleSheet, FlatList, Pressable } from 'react-native'
 import { Ionicons } from '@expo/vector-icons';
-import MenuButton from '../Buttons/GeneralButtonLight'
-import GeneralButtonDark from '../Buttons/GeneralButtonDark';
 import GeneralButtonLight from '../Buttons/GeneralButtonLight';
 import { useNavigation } from '@react-navigation/native';
 

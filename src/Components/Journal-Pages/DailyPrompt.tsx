@@ -1,8 +1,6 @@
 import React from 'react';
 import { View, Text, StyleSheet, TextInput, ScrollView, SafeAreaView, Platform, StatusBar, TouchableHighlight, Pressable } from 'react-native';
-import { AntDesign } from '@expo/vector-icons';
 import GeneralButtonDark from '../Buttons/GeneralButtonDark';
-import BackButton from '../Buttons/BackButton';
 
 export default function DailyPrompt() {
     //TODO: Add functions to do their respective tasks once they are implemented

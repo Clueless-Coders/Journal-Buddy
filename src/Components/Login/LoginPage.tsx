@@ -1,8 +1,6 @@
 import React, { useContext } from 'react';
 import { View, Text, StyleSheet, TextInput, ScrollView, SafeAreaView, Platform, StatusBar, TouchableHighlight, Pressable } from 'react-native';
-import { AntDesign } from '@expo/vector-icons';
 import GeneralButtonDark from '../Buttons/GeneralButtonDark';
-import GeneralButtonLight from '../Buttons/GeneralButtonLight';
 import { AuthContext } from '../../AuthContext';
 
 
@@ -52,9 +50,8 @@ export default function LoginPage() {
                         numberOfLines={1}
                     />
                 </View>
-                <Pressable onPress={() => handleLogin()}>
-                    <GeneralButtonDark buttonText={"Log In"} onPress={() => null} textStyle={styles.textStyle} containerStyle={{width: '78%', marginTop: 25}}/>
-                </Pressable>
+                <GeneralButtonDark buttonText={"Log In"} onPress={handleLogin} textStyle={styles.textStyle} containerStyle={{width: '78%', marginTop: 25}}/>
+
                 <Text style={styles.thin}>
                         Don't have an account? Sign Up!
                     </Text>

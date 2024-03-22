@@ -1,16 +1,20 @@
-import { createContext, PropsWithChildren, useContext, useState } from 'react';
+import { createContext, PropsWithChildren, useState } from 'react';
 import React from 'react';
 
-type AuthContextValue = {
-    user: User | null;
+export type AuthContextValue = {
+    user: {
+        name: string;
+        email: string;
+    };
     login: () => void;
     logout: () => void;
 }
 
-type User = {
-    name: string | null;
-    email: string | null;
+export type User = {
+    name: string;
+    email: string;
 }
+
 export const AuthContext = createContext({user: { name: "", email: ""}, login: () => {}, logout: () => {} });
 
 export function AuthenticationContext({ children }: PropsWithChildren) {
@@ -19,7 +23,7 @@ export function AuthenticationContext({ children }: PropsWithChildren) {
         setUser({
                 name: "John Doe",
                 email: "johndoe@gmail.com",
-            } as User
+            }
         );
         console.log(user);
     }
@@ -30,7 +34,7 @@ export function AuthenticationContext({ children }: PropsWithChildren) {
     
     console.log(user);
     return(
-        <AuthContext.Provider value = {{ user, login, logout } as AuthContextValue}>
+        <AuthContext.Provider value={{ user, login, logout } as AuthContextValue}>
             {children}
         </AuthContext.Provider>
     );

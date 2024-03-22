@@ -1,5 +1,5 @@
-import React, { CSSProperties } from 'react';
-import { Pressable, StyleProp, StyleSheet, Text, View, ViewComponent, ViewStyle } from 'react-native';
+import React from 'react';
+import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { ButtonInput } from '../../Types';
 
 /* A button that can be used as a navigation backwards. 
@@ -11,7 +11,7 @@ import { ButtonInput } from '../../Types';
 */
 export default function GeneralButtonDark(props: ButtonInput){
     return(
-        <Pressable onPress={ props.onPress } style={{ ...styles.containerStyleDefault, ...props.containerStyle }} disabled = {!props.enabled}>
+        <Pressable onPress={ props.onPress } style={{ ...styles.containerStyleDefault, ...props.containerStyle }} disabled = {props.enabled}>
             {props.children != undefined ? props.children : null}
             <View>
                 <Text style={ props.textStyle }>

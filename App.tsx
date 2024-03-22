@@ -1,7 +1,6 @@
 import DailyPrompt from './src/Components/Journal-Pages/DailyPrompt';
-import { Image, SafeAreaView, View } from 'react-native';
 import React, { useContext } from 'react';
-import { BottomTabBarProps, BottomTabNavigationOptions, createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import { NavigationContainer, NavigatorScreenParams } from '@react-navigation/native';
 import { createDrawerNavigator } from '@react-navigation/drawer';
@@ -22,6 +21,7 @@ function TabGroup() {
   
   return (
     <Tab.Navigator
+      
       screenOptions={({ route, navigation }) => ({
         tabBarIcon: (focused: boolean, color: string, size: number) => {
           let iconName;
@@ -35,9 +35,8 @@ function TabGroup() {
           return (<FontAwesome5 name={iconName} size={20} color={color} />) ;
         }
       })}
-      
     >
-      <Tab.Screen name="Home" component={HomeMenu}/>
+      <Tab.Screen name="Home" component={HomeStack}/>
       <Tab.Screen name="NewJournal" component={DailyPrompt} />
       <Tab.Screen name="Calendar" component={HomeMenu}/>
     </Tab.Navigator>
@@ -48,7 +47,15 @@ function JournalStack() {
   return (
     <Stack.Navigator>
       <Stack.Screen name="JournalEntries" component={JournalEntries} />
-      <Stack.Screen name="Tabs" component={TabGroup} />
+    </Stack.Navigator>
+  )
+}
+
+function HomeStack() {
+  return(
+    <Stack.Navigator>
+      <Stack.Screen name="Drawer" component={DrawerGroup} />
+
     </Stack.Navigator>
   )
 }
