@@ -14,46 +14,47 @@ export default function LoginPage() {
     let [password, setPassword] = React.useState('');
     return (
         <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
-        <SafeAreaView style={styles.overlord}>
-        <View style={styles.top}>
-                <Text style={styles.header}>
-                    Welcome!
-                </Text>
-        </View>
-            <View style={styles.container}> 
-                <View style={styles.texboxWithLabel}>
-                    <Text style={styles.prompt}>
-                        Email:
+            <SafeAreaView style={styles.overlord}>
+                <View style={styles.top}>
+                    <Text style={styles.header}>
+                        Welcome!
                     </Text>
-                    <TextInput
-                        editable 
-                        onChangeText={text => setEmail(text)} 
-                        value={email} placeholder="" 
-                        autoCapitalize="none"
-                        style={styles.inputField} 
-                        numberOfLines={1}
-                    />
                 </View>
-                <View style={styles.texboxWithLabel}>
-                    <Text style={styles.prompt}>
-                        Password:
-                    </Text>
-                    <TextInput  
-                        editable 
-                        onChangeText={text => setPassword(text)} 
-                        value={password} placeholder=""
-                        autoCapitalize="none"
-                        secureTextEntry
-                        style={styles.inputField} 
-                        numberOfLines={1}
-                    />
-                </View>
-                <GeneralButtonDark buttonText={"Log In"} onPress={() => null} textStyle={styles.textStyle} containerStyle={{width: '78%', marginTop: 25}}/>
-                <Text style={styles.thin}>
+                <View style={styles.container}> 
+                    <View style={styles.texboxWithLabel}>
+                        <Text style={styles.prompt}>
+                            Email:
+                        </Text>
+                        <TextInput
+                            editable 
+                            onChangeText={text => setEmail(text)} 
+                            value={email} placeholder="" 
+                            autoCapitalize="none"
+                            style={styles.inputField} 
+                            numberOfLines={1}
+                        />
+                    </View>
+                    <View style={styles.texboxWithLabel}>
+                        <Text style={styles.prompt}>
+                            Password:
+                        </Text>
+                        <TextInput  
+                            editable 
+                            onChangeText={text => setPassword(text)} 
+                            value={password} placeholder=""
+                            autoCapitalize="none"
+                            secureTextEntry
+                            style={styles.inputField} 
+                            numberOfLines={1}
+                        />
+                    </View>
+                    <GeneralButtonDark buttonText={"Log In"} onPress={() => null} textStyle={styles.textStyle} containerStyle={{width: '78%', marginTop: 25}}/>
+                    <GeneralButtonDark buttonText={"Sign Up"} onPress={() => null} textStyle={styles.textStyle} containerStyle={{width: '78%', marginTop: 0}}/>
+                    <Text style={styles.thin}>
                         Don't have an account? Sign Up!
                     </Text>
-            </View>
-        </SafeAreaView>
+                </View>
+            </SafeAreaView>
         </TouchableWithoutFeedback>
     )
 }
