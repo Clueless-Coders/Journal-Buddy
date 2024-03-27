@@ -1,8 +1,7 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { View, Text, StyleSheet, TextInput, ScrollView, SafeAreaView, Platform, StatusBar, TouchableWithoutFeedback, Keyboard, TouchableHighlight, Pressable } from 'react-native';
-import { AntDesign } from '@expo/vector-icons';
 import GeneralButtonDark from '../Buttons/GeneralButtonDark';
-import GeneralButtonLight from '../Buttons/GeneralButtonLight';
+import { AuthContext } from '../../AuthContext';
 
 //potentionally add eye icon to mask and unmask
 //incorrect password/email
@@ -12,6 +11,13 @@ import GeneralButtonLight from '../Buttons/GeneralButtonLight';
 export default function LoginPage() {
     let [email, setEmail] = React.useState('');
     let [password, setPassword] = React.useState('');
+    let auth = useContext(AuthContext);
+
+
+    function handleLogin() {
+        auth.login();
+    }
+
     return (
         <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
             <SafeAreaView style={styles.overlord}>
@@ -48,9 +54,10 @@ export default function LoginPage() {
                             numberOfLines={1}
                         />
                     </View>
-                    <GeneralButtonDark buttonText={"Log In"} onPress={() => null} textStyle={styles.textStyle} containerStyle={{width: '78%', marginTop: 25}}/>
-                    <GeneralButtonDark buttonText={"Sign Up"} onPress={() => null} textStyle={styles.textStyle} containerStyle={{width: '78%', marginTop: 0}}/>
-                    <Text style={styles.thin}>
+                    <GeneralButtonDark buttonText={"Log In"} onPress={handleLogin} textStyle={styles.textStyle} containerStyle={{width: '78%', marginTop: 25}}/>
+                    <GeneralButtonDark buttonText={"Sign Up"} onPress={handleLogin} textStyle={styles.textStyle} containerStyle={{width: '78%', marginTop: 0}}/>
+    
+                <Text style={styles.thin}>
                         Don't have an account? Sign Up!
                     </Text>
                 </View>
@@ -58,6 +65,8 @@ export default function LoginPage() {
         </TouchableWithoutFeedback>
     )
 }
+
+
 
 const styles = StyleSheet.create( {
     top: {
