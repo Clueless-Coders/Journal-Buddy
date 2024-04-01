@@ -7,10 +7,11 @@ import { AuthContext } from '../../AuthContext';
 export default function LoginPage() {
     let [username, setUsername] = React.useState('');
     let [password, setPassword] = React.useState('');
-    let auth = useContext(AuthContext);
+    
 
 
     function handleLogin() {
+        let auth = useContext(AuthContext);
         auth.login();
     }
 

@@ -21,7 +21,6 @@ function TabGroup() {
   
   return (
     <Tab.Navigator
-      
       screenOptions={({ route, navigation }) => ({
         tabBarIcon: (focused: boolean, color: string, size: number) => {
           let iconName;
