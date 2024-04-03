@@ -1,12 +1,11 @@
-import { createContext, PropsWithChildren, useState } from 'react';
+import { FirebaseApp } from '@react-native-firebase/database';
+import { getAuth, signInWithEmailAndPassword, UserCredential } from 'firebase/auth'
+import { createContext, PropsWithChildren, ReactNode, useState } from 'react';
 import React from 'react';
 
 export type AuthContextValue = {
-    user: {
-        name: string;
-        email: string;
-    };
-    login: () => void;
+    user: UserCredential
+    login: (email: string, password: string) => void;
     logout: () => void;
 }
 
@@ -17,15 +16,16 @@ export type User = {
 
 export const AuthContext = createContext({user: { name: "", email: ""}, login: () => {}, logout: () => {} });
 
-export function AuthenticationContext({ children }: PropsWithChildren) {
-    let [user, setUser] = useState(null as User | null);
-    
-    const login = () => {
-        setUser({
-                name: "John Doe",
-                email: "johndoe@gmail.com",
-            }
-        );
+export function AuthenticationContext({ app, children }: {children?: ReactNode | undefined; app: FirebaseApp}) {
+    let [user, setUser] = useState(null as UserCredential | null);
+    const auth = getAuth(app);
+
+    const login = (email: string, password: string) => {
+        signInWithEmailAndPassword(auth, email, password).then((userCredential) => {
+            setUser(userCredential);
+        })
+        .catch((error) => {console.log(error)});
+        
         console.log(user);
     }
 
@@ -33,7 +33,6 @@ export function AuthenticationContext({ children }: PropsWithChildren) {
         setUser(null);
     }
     
-    console.log(user);
     return(
         <AuthContext.Provider value={{ user, login, logout } as AuthContextValue}>
             {children}

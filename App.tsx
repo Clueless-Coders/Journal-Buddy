@@ -106,7 +106,7 @@ export default function App() {
   console.log(app);
 
   return(
-    <AuthenticationContext>
+    <AuthenticationContext app={app}>
       <NavigationContainer>
         <AuthLogic />
       </NavigationContainer>

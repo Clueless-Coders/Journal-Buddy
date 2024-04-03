@@ -11,7 +11,7 @@ export default function LoginPage() {
 
 
     function handleLogin() {
-        auth.login();
+        auth.login(username, password);
     }
 
     return (
@@ -53,8 +53,8 @@ export default function LoginPage() {
                 <GeneralButtonDark buttonText={"Log In"} onPress={handleLogin} textStyle={styles.textStyle} containerStyle={{width: '78%', marginTop: 25}}/>
 
                 <Text style={styles.thin}>
-                        Don't have an account? Sign Up!
-                    </Text>
+                    Don't have an account? Sign Up!
+                </Text>
             </View>
         </SafeAreaView>
     )
