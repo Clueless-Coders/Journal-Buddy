@@ -19,6 +19,7 @@ export const AuthContext = createContext({user: { name: "", email: ""}, login: (
 
 export function AuthenticationContext({ children }: PropsWithChildren) {
     let [user, setUser] = useState(null as User | null);
+    
     const login = () => {
         setUser({
                 name: "John Doe",
