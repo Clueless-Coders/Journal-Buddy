@@ -1,5 +1,5 @@
 import { FirebaseApp } from '@react-native-firebase/database';
-import { getAuth, signInWithEmailAndPassword, UserCredential } from 'firebase/auth'
+import { getAuth, signInWithEmailAndPassword, UserCredential, createUserWithEmailAndPassword} from 'firebase/auth'
 import { createContext, PropsWithChildren, ReactNode, useState } from 'react';
 import React from 'react';
 
@@ -7,6 +7,7 @@ export type AuthContextValue = {
     user: UserCredential
     login: (email: string, password: string) => void;
     logout: () => void;
+    signup: (email: string, password: string) => void;
 }
 
 export type User = {
@@ -29,12 +30,21 @@ export function AuthenticationContext({ app, children }: {children?: ReactNode |
         console.log(user);
     }
 
+    const signup = (email: string, password: string) => {
+        createUserWithEmailAndPassword(auth, email, password).then((userCredential) => {
+        setUser(userCredential);
+  })
+  .catch((error) => {console.log(error); });
+        console.log(user);
+    }
+
+
     function logout() {
         setUser(null);
     }
     
     return(
-        <AuthContext.Provider value={{ user, login, logout } as AuthContextValue}>
+        <AuthContext.Provider value={{ user, login, logout, signup } as AuthContextValue}>
             {children}
         </AuthContext.Provider>
     );

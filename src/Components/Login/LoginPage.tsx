@@ -11,7 +11,7 @@ export default function LoginPage() {
 
 
     function handleLogin() {
-        auth.login(username, password);
+        auth.signup(username, password);
     }
 
     return (
