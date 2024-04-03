@@ -1,0 +1,7 @@
+node_modules
+.expo
+.DS_Store
+/ios
+/.vscode
+/%ProgramData%
+/android
