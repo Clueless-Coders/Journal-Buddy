@@ -1,12 +1,11 @@
 import React, { useContext } from 'react';
-import { View, Text, StyleSheet, TextInput, ScrollView, SafeAreaView, Platform, StatusBar, TouchableWithoutFeedback, Keyboard, TouchableHighlight, Pressable } from 'react-native';
+import { View, Text, StyleSheet, TextInput, ScrollView, SafeAreaView, Platform, StatusBar, TouchableWithoutFeedback, Keyboard, KeyboardAvoidingView, TouchableHighlight, Pressable } from 'react-native';
 import GeneralButtonDark from '../Buttons/GeneralButtonDark';
 import { AuthContext } from '../../AuthContext';
 
 //potentionally add eye icon to mask and unmask
 //incorrect password/email
 //if click outside keyboard get rid off, no worky in android?
-//fix textbox scaling
 
 export default function LoginPage() {
     let [email, setEmail] = React.useState('');
@@ -19,6 +18,10 @@ export default function LoginPage() {
     }
 
     return (
+        <KeyboardAvoidingView
+            behavior={Platform.OS === "ios" ? "padding" : "height"}
+            style={{ flex: 1 }}>
+        <ScrollView >
         <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
             <SafeAreaView style={styles.overlord}>
                 <View style={styles.top}>
@@ -58,11 +61,13 @@ export default function LoginPage() {
                     <GeneralButtonDark buttonText={"Sign Up"} onPress={handleLogin} textStyle={styles.textStyle} containerStyle={{width: '78%', marginTop: 0}}/>
     
                 <Text style={styles.thin}>
-                        Don't have an account? Sign Up!
-                    </Text>
+                        Forgot your password or username?
+                </Text>
                 </View>
             </SafeAreaView>
         </TouchableWithoutFeedback>
+        </ScrollView>
+        </KeyboardAvoidingView>
     )
 }
 
@@ -94,7 +99,8 @@ const styles = StyleSheet.create( {
         marginBottom: 15,
         borderRadius: 5,
         backgroundColor: '#E7EFFF70',
-        padding: '3%'
+        padding: '3%',
+        height: '50%'
     },
     thin: {
         alignItems: 'center',
@@ -103,6 +109,7 @@ const styles = StyleSheet.create( {
     },
     texboxWithLabel: {
         width: '78%',
+        height: '20%'
     },
     textStyle: {
         fontSize: 20,
