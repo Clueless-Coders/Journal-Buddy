@@ -6,8 +6,9 @@ import { AuthContext } from '../../AuthContext';
 //potentionally add eye icon to mask and unmask
 //incorrect password/email
 //if click outside keyboard get rid off, no worky in android?
+//confirm password
 
-export default function LoginPage() {
+export default function LoginPage({navigation}) {
     let [email, setEmail] = React.useState('');
     let [password, setPassword] = React.useState('');
     let auth = useContext(AuthContext);
@@ -21,7 +22,7 @@ export default function LoginPage() {
         <KeyboardAvoidingView
             behavior={Platform.OS === "ios" ? "padding" : "height"}
             style={{ flex: 1 }}>
-        <ScrollView >
+        <ScrollView>
         <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
             <SafeAreaView style={styles.overlord}>
                 <View style={styles.top}>
@@ -58,10 +59,10 @@ export default function LoginPage() {
                         />
                     </View>
                     <GeneralButtonDark buttonText={"Log In"} onPress={handleLogin} textStyle={styles.textStyle} containerStyle={{width: '78%', marginTop: 25}}/>
-                    <GeneralButtonDark buttonText={"Sign Up"} onPress={handleLogin} textStyle={styles.textStyle} containerStyle={{width: '78%', marginTop: 0}}/>
+                    <GeneralButtonDark buttonText={"Sign Up"} onPress={navigation.navigate("SignUp")} textStyle={styles.textStyle} containerStyle={{width: '78%', marginTop: 0}}/>
     
                 <Text style={styles.thin}>
-                        Forgot your password or username?
+                        Don't have an account? Sign up!
                 </Text>
                 </View>
             </SafeAreaView>
@@ -96,7 +97,7 @@ const styles = StyleSheet.create( {
     inputField: {
         marginLeft: 0,
         marginRight: 0,
-        marginBottom: 15,
+        marginBottom: 150,
         borderRadius: 5,
         backgroundColor: '#E7EFFF70',
         padding: '3%',

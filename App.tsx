@@ -8,6 +8,7 @@ import HomeMenu from './src/Components/HomePage/HomeMenu';
 import JournalEntries from './src/Components/Journal-Pages/JournalEntries';
 import { FontAwesome5 } from '@expo/vector-icons';
 import LoginPage from './src/Components/Login/LoginPage';
+import SignUp from './src/Components/Login/SignUp';
 import { AuthenticationContext, AuthContext } from './src/AuthContext';
 
 //TODO: Allow each page to change the currentPage state in order to switch which page is being displayed.
@@ -72,8 +73,9 @@ function DrawerGroup() {
 
 function AuthenticationStack() {
   return(
-    <Stack.Navigator>
+    <Stack.Navigator initialRouteName='Login'>
       <Stack.Screen name="Login" component={LoginPage} />
+      <Stack.Screen name="SignUp" component={SignUp} />
     </Stack.Navigator>
   )
 }
