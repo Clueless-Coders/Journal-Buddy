@@ -24,19 +24,46 @@ export default function SignUp(){
                             </Text>
                         </View>
                         <View style={styles.texboxWithLabel}>
-                        <Text style={styles.prompt}>
-                            Password:
-                        </Text>
-                        <TextInput  
-                            editable 
-                            onChangeText={text => setPassword(text)} 
-                            value={password} placeholder=""
-                            autoCapitalize="none"
-                            secureTextEntry
-                            style={styles.inputField} 
-                            numberOfLines={1}
-                        />
-                    </View>
+                            <Text style={styles.prompt}>
+                                Email:
+                            </Text>
+                            <TextInput
+                                editable 
+                                onChangeText={text => setEmail(text)} 
+                                value={email} placeholder="" 
+                                autoCapitalize="none"
+                                style={styles.inputField} 
+                                numberOfLines={1}
+                            />
+                        </View>
+                        <View style={styles.texboxWithLabel}>
+                            <Text style={styles.prompt}>
+                                Password:
+                            </Text>
+                            <TextInput  
+                                editable 
+                                onChangeText={text => setPassword(text)} 
+                                value={password} placeholder=""
+                                autoCapitalize="none"
+                                secureTextEntry
+                                style={styles.inputField} 
+                                numberOfLines={1}
+                            />
+                        </View>
+                        <View style={styles.texboxWithLabel}>
+                            <Text style={styles.prompt}>
+                                Confirm Password:
+                            </Text>
+                            <TextInput  
+                                editable 
+                                onChangeText={text => setPassword(text)} 
+                                value={password} placeholder=""
+                                autoCapitalize="none"
+                                secureTextEntry
+                                style={styles.inputField} 
+                                numberOfLines={1}
+                            />
+                        </View>
                     </SafeAreaView>
                 </TouchableWithoutFeedback>
             </ScrollView>
@@ -60,16 +87,16 @@ const styles = StyleSheet.create({
     },
     prompt: {
         color: '#050B24',
-        marginBottom: 5,
+        marginBottom: 2,
     },
     texboxWithLabel: {
         width: '78%',
-        height: '20%'
+        height: 100
     },
     inputField: {
         marginLeft: 0,
         marginRight: 0,
-        marginBottom: 15,
+        marginBottom: 150,
         borderRadius: 5,
         backgroundColor: '#E7EFFF70',
         padding: '3%',

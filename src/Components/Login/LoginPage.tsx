@@ -91,13 +91,13 @@ const styles = StyleSheet.create( {
     },
     prompt: {
         color: '#050B24',
-        marginBottom: 5,
+        marginBottom: 2,
         textAlign: 'left' //how to align prompts to the left of the boxes, not screen?? use views!!
     },
     inputField: {
         marginLeft: 0,
         marginRight: 0,
-        marginBottom: 150,
+        marginBottom: 15,
         borderRadius: 5,
         backgroundColor: '#E7EFFF70',
         padding: '3%',
@@ -110,7 +110,7 @@ const styles = StyleSheet.create( {
     },
     texboxWithLabel: {
         width: '78%',
-        height: '20%'
+        height: 100
     },
     textStyle: {
         fontSize: 20,
