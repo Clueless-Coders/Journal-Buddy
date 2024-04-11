@@ -30,8 +30,6 @@ export type habit = {
 export function createUser(userID: string | undefined) {
     const rootRef = ref(getDatabase());
     const initData = {
-        habits: [] as string[],
-        journals: [] as string[],
         firstSignIn: true
     } as UserData;
     console.log(userID);
@@ -42,5 +40,5 @@ export function createUser(userID: string | undefined) {
 export function createJournal(journal: Journal) {
     const rootRef = ref(getDatabase()); 
     const journalUID = push(child(rootRef, `/journals/`), journal).key;
-    set(ref(getDatabase(), `/users/${getAuth().currentUser?.uid}/${journalUID}`), journalUID);
+    set(ref(getDatabase(), `/users/${getAuth().currentUser?.uid}/journals/${journalUID}`), journalUID);
 }
