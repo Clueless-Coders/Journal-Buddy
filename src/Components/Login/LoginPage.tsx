@@ -14,7 +14,11 @@ export default function LoginPage() {
 
 
     function handleLogin() {
-        auth.signup(username, password);
+        auth.login(email, password);
+    }
+
+    function handleSignup(){
+        auth.signup(email, password);
     }
 
     return (
@@ -58,7 +62,7 @@ export default function LoginPage() {
                         />
                     </View>
                     <GeneralButtonDark buttonText={"Log In"} onPress={handleLogin} textStyle={styles.textStyle} containerStyle={{width: '78%', marginTop: 25}}/>
-                    <GeneralButtonDark buttonText={"Sign Up"} onPress={handleLogin} textStyle={styles.textStyle} containerStyle={{width: '78%', marginTop: 0}}/>
+                    <GeneralButtonDark buttonText={"Sign Up"} onPress={handleSignup} textStyle={styles.textStyle} containerStyle={{width: '78%', marginTop: 0}}/>
     
                 <Text style={styles.thin}>
                         Forgot your password or username?

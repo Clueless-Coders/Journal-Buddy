@@ -10,7 +10,7 @@ export type UserData = {
 export type Journal = {
    user: string, //unique ident for owner of this journal
    entry: string,
-   dateWritten: Date
+   dateWritten: string 
 };
 
 export type habit = {
@@ -24,18 +24,19 @@ export type habit = {
     description?: string
     uid: string //unique identifier for this specific habit
     user: string, //unique ident for habit owner user
-    endDate: Date //time to stop habit
+    endDate: string//time to stop habit
 };
 
-export function createUser(userID: string) {
+export function createUser(userID: string | undefined) {
     const rootRef = ref(getDatabase());
     const initData = {
         habits: [] as string[],
         journals: [] as string[],
         firstSignIn: true
     } as UserData;
+    console.log(userID);
 
-    set(child(rootRef, `/users/${userID}`), initData);
+    set(child(rootRef, `/users/${userID}`), initData).catch((error) => console.log(error));
 }
 
 export function createJournal(journal: Journal) {

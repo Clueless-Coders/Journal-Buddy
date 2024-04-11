@@ -3,12 +3,22 @@ import { View, Text, StyleSheet, TextInput, ScrollView, SafeAreaView, Platform, 
 import GeneralButtonDark from '../Buttons/GeneralButtonDark';
 import BackButton from '../Buttons/BackButton';
 import { Inter_400Regular, useFonts } from '@expo-google-fonts/inter';
+import { createJournal, Journal } from '../../Database';
+import { getAuth } from 'firebase/auth';
 
 export default function DailyPrompt() {
     //TODO: Add functions to do their respective tasks once they are implemented
     //TODO: Interface with the backend in order to save the user's response.
     let [input, onChangeInput] = React.useState('');
     const [fontsLoaded] = useFonts({Inter_400Regular});
+    function handleSubmit() {
+        const newJournal = {
+            user: getAuth().currentUser?.uid,
+            entry: input,
+            dateWritten: Date.now().toString() 
+        } as Journal;
+        createJournal(newJournal);
+    }
     return (
         <SafeAreaView style={styles.overlord}>
             <ScrollView style={styles.wrapper}>
@@ -31,7 +41,7 @@ export default function DailyPrompt() {
                             Reflect on the impact it had on your personal growth and the person you've become today.
                         </Text>
                     </View>
-                    <GeneralButtonDark buttonText={"Save Response"} onPress={() => null} containerStyle={styles.submit}/>
+                    <GeneralButtonDark buttonText={"Save Response"} onPress={() => handleSubmit()} containerStyle={styles.submit}/>
                 </View>
                 <TextInput 
                     editable 
