@@ -3,7 +3,7 @@ import { View, Text, StyleSheet, TextInput, ScrollView, SafeAreaView, Platform, 
 import GeneralButtonDark from '../Buttons/GeneralButtonDark';
 import BackButton from '../Buttons/BackButton';
 import { Inter_400Regular, useFonts } from '@expo-google-fonts/inter';
-import { createJournal, Journal } from '../../Database';
+import { createJournal, Journal } from '../../firebase/Database';
 import { getAuth } from 'firebase/auth';
 
 export default function DailyPrompt() {

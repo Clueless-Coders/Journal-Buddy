@@ -13,8 +13,8 @@ export type Journal = {
    dateWritten: string 
 };
 
-export type habit = {
-    daysToComplete: "sun" | "m" | "tu" | "w" | "th" | "f" | "sat",
+export type Habit = {
+    daysToComplete: ("sun" | "m" | "tu" | "w" | "th" | "f" | "sat")[],
     timesToComplete?: {
         hour: number,
         minute: number,
@@ -41,4 +41,20 @@ export function createJournal(journal: Journal) {
     const rootRef = ref(getDatabase()); 
     const journalUID = push(child(rootRef, `/journals/`), journal).key;
     set(ref(getDatabase(), `/users/${getAuth().currentUser?.uid}/journals/${journalUID}`), journalUID);
+}
+
+export function createHabit(
+        daysToComplete: ("sun" | "m" | "tu" | "w" | "th" | "f" | "sat")[], 
+        timesToComplete: { hour: number, minute: number, afternoon: boolean }[],
+        title: string,
+        endDate: string,
+        description?: string){
+    
+    const newHabit: Habit = {
+        daysToComplete: daysToComplete.reduce((a, v) => ({ ...a, [v]: v}), {}) ,
+    };
+
+    const rootRef = ref(getDatabase()); 
+    const habitlUID = push(child(rootRef, `/habits/`), newHabit).key;
+    set(ref(getDatabase(), `/users/${getAuth().currentUser?.uid}/habits/${habitlUID}`), habitlUID);
 }

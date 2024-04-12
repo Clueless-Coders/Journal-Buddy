@@ -8,7 +8,7 @@ import HomeMenu from './src/Components/HomePage/HomeMenu';
 import JournalEntries from './src/Components/Journal-Pages/JournalEntries';
 import { FontAwesome5 } from '@expo/vector-icons';
 import LoginPage from './src/Components/Login/LoginPage';
-import { AuthenticationContext, AuthContext } from './src/AuthContext';
+import { AuthenticationContext, AuthContext } from './src/firebase/AuthContext';
 import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
 
