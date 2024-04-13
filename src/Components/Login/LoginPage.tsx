@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
-import { View, Text, StyleSheet, TextInput, ScrollView, SafeAreaView, Platform, StatusBar, TouchableWithoutFeedback, Keyboard, KeyboardAvoidingView, TouchableHighlight, Pressable } from 'react-native';
+import {Image, View, Text, StyleSheet, TextInput, ScrollView, SafeAreaView, Platform, StatusBar, TouchableWithoutFeedback, Keyboard, KeyboardAvoidingView, TouchableHighlight, Pressable } from 'react-native';
 import GeneralButtonDark from '../Buttons/GeneralButtonDark';
-import { AuthContext } from '../../AuthContext';
+import { AuthContext } from '../../AuthContext'; 
 
 //potentionally add eye icon to mask and unmask
 //incorrect password/email
@@ -32,7 +32,7 @@ export default function LoginPage({navigation}) {
                 </View>
                 <View style={styles.container}> 
                     <View style={styles.texboxWithLabel}>
-                        <Text style={styles.prompt}>
+                        <Text style={styles.label}>
                             Email:
                         </Text>
                         <TextInput
@@ -45,7 +45,7 @@ export default function LoginPage({navigation}) {
                         />
                     </View>
                     <View style={styles.texboxWithLabel}>
-                        <Text style={styles.prompt}>
+                        <Text style={styles.label}>
                             Password:
                         </Text>
                         <TextInput  
@@ -58,12 +58,14 @@ export default function LoginPage({navigation}) {
                             numberOfLines={1}
                         />
                     </View>
-                    <GeneralButtonDark buttonText={"Log In"} onPress={handleLogin} textStyle={styles.textStyle} containerStyle={{width: '78%', marginTop: 25}}/>
-                    <GeneralButtonDark buttonText={"Sign Up"} onPress={navigation.navigate("SignUp")} textStyle={styles.textStyle} containerStyle={{width: '78%', marginTop: 0}}/>
-    
-                <Text style={styles.thin}>
+                    <GeneralButtonDark buttonText={"Log In"} onPress={handleLogin} textStyle={styles.textStyle} containerStyle={{width: '60%', marginTop: 0}}/>
+                <Pressable
+                    onPress={() => navigation.navigate("SignUp")}>
+                    {({ pressed }) => (
+                <Text style={[styles.thin, {opacity: pressed ? 0.5 : 1}]}>
                         Don't have an account? Sign up!
-                </Text>
+                </Text>)}
+                </Pressable>
                 </View>
             </SafeAreaView>
         </TouchableWithoutFeedback>
@@ -89,24 +91,17 @@ const styles = StyleSheet.create( {
         color: '#050B24',
         alignItems: 'center'
     },
-    prompt: {
+    label: {
         color: '#050B24',
         marginBottom: 2,
-        textAlign: 'left' //how to align prompts to the left of the boxes, not screen?? use views!!
+        textAlign: 'left' //how to align labels to the left of the boxes, not screen?? use views!!
     },
     inputField: {
-        marginLeft: 0,
-        marginRight: 0,
-        marginBottom: 15,
+        marginBottom: '10%',
         borderRadius: 5,
         backgroundColor: '#E7EFFF70',
         padding: '3%',
         height: '50%'
-    },
-    thin: {
-        alignItems: 'center',
-        fontWeight: '100',
-        color: '#050B24'
     },
     texboxWithLabel: {
         width: '78%',
@@ -115,6 +110,11 @@ const styles = StyleSheet.create( {
     textStyle: {
         fontSize: 20,
         color: 'white'
+    },
+    thin: {
+        alignItems: 'center',
+        fontWeight: '100',
+        color: '#050B24'
     },
     overlord: {
         paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0,
