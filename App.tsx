@@ -9,6 +9,7 @@ import JournalEntries from './src/Components/Journal-Pages/JournalEntries';
 import { FontAwesome5 } from '@expo/vector-icons';
 import LoginPage from './src/Components/Login/LoginPage';
 import { AuthenticationContext, AuthContext } from './src/AuthContext';
+import CalendarPage from './src/Components/Journal-Pages/CalendarPage';
 
 //TODO: Allow each page to change the currentPage state in order to switch which page is being displayed.
 //TODO: Create bottom taskbar
@@ -22,7 +23,6 @@ function TabGroup() {
 
   return (
     <Tab.Navigator
-      
       screenOptions={({ route, navigation }) => ({
         tabBarIcon: (focused: boolean, color: string, size: number) => {
           let iconName;
@@ -38,8 +38,8 @@ function TabGroup() {
       })}
     >
       <Tab.Screen name="Home" component={HomeStack}/>
-      <Tab.Screen name="NewJournal" component={DailyPrompt} />
-      <Tab.Screen name="Calendar" component={HomeMenu}/>
+      <Tab.Screen name="NewJournal" component={DailyPrompt}/>
+      <Tab.Screen name="Calendar" component={CalendarPage}/>
     </Tab.Navigator>
   );
 }
