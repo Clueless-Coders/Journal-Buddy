@@ -1,6 +1,8 @@
 import { get, set, child, ref, getDatabase, push } from 'firebase/database';
 import { getAuth } from 'firebase/auth';
 
+const SECONDS_IN_DAY = 86400
+
 export type UserData = {
     habits: {
         [uid: string]: {
@@ -18,7 +20,6 @@ export type UserData = {
 export type Journal = {
    user: string, //unique ident for owner of this journal
    entry: string,
-   dateWritten: string 
 };
 
 export type Habit = {
@@ -43,14 +44,14 @@ export type Habit = {
     description?: string
     uid: string //unique identifier for this specific habit
     user: string | undefined, //unique ident for habit owner user
-    endDate: {
+    endDate?: {
         month: number,
         day: number,
         year: number
     }
 };
 
-export function createUser(userID: string | undefined) {
+export function createUser(userID: string) {
     const rootRef = ref(getDatabase());
     const initData = {
         firstSignIn: true
@@ -63,6 +64,11 @@ export function createUser(userID: string | undefined) {
 //Use the predefined Journal type in order to pass in the object to this method
 //saves the Journal data in the habits database directory
 export function createJournal(journal: Journal) {
+    const user = getAuth().currentUser;
+    get(child(getDatabase(), `/users/${user.uid}/`))
+    if( - Date.now() < SECONDS_IN_DAY)
+        return;
+
     const rootRef = ref(getDatabase()); 
     const journalUID = push(child(rootRef, `/journals/`), journal).key;
     set(ref(getDatabase(), `/users/${getAuth().currentUser?.uid}/journals/${journalUID}`), journalUID);

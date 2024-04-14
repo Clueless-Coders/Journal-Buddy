@@ -12,11 +12,14 @@ export default function DailyPrompt() {
     let [input, onChangeInput] = React.useState('');
     const [fontsLoaded] = useFonts({Inter_400Regular});
     function handleSubmit() {
-        const newJournal = {
-            user: getAuth().currentUser?.uid,
-            entry: input,
-            dateWritten: Date.now().toString() 
-        } as Journal;
+        const auth = getAuth();
+        if(auth.currentUser === undefined || auth.currentUser === null)
+            return;
+
+        const newJournal: Journal = {
+            user: auth.currentUser.uid,
+            entry: input
+        };
         createJournal(newJournal);
     }
     return (
