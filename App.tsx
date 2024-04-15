@@ -87,7 +87,6 @@ function AuthLogic() {
 }
 
 export default function App() {
-  console.log(process.env.API_KEY);
 
   const firebaseConfig = {
     apiKey: "AIzaSyCOshsr_f422QOgFGCtG6F2HFvAy4DIqpg",
@@ -102,8 +101,6 @@ export default function App() {
 
   const app = initializeApp(firebaseConfig);
   const analytics = getAnalytics(app);
-  console.log(firebaseConfig);
-  console.log(app);
 
   return(
     <AuthenticationContext app={app}>

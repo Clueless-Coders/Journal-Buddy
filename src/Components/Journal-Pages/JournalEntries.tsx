@@ -3,10 +3,30 @@ import { View, Text, StyleSheet, SafeAreaView, Platform, StatusBar, TextInput, F
 import GeneralButtonLight from '../Buttons/GeneralButtonLight';
 import GeneralButtonDark from '../Buttons/GeneralButtonDark';
 import { Inter_400Regular, useFonts } from '@expo-google-fonts/inter';
+import { Journal, getJournalsByCurrentUser, getJournalsByUserID } from '../../firebase/Database';
 
 export default function JournalEntries() {
     
+    let [ data, setData ] = React.useState([] as Journal[])
+
+    React.useEffect(() => {
+        let ignore = false;
+
+        async function getJournals(){
+            await getJournalsByCurrentUser().then((journals) =>{
+                console.log(journals);
+                if(!ignore){
+                    setData(journals);
+                }
+            });
+            
+        }
+        getJournals();
+        return () => {ignore = true};
+    }, []);
+   
     const [fontsLoaded] = useFonts({Inter_400Regular});
+
     return (
         <SafeAreaView style={styles.overlord}>  
             <View style={styles.container}>
@@ -17,17 +37,14 @@ export default function JournalEntries() {
             <TextInput placeholder='Search' style={styles.inputBox}/>
             <ScrollView contentContainerStyle = {styles.mainContent}>
                 <GeneralButtonDark  onPress={() => console.log('hello')} buttonText={'Start today\'s journal!'} containerStyle={styles.containerStyle} />
-                { DATA.map((item) => {
-                    return <GeneralButtonLight  onPress={() => console.log('hello')} buttonText={item.toDateString()} containerStyle={styles.containerStyle}/>;
+                { data.map((item, index) => {
+                    return <GeneralButtonLight  key={index} onPress={() => console.log('hello')} buttonText={item.dayWritten} containerStyle={styles.containerStyle}/>;
                 }) }
             </ScrollView>
-            
         </SafeAreaView>
-        
     );
 }
 
-const DATA = [new Date(), new Date(), new Date(), new Date()];
 
 const styles = StyleSheet.create({
     overlord: {

@@ -2,6 +2,7 @@ import { get, set, child, ref, getDatabase, push } from 'firebase/database';
 import { getAuth } from 'firebase/auth';
 
 const SECONDS_IN_DAY = 86400
+const SUBMIT_HABIT_COOLDOWN_SECONDS = 10;
 
 export type UserData = {
     habits: {
@@ -14,12 +15,14 @@ export type UserData = {
             uid: string
         }
     },
+    lastJournalEntryTime?: number,
     firstSignIn: boolean
 };
 
 export type Journal = {
    user: string, //unique ident for owner of this journal
    entry: string,
+   dayWritten: string
 };
 
 export type Habit = {
@@ -63,15 +66,40 @@ export function createUser(userID: string) {
 
 //Use the predefined Journal type in order to pass in the object to this method
 //saves the Journal data in the habits database directory
-export function createJournal(journal: Journal) {
-    const user = getAuth().currentUser;
-    get(child(getDatabase(), `/users/${user.uid}/`))
-    if( - Date.now() < SECONDS_IN_DAY)
+export async function createJournal(journal: Journal) {
+    //initiallize database reference & obtain userID
+    const db = getDatabase(); 
+    const user = getAuth().currentUser?.uid;
+    //exits if there was an issue with authentication
+    if(user === null || user === undefined) 
         return;
 
-    const rootRef = ref(getDatabase()); 
-    const journalUID = push(child(rootRef, `/journals/`), journal).key;
-    set(ref(getDatabase(), `/users/${getAuth().currentUser?.uid}/journals/${journalUID}`), journalUID);
+    let previousJournalTime = 0;
+    let previousJournalID = '';
+    //obtains the last time the user has instantiated a new Journal entry in Unix time (stored in user profile)
+    await get(ref(getDatabase(), `/users/${user}/lastJournalEntryTime`)).then((data) => {
+        if(data.exists()){
+            previousJournalTime = data.val();
+            console.log(previousJournalTime);
+        }
+    });
+
+    //if the user has created a Journal entry in the last day, it will update that entry instead of creating a new one
+    if(previousJournalTime !== 0 && Date.now() - previousJournalTime < SECONDS_IN_DAY){
+        await get(ref(getDatabase(), `/users/${user}/lastJournalEntryID`)).then((data) => {
+            //if somehow the database managed to store the time and not the entry ID, something has gone terribly wrong
+            if(data.exists()){
+                set(child(ref(db), `/journals/${data.val()}`), journal); 
+            }
+        });   
+        return;
+    }
+
+    //creates a new Journal entry in the database initialized with the user's input
+    const journalUID = await push(child(ref(db), `/journals/`), journal).key;
+    set(ref(db, `/users/${user}/journals/${journalUID}`), journalUID);
+    set(ref(db, `/users/${user}/lastJournalEntryTime`), Date.now());
+    set(ref(db, `/users/${user}/lastJournalEntryID`), journalUID);
 }
 
 //Use the predefined Habit type in order to pass in the object to this method
@@ -80,4 +108,67 @@ export function createHabit(newHabit: Habit){
     const rootRef = ref(getDatabase()); 
     const habitlUID = push(child(rootRef, `/habits/`), newHabit).key;
     set(ref(getDatabase(), `/users/${getAuth().currentUser?.uid}/habits/${habitlUID}`), habitlUID);
+}
+
+//Queries the database for all the journals created by this user
+export async function getJournalsByUserID(userID: string): Promise<Journal[]>{
+    return new Promise((resolve, reject) => get(ref(getDatabase(), `/users/${userID}/journals`)).then((data) => {
+        if(data.exists()) {
+            let journals: Journal[] = [];
+            Object.entries(data.val()).forEach((entry) => {
+                console.log(entry);
+                console.log(Object.values(entry)[0])
+                console.log(`/journals/${Object.values(entry)[0]}`)
+                get(child(ref(getDatabase()), `/journals/${Object.values(entry)[0]}`)).then((data) => {
+                    if(data.exists()){
+                        console.log(data.val());
+                        journals.push(data.val());
+                    }
+                });
+            });
+            resolve(journals);
+        }
+        console.log('Journal data does not exist');
+        reject("Journals data does not exist")
+    }).catch((error) => {
+        console.log(error);
+        reject("A Firebase error has occurred");
+    }));
+}
+
+//Queries the database for all the habits created by this user
+export async function getHabitsByUserID(userID: string): Promise<Habit[]>{
+    return new Promise((resolve, reject) => get(ref(getDatabase(), `/users/${userID}/habits`)).then((data) => {
+        if(data.exists()) {
+            let habits: Habit[] = [];
+            Object.entries(data.val()).forEach((entry) => {
+                get(ref(getDatabase(), `/habits/${entry}`)).then((data) => {
+                    if(data.exists())
+                        habits.push(data.val());
+                });
+            });
+            resolve(habits); 
+        }
+        console.log('Habit data does not exist');
+        reject("Habit data does not exist");
+    }).catch((error) => {
+        console.log(error);
+        reject("A Firebase error has occurred");
+    }));
+}
+
+export async function getJournalsByCurrentUser(): Promise<Journal[]> {
+    let userID = getAuth().currentUser?.uid;
+    if(userID === null || userID === undefined)
+        return [];
+
+    return getJournalsByUserID(userID);
+}
+
+export async function getHabitsByCurrentUser(): Promise<Habit[]>  {
+    let userID = getAuth().currentUser?.uid;
+    if(userID === null || userID === undefined)
+        return [];
+
+    return getHabitsByUserID(userID);
 }

@@ -26,7 +26,6 @@ export function AuthenticationContext({ app, children }: {children?: ReactNode |
         })
         .catch((error) => {console.log(error)});
         
-        console.log(user);
     }
 
     const signup = (email: string, password: string) => {
