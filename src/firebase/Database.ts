@@ -115,21 +115,26 @@ export async function getJournalsByUserID(userID: string): Promise<Journal[]>{
     return new Promise((resolve, reject) => get(ref(getDatabase(), `/users/${userID}/journals`)).then((data) => {
         if(data.exists()) {
             let journals: Journal[] = [];
+            let promises: Promise<void>[] = []
             Object.entries(data.val()).forEach((entry) => {
-                console.log(entry);
-                console.log(Object.values(entry)[0])
-                console.log(`/journals/${Object.values(entry)[0]}`)
-                get(child(ref(getDatabase()), `/journals/${Object.values(entry)[0]}`)).then((data) => {
+                
+                let promise = get(child(ref(getDatabase()), `/journals/${Object.values(entry)[0]}`)).then((data) => {
                     if(data.exists()){
-                        console.log(data.val());
                         journals.push(data.val());
                     }
                 });
+                promises.push(promise);
             });
-            resolve(journals);
+
+            Promise.all(promises).then(() => {
+                console.log(journals);
+                resolve(journals);
+            });
+        } else {
+            console.log('Journal data does not exist');
+            reject("Journals data does not exist");
         }
-        console.log('Journal data does not exist');
-        reject("Journals data does not exist")
+        
     }).catch((error) => {
         console.log(error);
         reject("A Firebase error has occurred");
@@ -141,16 +146,22 @@ export async function getHabitsByUserID(userID: string): Promise<Habit[]>{
     return new Promise((resolve, reject) => get(ref(getDatabase(), `/users/${userID}/habits`)).then((data) => {
         if(data.exists()) {
             let habits: Habit[] = [];
+            let promises: Promise<void>[] = [];
             Object.entries(data.val()).forEach((entry) => {
                 get(ref(getDatabase(), `/habits/${entry}`)).then((data) => {
                     if(data.exists())
                         habits.push(data.val());
                 });
             });
+            Promise.all(promises).then(() => {
+                console.log(habits);
+                resolve(habits);
+            });
             resolve(habits); 
+        } else{
+            console.log('Habit data does not exist');
+            reject("Habit data does not exist");
         }
-        console.log('Habit data does not exist');
-        reject("Habit data does not exist");
     }).catch((error) => {
         console.log(error);
         reject("A Firebase error has occurred");

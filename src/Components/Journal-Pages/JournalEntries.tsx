@@ -13,7 +13,7 @@ export default function JournalEntries() {
         let ignore = false;
 
         async function getJournals(){
-            await getJournalsByCurrentUser().then((journals) =>{
+            getJournalsByCurrentUser().then((journals) => {
                 console.log(journals);
                 if(!ignore){
                     setData(journals);
@@ -36,10 +36,10 @@ export default function JournalEntries() {
             </View>
             <TextInput placeholder='Search' style={styles.inputBox}/>
             <ScrollView contentContainerStyle = {styles.mainContent}>
-                <GeneralButtonDark  onPress={() => console.log('hello')} buttonText={'Start today\'s journal!'} containerStyle={styles.containerStyle} />
-                { data.map((item, index) => {
+                <GeneralButtonDark  onPress={() => console.log(data)} buttonText={'Start today\'s journal!'} containerStyle={styles.containerStyle} />
+                { data.length > 0 ? data.map((item, index) => {
                     return <GeneralButtonLight  key={index} onPress={() => console.log('hello')} buttonText={item.dayWritten} containerStyle={styles.containerStyle}/>;
-                }) }
+                }) : <Text>bad</Text>}
             </ScrollView>
         </SafeAreaView>
     );
