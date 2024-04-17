@@ -114,19 +114,13 @@ export function createHabit(newHabit: Habit){
 export async function getJournalsByUserID(userID: string): Promise<Journal[]>{
     return new Promise((resolve, reject) => get(ref(getDatabase(), `/users/${userID}/journals`)).then((data) => {
         if(data.exists()) {
-            let journals: Journal[] = [];
-            let promises: Promise<void>[] = []
+            let promises: Promise<Journal>[] = []
             Object.entries(data.val()).forEach((entry) => {
-                
-                let promise = get(child(ref(getDatabase()), `/journals/${Object.values(entry)[0]}`)).then((data) => {
-                    if(data.exists()){
-                        journals.push(data.val());
-                    }
-                });
+                let promise = getJournalByID(Object.values(entry)[0] as string);
                 promises.push(promise);
             });
 
-            Promise.all(promises).then(() => {
+            Promise.all(promises).then((journals) => {
                 console.log(journals);
                 resolve(journals);
             });
@@ -145,19 +139,15 @@ export async function getJournalsByUserID(userID: string): Promise<Journal[]>{
 export async function getHabitsByUserID(userID: string): Promise<Habit[]>{
     return new Promise((resolve, reject) => get(ref(getDatabase(), `/users/${userID}/habits`)).then((data) => {
         if(data.exists()) {
-            let habits: Habit[] = [];
-            let promises: Promise<void>[] = [];
+            let promises: Promise<Habit>[] = [];
             Object.entries(data.val()).forEach((entry) => {
-                get(ref(getDatabase(), `/habits/${entry}`)).then((data) => {
-                    if(data.exists())
-                        habits.push(data.val());
-                });
+                let promise = getHabitByID(Object.values(entry)[0] as string);
+                promises.push(promise);
             });
-            Promise.all(promises).then(() => {
+            Promise.all(promises).then((habits) => {
                 console.log(habits);
                 resolve(habits);
             });
-            resolve(habits); 
         } else{
             console.log('Habit data does not exist');
             reject("Habit data does not exist");
@@ -182,4 +172,28 @@ export async function getHabitsByCurrentUser(): Promise<Habit[]>  {
         return [];
 
     return getHabitsByUserID(userID);
+}
+
+export function getJournalByID(journalID: string): Promise<Journal>{
+    return new Promise((resolve, reject) => {
+        get(child(ref(getDatabase()), `/journals/${journalID}`)).then((data) => {
+            if(data.exists()){
+                resolve(data.val());
+            } else {
+                reject('Journal of this ID does not exist');
+            }
+        })
+    })
+}
+
+export function getHabitByID(habitID: string): Promise<Habit>{
+    return new Promise((resolve, reject) => {
+        get(child(ref(getDatabase()), `/journals/${habitID}`)).then((data) => {
+            if(data.exists()){
+                resolve(data.val());
+            } else {
+                reject('Habit of this ID does not exist');
+            }
+        })
+    })
 }
