@@ -4,6 +4,8 @@ import GeneralButtonLight from '../Buttons/GeneralButtonLight';
 import GeneralButtonDark from '../Buttons/GeneralButtonDark';
 import { Inter_400Regular, useFonts } from '@expo-google-fonts/inter';
 import { Journal, getJournalsByCurrentUser, getJournalsByUserID } from '../../firebase/Database';
+import { getDatabase, onValue, ref } from 'firebase/database'
+import { getAuth } from 'firebase/auth';
 
 export default function JournalEntries() {
     
@@ -21,12 +23,12 @@ export default function JournalEntries() {
             });
             
         }
-        getJournals();
+        onValue(ref(getDatabase(), `users/${getAuth().currentUser?.uid}/journals`), (data) =>{
+            getJournals();
+        })
         return () => {ignore = true};
     }, []);
-   
-    const [fontsLoaded] = useFonts({Inter_400Regular});
-
+    
     return (
         <SafeAreaView style={styles.overlord}>  
             <View style={styles.container}>
