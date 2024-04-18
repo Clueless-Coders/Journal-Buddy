@@ -216,6 +216,7 @@ const CalendarPage = (props: Props) => {
 
 
   return (
+
     <CalendarProvider date = {ITEMS[1]?.title} theme = {todayBtnTheme.current}> 
     {weekView ? ( <WeekCalendar testID={'menu'} firstDay={1} markedDates={marked.current}/>
       ) : (
