@@ -214,6 +214,7 @@ const CalendarPage = (props: Props) => {
     return <AgendaItem item={item}/>;
    }, []);              
 
+
   return (
     <CalendarProvider date = {ITEMS[1]?.title} showTodayButton theme = {todayBtnTheme.current} > 
   
@@ -241,7 +242,6 @@ const CalendarPage = (props: Props) => {
           // closeOnDayPress={false}
         />
       )}
-
       <AgendaList
         sections={ITEMS}
         renderItem={renderItem}
@@ -269,4 +269,3 @@ const styles = StyleSheet.create({
     textTransform: 'capitalize'
   }
 });
-
