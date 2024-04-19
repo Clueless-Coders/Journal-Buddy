@@ -54,6 +54,7 @@ export type Habit = {
     }
 };
 
+//Initializes user with flag to complete first-time account setup
 export function createUser(userID: string) {
     const rootRef = ref(getDatabase());
     const initData = {
@@ -75,7 +76,6 @@ export async function createJournal(journal: Journal) {
         return;
 
     let previousJournalTime = 0;
-    let previousJournalID = '';
     //obtains the last time the user has instantiated a new Journal entry in Unix time (stored in user profile)
     get(ref(getDatabase(), `/users/${user}/lastJournalEntryTime`)).then((data) => {
         if(data.exists()){
@@ -92,36 +92,40 @@ export async function createJournal(journal: Journal) {
                 }
             });
         } else {
+            //creates a new Journal entry in the database initialized with the user's input
             const journalUID = await push(child(ref(db), `/journals/`), journal).key;
             set(ref(db, `/users/${user}/journals/${journalUID}`), journalUID);
             set(ref(db, `/users/${user}/lastJournalEntryTime`), Date.now());
             set(ref(db, `/users/${user}/lastJournalEntryID`), journalUID);
         }
     });
-    
-
-    //creates a new Journal entry in the database initialized with the user's input
-    
 }
 
 //Use the predefined Habit type in order to pass in the object to this method
 //saves the habit data in the habits database directory
 export function createHabit(newHabit: Habit){
-    const rootRef = ref(getDatabase()); 
-    const habitlUID = push(child(rootRef, `/habits/`), newHabit).key;
-    set(ref(getDatabase(), `/users/${getAuth().currentUser?.uid}/habits/${habitlUID}`), habitlUID);
+    const db = getDatabase(); 
+    const user = getAuth().currentUser;
+    if(user === null || user === undefined)
+        return;
+
+    const habitlUID = push(child(ref(db), `/habits/`), newHabit).key;
+    set(ref(getDatabase(), `/users/${user.uid}/habits/${habitlUID}`), habitlUID);
 }
 
 //Queries the database for all the journals created by this user
 export async function getJournalsByUserID(userID: string): Promise<Journal[]>{
+    //Grabs all the Journal data references under the user's profile
     return new Promise((resolve, reject) => get(ref(getDatabase(), `/users/${userID}/journals`)).then((data) => {
         if(data.exists()) {
-            let promises: Promise<Journal>[] = []
+            let promises: Promise<Journal>[] = [];
+            //for every reference, attempts to access its data
             Object.entries(data.val()).forEach((entry) => {
                 let promise = getJournalByID(Object.values(entry)[0] as string);
                 promises.push(promise);
             });
 
+            //waits for all DB queries to finish, then returns the journals as an Array
             Promise.all(promises).then((journals) => {
                 console.log(journals);
                 resolve(journals);
@@ -139,13 +143,16 @@ export async function getJournalsByUserID(userID: string): Promise<Journal[]>{
 
 //Queries the database for all the habits created by this user
 export async function getHabitsByUserID(userID: string): Promise<Habit[]>{
+    //Grabs all the Habit data references under the current user
     return new Promise((resolve, reject) => get(ref(getDatabase(), `/users/${userID}/habits`)).then((data) => {
         if(data.exists()) {
             let promises: Promise<Habit>[] = [];
+            //for each Habit reference, attempts to retrieve that data from the DB
             Object.entries(data.val()).forEach((entry) => {
                 let promise = getHabitByID(Object.values(entry)[0] as string);
                 promises.push(promise);
             });
+            //wait for the queries to complete, then return an array containing the Habits 
             Promise.all(promises).then((habits) => {
                 console.log(habits);
                 resolve(habits);
@@ -160,6 +167,7 @@ export async function getHabitsByUserID(userID: string): Promise<Habit[]>{
     }));
 }
 
+//return journals under the userID of the current logged-in user
 export async function getJournalsByCurrentUser(): Promise<Journal[]> {
     let userID = getAuth().currentUser?.uid;
     if(userID === null || userID === undefined)
@@ -168,6 +176,7 @@ export async function getJournalsByCurrentUser(): Promise<Journal[]> {
     return getJournalsByUserID(userID);
 }
 
+//return habits under the userID of the current logged-in user
 export async function getHabitsByCurrentUser(): Promise<Habit[]>  {
     let userID = getAuth().currentUser?.uid;
     if(userID === null || userID === undefined)
@@ -176,6 +185,7 @@ export async function getHabitsByCurrentUser(): Promise<Habit[]>  {
     return getHabitsByUserID(userID);
 }
 
+//returns the journal data specified by the journalID
 export function getJournalByID(journalID: string): Promise<Journal>{
     return new Promise((resolve, reject) => {
         get(child(ref(getDatabase()), `/journals/${journalID}`)).then((data) => {
@@ -188,6 +198,7 @@ export function getJournalByID(journalID: string): Promise<Journal>{
     })
 }
 
+//returns the habit data specified by the journalID
 export function getHabitByID(habitID: string): Promise<Habit>{
     return new Promise((resolve, reject) => {
         get(child(ref(getDatabase()), `/journals/${habitID}`)).then((data) => {
