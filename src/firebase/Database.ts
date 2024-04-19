@@ -104,13 +104,36 @@ export async function createJournal(journal: Journal) {
 //Use the predefined Habit type in order to pass in the object to this method
 //saves the habit data in the habits database directory
 export function createHabit(newHabit: Habit){
+    //initiallize database reference & obtain userID
     const db = getDatabase(); 
-    const user = getAuth().currentUser;
-    if(user === null || user === undefined)
+    const user = getAuth().currentUser?.uid;
+    //exits if there was an issue with authentication
+    if(user === null || user === undefined) 
         return;
 
-    const habitlUID = push(child(ref(db), `/habits/`), newHabit).key;
-    set(ref(getDatabase(), `/users/${user.uid}/habits/${habitlUID}`), habitlUID);
+    let previousHabitTime = 0;
+    //obtains the last time the user has instantiated a new Journal entry in Unix time (stored in user profile)
+    get(ref(getDatabase(), `/users/${user}/lastHabitEntryTime`)).then((data) => {
+        if(data.exists()){
+            previousHabitTime = data.val();
+        }
+    }).then(async () =>{
+        //if the user has created a Journal entry in the last day, it will update that entry instead of creating a new one
+        if(Date.now() - previousHabitTime < SUBMIT_HABIT_COOLDOWN_SECONDS){
+            get(ref(getDatabase(), `/users/${user}/lastHabitlEntryID`)).then((data) => {
+                //if somehow the database managed to store the time and not the entry ID, something has gone terribly wrong
+                if(data.exists()){
+                    set(child(ref(db), `/habits/${data.val()}`), newHabit); 
+                }
+            });
+        } else {
+            //creates a new Journal entry in the database initialized with the user's input
+            const habitUID = await push(child(ref(db), `/habits/`), newHabit).key;
+            set(ref(db, `/users/${user}/habits/${habitUID}`), habitUID);
+            set(ref(db, `/users/${user}/lastHabitEntryTime`), Date.now());
+            set(ref(db, `/users/${user}/lastHabitEntryID`), habitUID);
+        }
+    });
 }
 
 //Queries the database for all the journals created by this user
