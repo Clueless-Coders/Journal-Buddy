@@ -8,10 +8,9 @@ import HomeMenu from './src/Components/HomePage/HomeMenu';
 import JournalEntries from './src/Components/Journal-Pages/JournalEntries';
 import { FontAwesome5 } from '@expo/vector-icons';
 import LoginPage from './src/Components/Login/LoginPage';
-import { AuthenticationContext, AuthContext } from './src/firebase/AuthContext';
 import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
-import { initializeAuth, getReactNativePersistence } from 'firebase/auth';
+import { initializeAuth, getReactNativePersistence, getAuth, onAuthStateChanged } from 'firebase/auth';
 import ReactNativeAsyncStorage from '@react-native-async-storage/async-storage';
 
 
@@ -84,8 +83,11 @@ function AuthenticationStack() {
 }
 
 function AuthLogic() {
-  const auth = useContext(AuthContext);
-  return auth.user === null ? <AuthenticationStack /> : <TabGroup />
+  let [loggedIn, setLoggedIn ] = React.useState(getAuth().currentUser !== null);
+  onAuthStateChanged(getAuth(),(user) => {
+    setLoggedIn(user !== null);
+  })
+  return !loggedIn ? <AuthenticationStack /> : <TabGroup />
 }
 
 export default function App() {
@@ -107,11 +109,8 @@ export default function App() {
   })
 
   return(
-    <AuthenticationContext app={app}>
-      <NavigationContainer>
-        <AuthLogic />
-      </NavigationContainer>
-    </AuthenticationContext>
-    
+    <NavigationContainer>
+      <AuthLogic />
+    </NavigationContainer>    
   );
 }

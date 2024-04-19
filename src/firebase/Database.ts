@@ -1,5 +1,5 @@
 import { get, set, child, ref, getDatabase, push } from 'firebase/database';
-import { getAuth } from 'firebase/auth';
+import { createUserWithEmailAndPassword, getAuth, signInWithEmailAndPassword } from 'firebase/auth';
 
 const SECONDS_IN_DAY = 86400
 const SUBMIT_HABIT_COOLDOWN_SECONDS = 10;
@@ -21,8 +21,8 @@ export type UserData = {
 
 export type Journal = {
    user: string, //unique ident for owner of this journal
-   entry: string,
-   dayWritten: number
+   entry: string, //actual entry text
+   dayWritten: number //unix timestamp
 };
 
 export type Habit = {
@@ -47,11 +47,7 @@ export type Habit = {
     description?: string
     uid: string //unique identifier for this specific habit
     user: string, //unique ident for habit owner user
-    endDate?: {
-        month: number,
-        day: number,
-        year: number
-    }
+    endDate?: number //Unix timestamp
 };
 
 //Initializes user with flag to complete first-time account setup
@@ -232,4 +228,14 @@ export function getHabitByID(habitID: string): Promise<Habit>{
             }
         })
     })
+}
+
+export function login (email: string, password: string) {
+    signInWithEmailAndPassword(getAuth(), email, password);
+}
+
+export function signup (email: string, password: string) {
+    createUserWithEmailAndPassword(getAuth(), email, password).then((userCredential) => {
+        createUser(userCredential.user?.uid)
+    });
 }
