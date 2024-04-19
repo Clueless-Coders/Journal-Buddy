@@ -46,7 +46,7 @@ export type Habit = {
     title: string,
     description?: string
     uid: string //unique identifier for this specific habit
-    user: string | undefined, //unique ident for habit owner user
+    user: string, //unique ident for habit owner user
     endDate?: {
         month: number,
         day: number,

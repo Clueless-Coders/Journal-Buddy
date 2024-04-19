@@ -67,8 +67,7 @@ const styles = StyleSheet.create({
         padding: 5
     },
     mainContent: {
-        alignItems: 'center',
-        flex: 1
+        alignItems: 'center'
     },
     inputBox: {
         borderWidth: .5,

@@ -13,7 +13,7 @@ export type AuthContextValue = {
 
 
 
-export const AuthContext = createContext({user: { name: "", email: ""}, login: () => {}, logout: () => {} });
+export const AuthContext = createContext({user: { name: "", email: ""}, login: (email: string, password: string) => {}, logout: () => {}, signup: (email: string, password: string) => {} });
 
 export function AuthenticationContext({ app, children }: {children?: ReactNode | undefined; app: FirebaseApp}) {
     let [user, setUser] = useState(null as User | null);

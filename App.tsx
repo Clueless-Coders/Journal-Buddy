@@ -11,6 +11,8 @@ import LoginPage from './src/Components/Login/LoginPage';
 import { AuthenticationContext, AuthContext } from './src/firebase/AuthContext';
 import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
+import { initializeAuth, getReactNativePersistence } from 'firebase/auth';
+import ReactNativeAsyncStorage from '@react-native-async-storage/async-storage';
 
 
 //TODO: Allow each page to change the currentPage state in order to switch which page is being displayed.
@@ -100,7 +102,9 @@ export default function App() {
   };
 
   const app = initializeApp(firebaseConfig);
-  const analytics = getAnalytics(app);
+  const auth = initializeAuth(app, {
+    persistence: getReactNativePersistence(ReactNativeAsyncStorage)
+  })
 
   return(
     <AuthenticationContext app={app}>
