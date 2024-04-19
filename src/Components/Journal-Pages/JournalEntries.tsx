@@ -16,7 +16,6 @@ export default function JournalEntries() {
 
         async function getJournals(){
             getJournalsByCurrentUser().then((journals) => {
-                console.log(journals);
                 if(!ignore){
                     setData(journals);
                 }
@@ -39,8 +38,8 @@ export default function JournalEntries() {
             <TextInput placeholder='Search' style={styles.inputBox}/>
             <ScrollView contentContainerStyle = {styles.mainContent}>
                 <GeneralButtonDark  onPress={() => console.log(data)} buttonText={'Start today\'s journal!'} containerStyle={styles.containerStyle} />
-                { data.length > 0 ? data.map((item, index) => {
-                    return <GeneralButtonLight  key={index} onPress={() => console.log('hello')} buttonText={item.dayWritten} containerStyle={styles.containerStyle}/>;
+                { data.length > 0 ? data.reverse().map((item, index) => {
+                    return <GeneralButtonLight  key={index} onPress={() => console.log('hello')} buttonText={new Date(item.dayWritten).toDateString()} containerStyle={styles.containerStyle}/>;
                 }) : <Text>bad</Text>}
             </ScrollView>
         </SafeAreaView>

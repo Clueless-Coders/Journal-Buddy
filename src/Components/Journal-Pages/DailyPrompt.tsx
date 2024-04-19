@@ -19,7 +19,7 @@ export default function DailyPrompt() {
         const newJournal: Journal = {
             user: auth.currentUser.uid,
             entry: input,
-            dayWritten: Date.now().toString()
+            dayWritten: Date.now()
         };
         createJournal(newJournal);
     }

@@ -22,7 +22,7 @@ export type UserData = {
 export type Journal = {
    user: string, //unique ident for owner of this journal
    entry: string,
-   dayWritten: string
+   dayWritten: number
 };
 
 export type Habit = {
@@ -77,29 +77,31 @@ export async function createJournal(journal: Journal) {
     let previousJournalTime = 0;
     let previousJournalID = '';
     //obtains the last time the user has instantiated a new Journal entry in Unix time (stored in user profile)
-    await get(ref(getDatabase(), `/users/${user}/lastJournalEntryTime`)).then((data) => {
+    get(ref(getDatabase(), `/users/${user}/lastJournalEntryTime`)).then((data) => {
         if(data.exists()){
             previousJournalTime = data.val();
             console.log(previousJournalTime);
         }
+    }).then(async () =>{
+        //if the user has created a Journal entry in the last day, it will update that entry instead of creating a new one
+        if(previousJournalTime !== 0 && Date.now() - previousJournalTime < SECONDS_IN_DAY){
+            get(ref(getDatabase(), `/users/${user}/lastJournalEntryID`)).then((data) => {
+                //if somehow the database managed to store the time and not the entry ID, something has gone terribly wrong
+                if(data.exists()){
+                    set(child(ref(db), `/journals/${data.val()}`), journal); 
+                }
+            });
+        } else {
+            const journalUID = await push(child(ref(db), `/journals/`), journal).key;
+            set(ref(db, `/users/${user}/journals/${journalUID}`), journalUID);
+            set(ref(db, `/users/${user}/lastJournalEntryTime`), Date.now());
+            set(ref(db, `/users/${user}/lastJournalEntryID`), journalUID);
+        }
     });
-
-    //if the user has created a Journal entry in the last day, it will update that entry instead of creating a new one
-    if(previousJournalTime !== 0 && Date.now() - previousJournalTime < SECONDS_IN_DAY){
-        await get(ref(getDatabase(), `/users/${user}/lastJournalEntryID`)).then((data) => {
-            //if somehow the database managed to store the time and not the entry ID, something has gone terribly wrong
-            if(data.exists()){
-                set(child(ref(db), `/journals/${data.val()}`), journal); 
-            }
-        });   
-        return;
-    }
+    
 
     //creates a new Journal entry in the database initialized with the user's input
-    const journalUID = await push(child(ref(db), `/journals/`), journal).key;
-    set(ref(db, `/users/${user}/journals/${journalUID}`), journalUID);
-    set(ref(db, `/users/${user}/lastJournalEntryTime`), Date.now());
-    set(ref(db, `/users/${user}/lastJournalEntryID`), journalUID);
+    
 }
 
 //Use the predefined Habit type in order to pass in the object to this method
