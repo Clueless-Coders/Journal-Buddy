@@ -8,8 +8,14 @@ import HomeMenu from './src/Components/HomePage/HomeMenu';
 import JournalEntries from './src/Components/Journal-Pages/JournalEntries';
 import { FontAwesome5 } from '@expo/vector-icons';
 import LoginPage from './src/Components/Login/LoginPage';
-import { AuthenticationContext, AuthContext } from './src/AuthContext';
 import CalendarPage from './src/Components/Journal-Pages/CalendarPage';
+import SignUp from './src/Components/Login/SignUp';
+import ForgotPassword from './src/Components/Login/ForgotPassword';
+import { initializeApp } from "firebase/app";
+import { getAnalytics } from "firebase/analytics";
+import { initializeAuth, getReactNativePersistence, getAuth, onAuthStateChanged } from 'firebase/auth';
+import ReactNativeAsyncStorage from '@react-native-async-storage/async-storage';
+
 
 //TODO: Allow each page to change the currentPage state in order to switch which page is being displayed.
 //TODO: Create bottom taskbar
@@ -72,24 +78,43 @@ function DrawerGroup() {
 
 function AuthenticationStack() {
   return(
-    <Stack.Navigator>
+    <Stack.Navigator initialRouteName='Login'>
       <Stack.Screen name="Login" component={LoginPage} />
+      <Stack.Screen name="SignUp" component={SignUp} />
+      <Stack.Screen name="ForgotPassword" component={ForgotPassword} />
     </Stack.Navigator>
   )
 }
 
 function AuthLogic() {
-  const auth = useContext(AuthContext);
-  return auth.user === null ? <AuthenticationStack /> : <TabGroup />
+  let [loggedIn, setLoggedIn ] = React.useState(getAuth().currentUser !== null);
+  onAuthStateChanged(getAuth(),(user) => {
+    setLoggedIn(user !== null);
+  })
+  return !loggedIn ? <AuthenticationStack /> : <TabGroup />
 }
 
 export default function App() {
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyCOshsr_f422QOgFGCtG6F2HFvAy4DIqpg",
+    authDomain: "journal-buddy-bfa71.firebaseapp.com",
+    databaseURL: "https://journal-buddy-bfa71-default-rtdb.firebaseio.com",
+    projectId: "journal-buddy-bfa71",
+    storageBucket: "journal-buddy-bfa71.appspot.com",
+    messagingSenderId: "750765241871",
+    appId: "1:750765241871:web:cf391de4e20373bb9f957a",
+    measurementId: "G-Q0VF0V7M1T"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const auth = initializeAuth(app, {
+    persistence: getReactNativePersistence(ReactNativeAsyncStorage)
+  })
+
   return(
-    <AuthenticationContext>
-      <NavigationContainer>
-        <AuthLogic />
-      </NavigationContainer>
-    </AuthenticationContext>
-    
+    <NavigationContainer>
+      <AuthLogic />
+    </NavigationContainer>    
   );
 }
