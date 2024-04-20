@@ -16,10 +16,6 @@ export default function LoginPage({navigation}) {
         login(email, password);
     }
 
-    function handleSignup(){
-        signup(email, password);
-    }
-
     return(
         <SafeAreaView style={styles.overlord}>
         <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : "height"}>
