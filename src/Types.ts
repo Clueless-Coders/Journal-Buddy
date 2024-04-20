@@ -1,4 +1,6 @@
-export type ButtonInput = {
+import { Button } from "react-native"
+
+export interface ButtonInput {
     buttonText: string,
     onPress: () => void,
     textStyle?: any,
@@ -7,7 +9,18 @@ export type ButtonInput = {
     enabled?: boolean
 }
 
+export interface CheckboxInput extends ButtonInput{
+    checked?: boolean
+}
+
 export type Quotes = {
     q: string,
     a: string
+}
+
+export type Habit = {
+    task: string,
+    isDone: boolean,
+    id: string,
+    index?: Number
 }
