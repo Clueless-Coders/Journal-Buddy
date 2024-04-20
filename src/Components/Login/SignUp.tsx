@@ -67,7 +67,7 @@ export default function SignUp({navigation}){
                     numberOfLines={1}
                 />
            </View>
-           <GeneralButtonDark buttonText={"Sign Up"} onPress={navigation.navigate("SignUp")} textStyle={styles.textStyle} containerStyle={{width: '60%', marginTop: 10}}/>
+           <GeneralButtonDark buttonText={"Sign Up"} onPress={} textStyle={styles.textStyle} containerStyle={{width: '60%', marginTop: 10}}/>
         </View>
         </ScrollView>
         </View>
