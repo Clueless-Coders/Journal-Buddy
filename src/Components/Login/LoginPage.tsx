@@ -3,6 +3,7 @@ import {Image, View, Text, StyleSheet, TextInput, ScrollView, SafeAreaView, Plat
 import GeneralButtonDark from '../Buttons/GeneralButtonDark';
 import { AuthContext } from '../../AuthContext'; 
 
+
 //potentionally add eye icon to mask and unmask
 //incorrect password/email
 //if click outside keyboard get rid off, no worky in android?
@@ -18,47 +19,53 @@ export default function LoginPage({navigation}) {
         auth.login();
     }
 
-    return (
-        <KeyboardAvoidingView
-            behavior={Platform.OS === "ios" ? "padding" : "height"}
-            style={{ flex: 1 }}>
-        <ScrollView>
+    return(
+        <SafeAreaView style={styles.overlord}>
+        <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : "height"}>
         <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
-            <SafeAreaView style={styles.overlord}>
-                <View style={styles.top}>
-                    <Text style={styles.header}>
-                        Welcome!
-                    </Text>
-                </View>
-                <View style={styles.container}> 
-                    <View style={styles.texboxWithLabel}>
-                        <Text style={styles.label}>
-                            Email:
-                        </Text>
-                        <TextInput
-                            editable 
-                            onChangeText={text => setEmail(text)} 
-                            value={email} placeholder="" 
-                            autoCapitalize="none"
-                            style={styles.inputField} 
-                            numberOfLines={1}
-                        />
-                    </View>
-                    <View style={styles.texboxWithLabel}>
-                        <Text style={styles.label}>
-                            Password:
-                        </Text>
-                        <TextInput  
-                            editable 
-                            onChangeText={text => setPassword(text)} 
-                            value={password} placeholder=""
-                            autoCapitalize="none"
-                            secureTextEntry
-                            style={styles.inputField} 
-                            numberOfLines={1}
-                        />
-                    </View>
-                    <GeneralButtonDark buttonText={"Log In"} onPress={handleLogin} textStyle={styles.textStyle} containerStyle={{width: '60%', marginTop: 0}}/>
+        <View>
+        <ScrollView>
+            <View style={styles.container}>
+            <Image source={require('./cat.png')}
+                   style={{width: 250, height: 250, marginTop: "10%"}}  />
+            <Text style={styles.header}>
+                Welcome!
+            </Text>
+            <View style={styles.texboxWithLabel}>
+                <Text style={styles.label}>
+                    Email:
+                </Text>
+                <TextInput
+                    editable 
+                    onChangeText={text => setEmail(text)} 
+                    value={email} placeholder="" 
+                    autoCapitalize="none"
+                    style={styles.inputField} 
+                    numberOfLines={1}
+                />
+           </View>
+           <View style={styles.texboxWithLabel}>
+                <Text style={styles.label}>
+                    Password:
+                </Text>
+                <TextInput
+                    editable 
+                    onChangeText={text => setPassword(text)} 
+                    value={password} placeholder="" 
+                    autoCapitalize="none"
+                    secureTextEntry
+                    style={styles.inputField} 
+                    numberOfLines={1}
+                />
+                <Pressable
+                    onPress={() => navigation.navigate("ForgotPassword")}>
+                    {({ pressed }) => (
+                <Text style={[styles.label2, {opacity: pressed ? 0.5 : 1}]}>
+                        Forgot your password?
+                </Text>)}
+                </Pressable>
+           </View>
+           <GeneralButtonDark buttonText={"Log In"} onPress={handleLogin} textStyle={styles.textStyle} containerStyle={{width: '60%', marginTop: "7%"}}/>
                 <Pressable
                     onPress={() => navigation.navigate("SignUp")}>
                     {({ pressed }) => (
@@ -66,15 +73,14 @@ export default function LoginPage({navigation}) {
                         Don't have an account? Sign up!
                 </Text>)}
                 </Pressable>
-                </View>
-            </SafeAreaView>
-        </TouchableWithoutFeedback>
+        </View>
         </ScrollView>
+        </View>
+        </TouchableWithoutFeedback>
         </KeyboardAvoidingView>
-    )
+        </SafeAreaView>
+    )       
 }
-
-
 
 const styles = StyleSheet.create( {
     top: {
@@ -84,8 +90,8 @@ const styles = StyleSheet.create( {
         alignItems: 'center'
     },
     header: {
-        marginTop: '70%',
-        marginBottom: '5%',
+        marginTop: '10%',
+        marginBottom: '7%',
         fontSize: 50,
         fontWeight: 'bold',
         color: '#050B24',
@@ -96,8 +102,14 @@ const styles = StyleSheet.create( {
         marginBottom: 2,
         textAlign: 'left' //how to align labels to the left of the boxes, not screen?? use views!!
     },
+    label2: {
+        color: '#050B24',
+        marginBottom: 0,
+        textAlign: 'right',
+        fontWeight: '100'
+    },
     inputField: {
-        marginBottom: '10%',
+        marginBottom: 2,
         borderRadius: 5,
         backgroundColor: '#E7EFFF70',
         padding: '3%',
@@ -105,7 +117,8 @@ const styles = StyleSheet.create( {
     },
     texboxWithLabel: {
         width: '78%',
-        height: 100
+        height: 100,
+        marginBottom: -10
     },
     textStyle: {
         fontSize: 20,

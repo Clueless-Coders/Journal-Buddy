@@ -1,12 +1,15 @@
 import React, { useContext } from 'react';
-import {View, Text, StyleSheet, TextInput, ScrollView, SafeAreaView, Platform, StatusBar, TouchableWithoutFeedback, Keyboard, KeyboardAvoidingView, Image, TouchableHighlight, Pressable } from 'react-native';
+import {Image, View, Text, StyleSheet, TextInput, ScrollView, SafeAreaView, Platform, StatusBar, TouchableWithoutFeedback, Keyboard, KeyboardAvoidingView, TouchableHighlight, Pressable } from 'react-native';
 import GeneralButtonDark from '../Buttons/GeneralButtonDark';
-import { AuthContext } from '../../AuthContext';
+import { AuthContext } from '../../AuthContext'; 
 
-//ask tristan about setPassword with the confirm, rn it just types in both
-//like is there a handleSignUp function?
 
-export default function SignUp({navigation}){
+//potentionally add eye icon to mask and unmask
+//incorrect password/email
+//if click outside keyboard get rid off, no worky in android?
+//confirm password
+
+export default function LoginPage({navigation}) {
     let [email, setEmail] = React.useState('');
     let [password, setPassword] = React.useState('');
     let auth = useContext(AuthContext);
@@ -23,10 +26,10 @@ export default function SignUp({navigation}){
         <View>
         <ScrollView>
             <View style={styles.container}>
-            <Image source={require('./cat.png')}
-                   style={{width: 250, height: 250, marginTop: "1%"}}  />
+            {/* <Image source={require('./cat.png')}
+                   style={{width: 250, height: 250, marginTop: "10%"}}  /> */}
             <Text style={styles.header}>
-                Sign Up            
+                Password Reset
             </Text>
             <View style={styles.texboxWithLabel}>
                 <Text style={styles.label}>
@@ -41,35 +44,8 @@ export default function SignUp({navigation}){
                     numberOfLines={1}
                 />
            </View>
-           <View style={styles.texboxWithLabel}>
-                <Text style={styles.label}>
-                    Password:
-                </Text>
-                <TextInput
-                    editable 
-                    onChangeText={text => setPassword(text)} 
-                    value={password} placeholder="" 
-                    autoCapitalize="none"
-                    secureTextEntry
-                    style={styles.inputField} 
-                    numberOfLines={1}
-                />
-           </View>
-           <View style={styles.texboxWithLabel}>
-                <Text style={styles.label}>
-                    Confirm Password:
-                </Text>
-                <TextInput
-                    editable 
-                    onChangeText={text => setPassword(text)} 
-                    value={password} placeholder="" 
-                    autoCapitalize="none"
-                    secureTextEntry
-                    style={styles.inputField} 
-                    numberOfLines={1}
-                />
-           </View>
-           <GeneralButtonDark buttonText={"Sign Up"} onPress={navigation.navigate("SignUp")} textStyle={styles.textStyle} containerStyle={{width: '60%', marginTop: 10}}/>
+           
+           <GeneralButtonDark buttonText={"Reset"} onPress={handleLogin} textStyle={styles.textStyle} containerStyle={{width: '60%', marginTop: "7%"}}/>
         </View>
         </ScrollView>
         </View>
@@ -79,22 +55,31 @@ export default function SignUp({navigation}){
     )       
 }
 
-const styles = StyleSheet.create({
+const styles = StyleSheet.create( {
+    top: {
+        alignItems: 'center'
+    },
     container: {
         alignItems: 'center'
     },
     header: {
-        marginTop: '10%',
+        marginTop: '70%',
         marginBottom: '7%',
-        fontSize: 50,
+        fontSize: 30,
         fontWeight: 'bold',
         color: '#050B24',
-        
+        alignItems: 'center'
     },
     label: {
         color: '#050B24',
         marginBottom: 2,
         textAlign: 'left' //how to align labels to the left of the boxes, not screen?? use views!!
+    },
+    label2: {
+        color: '#050B24',
+        marginBottom: 0,
+        textAlign: 'right',
+        fontWeight: '100'
     },
     inputField: {
         marginBottom: 2,
@@ -112,9 +97,14 @@ const styles = StyleSheet.create({
         fontSize: 20,
         color: 'white'
     },
+    thin: {
+        alignItems: 'center',
+        fontWeight: '100',
+        color: '#050B24'
+    },
     overlord: {
-        backgroundColor: 'white',
         paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0,
+        backgroundColor: 'white',
         flex: 1
     }
 });
