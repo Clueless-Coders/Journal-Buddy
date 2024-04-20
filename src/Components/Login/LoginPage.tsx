@@ -1,8 +1,7 @@
 import React, { useContext } from 'react';
 import {Image, View, Text, StyleSheet, TextInput, ScrollView, SafeAreaView, Platform, StatusBar, TouchableWithoutFeedback, Keyboard, KeyboardAvoidingView, TouchableHighlight, Pressable } from 'react-native';
 import GeneralButtonDark from '../Buttons/GeneralButtonDark';
-import { AuthContext } from '../../AuthContext'; 
-
+import { login, signup } from '../../firebase/Database';
 
 //potentionally add eye icon to mask and unmask
 //incorrect password/email
@@ -12,11 +11,13 @@ import { AuthContext } from '../../AuthContext';
 export default function LoginPage({navigation}) {
     let [email, setEmail] = React.useState('');
     let [password, setPassword] = React.useState('');
-    let auth = useContext(AuthContext);
-
 
     function handleLogin() {
-        auth.login();
+        login(email, password);
+    }
+
+    function handleSignup(){
+        signup(email, password);
     }
 
     return(

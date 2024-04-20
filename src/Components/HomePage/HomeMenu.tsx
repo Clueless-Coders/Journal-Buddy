@@ -3,6 +3,7 @@ import { Inter_400Regular, useFonts } from '@expo-google-fonts/inter';
 import { View, Text, StyleSheet, ScrollView, SafeAreaView, Platform, StatusBar, Button, Alert } from 'react-native';
 import GeneralButtonDark from '../Buttons/GeneralButtonDark';
 import { Quotes } from '../../Types';
+import { getAuth, signOut } from 'firebase/auth';
 
 import GeneralButtonLight from '../Buttons/GeneralButtonLight';
 import DailyPrompt from '../Journal-Pages/DailyPrompt';
@@ -68,6 +69,7 @@ export default function HomeMenu({ navigation }: any) {
                         {/* <GeneralButton buttonText={"Habit 2"} onPress={() => null}/> */}
                         {/* <GeneralButton buttonText={"Habit 3"} onPress={() => null}/> */}
                     </View>
+                    <GeneralButtonDark onPress={ () => signOut(getAuth()) } buttonText='Sign Out'/>
                 </View>
             </ScrollView>
         </SafeAreaView>
