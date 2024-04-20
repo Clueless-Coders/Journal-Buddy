@@ -3,6 +3,7 @@ import { Inter_400Regular, useFonts } from '@expo-google-fonts/inter';
 import { View, Text, StyleSheet, ScrollView, SafeAreaView, Platform, StatusBar, FlatList} from 'react-native';
 import GeneralButtonDark from '../Buttons/GeneralButtonDark';
 import { Quotes, Habit } from '../../Types';
+import { getAuth, signOut } from 'firebase/auth';
 import GeneralButtonLight from '../Buttons/GeneralButtonLight';
 import DailyPrompt from '../Journal-Pages/DailyPrompt';
 import Menu from '../HamburgerMenu/Menu';
@@ -68,7 +69,7 @@ export default function HomeMenu({ navigation }: any) {
                     <View>
                     
                     </View>
-                    
+                    <GeneralButtonDark onPress={ () => signOut(getAuth()) } buttonText='Sign Out'/>
                 </View>
             </ScrollView>
         </SafeAreaView>
