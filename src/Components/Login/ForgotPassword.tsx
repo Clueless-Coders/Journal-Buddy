@@ -26,10 +26,10 @@ export default function LoginPage({navigation}) {
         <View>
         <ScrollView>
             <View style={styles.container}>
-            <Image source={require('./cat.png')}
-                   style={{width: 250, height: 250, marginTop: "10%"}}  />
+            {/* <Image source={require('./cat.png')}
+                   style={{width: 250, height: 250, marginTop: "10%"}}  /> */}
             <Text style={styles.header}>
-                Welcome!
+                Password Reset
             </Text>
             <View style={styles.texboxWithLabel}>
                 <Text style={styles.label}>
@@ -44,35 +44,8 @@ export default function LoginPage({navigation}) {
                     numberOfLines={1}
                 />
            </View>
-           <View style={styles.texboxWithLabel}>
-                <Text style={styles.label}>
-                    Password:
-                </Text>
-                <TextInput
-                    editable 
-                    onChangeText={text => setPassword(text)} 
-                    value={password} placeholder="" 
-                    autoCapitalize="none"
-                    secureTextEntry
-                    style={styles.inputField} 
-                    numberOfLines={1}
-                />
-                <Pressable
-                    onPress={() => navigation.navigate("ForgotPassword")}>
-                    {({ pressed }) => (
-                <Text style={[styles.label2, {opacity: pressed ? 0.5 : 1}]}>
-                        Forgot your password?
-                </Text>)}
-                </Pressable>
-           </View>
-           <GeneralButtonDark buttonText={"Log In"} onPress={handleLogin} textStyle={styles.textStyle} containerStyle={{width: '60%', marginTop: "7%"}}/>
-                <Pressable
-                    onPress={() => navigation.navigate("SignUp")}>
-                    {({ pressed }) => (
-                <Text style={[styles.thin, {opacity: pressed ? 0.5 : 1}]}>
-                        Don't have an account? Sign up!
-                </Text>)}
-                </Pressable>
+           
+           <GeneralButtonDark buttonText={"Reset"} onPress={handleLogin} textStyle={styles.textStyle} containerStyle={{width: '60%', marginTop: "7%"}}/>
         </View>
         </ScrollView>
         </View>
@@ -90,9 +63,9 @@ const styles = StyleSheet.create( {
         alignItems: 'center'
     },
     header: {
-        marginTop: '10%',
+        marginTop: '70%',
         marginBottom: '7%',
-        fontSize: 50,
+        fontSize: 30,
         fontWeight: 'bold',
         color: '#050B24',
         alignItems: 'center'
