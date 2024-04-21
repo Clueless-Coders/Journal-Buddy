@@ -1,14 +1,14 @@
 import React, { useContext } from 'react';
 import {Image, View, Text, StyleSheet, TextInput, ScrollView, SafeAreaView, Platform, StatusBar, TouchableWithoutFeedback, Keyboard, KeyboardAvoidingView, TouchableHighlight, Pressable } from 'react-native';
 import GeneralButtonDark from '../Buttons/GeneralButtonDark';
-import { login, signup } from '../../firebase/Database';
+import { login } from '../../firebase/Database';
 
 //potentionally add eye icon to mask and unmask
 //incorrect password/email
 //if click outside keyboard get rid off, no worky in android?
 //confirm password
 
-export default function LoginPage({navigation}) {
+export default function LoginPage({navigation}){
     let [email, setEmail] = React.useState('');
     let [password, setPassword] = React.useState('');
 
@@ -24,7 +24,7 @@ export default function LoginPage({navigation}) {
         <ScrollView>
             <View style={styles.container}>
             <Image source={require('./cat.png')}
-                   style={{width: 250, height: 250, marginTop: "10%"}}  />
+                   style={{width: 250, height: 250, marginTop: "7%"}}  />
             <Text style={styles.header}>
                 Welcome!
             </Text>
@@ -124,7 +124,8 @@ const styles = StyleSheet.create( {
     thin: {
         alignItems: 'center',
         fontWeight: '100',
-        color: '#050B24'
+        color: '#050B24',
+        marginTop: -7
     },
     overlord: {
         paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0,
