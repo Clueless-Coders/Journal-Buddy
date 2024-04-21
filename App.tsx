@@ -10,6 +10,7 @@ import { FontAwesome5 } from '@expo/vector-icons';
 import LoginPage from './src/Components/Login/LoginPage';
 import SignUp from './src/Components/Login/SignUp';
 import ForgotPassword from './src/Components/Login/ForgotPassword';
+import HabitPage from './src/Components/Habits/HabitPage';
 import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
 import { initializeAuth, getReactNativePersistence, getAuth, onAuthStateChanged } from 'firebase/auth';
@@ -72,6 +73,7 @@ function DrawerGroup() {
     <Drawer.Navigator initialRouteName='HomeStack'>
       <Stack.Screen name="Home" component={HomeMenu} />
       <Stack.Screen name="JournalStack" component={JournalStack} />
+      <Stack.Screen name="Habits" component={HabitPage} />
     </Drawer.Navigator>
   );
 }
