@@ -11,6 +11,7 @@ import LoginPage from './src/Components/Login/LoginPage';
 import SignUp from './src/Components/Login/SignUp';
 import ForgotPassword from './src/Components/Login/ForgotPassword';
 import HabitPage from './src/Components/Habits/HabitPage';
+import Create from './src/Components/Habits/Create';
 import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
 import { initializeAuth, getReactNativePersistence, getAuth, onAuthStateChanged } from 'firebase/auth';
@@ -29,7 +30,6 @@ function TabGroup() {
 
   return (
     <Tab.Navigator
-      
       screenOptions={({ route, navigation }) => ({
         tabBarIcon: (focused: boolean, color: string, size: number) => {
           let iconName;
@@ -74,6 +74,7 @@ function DrawerGroup() {
       <Stack.Screen name="Home" component={HomeMenu} />
       <Stack.Screen name="JournalStack" component={JournalStack} />
       <Stack.Screen name="Habits" component={HabitPage} />
+      <Stack.Screen name="Create Habit" component={Create} />
     </Drawer.Navigator>
   );
 }

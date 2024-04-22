@@ -12,29 +12,9 @@ export default function HabitPage({navigation}) {
         <ScrollView>
             <View style={styles.container}>
             <Text style={styles.header}>
-                Habits
+                Create a Habit
             </Text>
             <View style={styles.div} />
-            <View style={styles.row}>
-            <Pressable
-                style={({ pressed }) => [
-                    styles.press,
-                    {opacity: pressed ? 0.5 : 1 } 
-                ]}
-                onPress={() => navigation.navigate("Create Habit")}>
-                <Text style={styles.textStyle}>
-                        Today
-                </Text>
-            </Pressable>
-            <Pressable
-                style={({ pressed }) => [
-                    styles.press,
-                    {opacity: pressed ? 0.5 : 1 } 
-                ]}
-                onPress={() => navigation.navigate("Create Habit")}>
-                <Ionicons name="add" size={16} color="white" />
-            </Pressable>
-            </View>
         </View>
         </ScrollView>
         </View>
@@ -54,18 +34,6 @@ const styles = StyleSheet.create( {
         backgroundColor: 'gray',
         marginBottom: '1%'
     },
-    row: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        width: '100%',
-        paddingHorizontal: 25
-    },
-    press: {
-        backgroundColor: "#8DB1F7",
-        borderRadius: 25,
-        paddingHorizontal: 10,
-        paddingVertical: 10,
-    },
     header: {
         marginTop: '1%',
         marginBottom: '1%',
@@ -73,11 +41,6 @@ const styles = StyleSheet.create( {
         fontWeight: 'bold',
         color: '#050B24',
         alignItems: 'center'
-    },
-    textStyle: {
-        alignItems: 'center',
-        fontSize: 13,
-        color: 'white'
     },
     overlord: {
         paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0,

@@ -88,7 +88,7 @@ const styles = StyleSheet.create({
     header: {
         fontSize: 30,
         // fontWeight: 'bold',
-        color: 'black',
+        color: '#050B24',
     },
     headerWrapper: {
         width: '100%',
