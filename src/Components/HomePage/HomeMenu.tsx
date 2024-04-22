@@ -9,7 +9,7 @@ import DailyPrompt from '../Journal-Pages/DailyPrompt';
 import Menu from '../HamburgerMenu/Menu';
 import CheckboxButton from '../Buttons/CheckboxButton';
 import { getDatabase, onValue, ref } from 'firebase/database'
-import { Habit, getHabitByID, getHabitsByCurrentUser } from '../../firebase/Database';
+import { Habit, addHabitTime, getHabitByID, getHabitsByCurrentUser } from '../../firebase/Database';
 //import { FlatList } from 'react-native-gesture-handler';
 // import { getapi } from '../../Quotes';
 
@@ -43,17 +43,17 @@ export default function HomeMenu({ navigation }: any) {
         return UTCms%86400000;
     }
     
-    function HabitDoneToday(habit : Habit): boolean {
+    function HabitIsDone(habit : Habit): boolean {
         let currentDate: string = new Date().toDateString();
         let DaysDone =  habit.timesCompleted;
         if( DaysDone !== undefined){
-            let TimesDone: string[] = Object.keys(DaysDone);
-            let lastDateDone: string = new Date(parseInt(TimesDone[TimesDone.length - 1])).toDateString(); //gets date of when it was last done
+            let timeKeys: string[] = Object.keys(DaysDone);
+            let lastDateDone: string = new Date(parseInt(timeKeys[timeKeys.length - 1])).toDateString(); //gets date of when it was last done
             if(currentDate === lastDateDone){
                 //let timesObject = Object.values(DaysDone);
                 
                 //get's latest habit time completed ... i think
-                let recentTime: number = Object.values(DaysDone[TimesDone[TimesDone.length - 1]])[0];
+                let recentTime: number = Object.values(DaysDone[timeKeys[timeKeys.length - 1]])[0];
 
                 let timesToCompleteKeys: string[] = Object.keys(habit.timesToComplete);
                 //let timeToCompleteValues = Object.values(habit.timesToComplete);
@@ -79,7 +79,7 @@ export default function HomeMenu({ navigation }: any) {
             return false;
         }
     } 
-    ///push(child(ref(db), `/habits/${habitID}/timesCompleted), Date.now());
+    
 
     function HabitAddTime(habit : Habit){
         //
@@ -151,15 +151,16 @@ export default function HomeMenu({ navigation }: any) {
                         {   
                             DATA.map((item) => {
                             return <CheckboxButton  onPress={() => {
-                                if(HabitDoneToday(item)){
+                                if(HabitIsDone(item)){
                                     console.log("Habit is done today, switch to not done");
+                                    addHabitTime(item.uid);
                                     //item.daysCompleted?.push(new Date().toDateString());
                                     //add logic to update database
                                 } else {
                                     console.log("habit was not done, changing to completed");
                                     //item.daysCompleted?.pop();
                                 }
-                            }} buttonText={item.title} containerStyle={styles.checkButton} checked = {HabitDoneToday(item)}/>;
+                            }} buttonText={item.title} containerStyle={styles.checkButton} checked = {HabitIsDone(item)}/>;
                             }) 
                         }
                     </View>

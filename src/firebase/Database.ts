@@ -138,6 +138,15 @@ export function createHabit(newHabit: Habit){
     });
 }
 
+export async function addHabitTime(habitID: string){
+    const db = getDatabase(); 
+    let currentTime = Date.now();
+    await push(child(ref(db), `/habits/${habitID}/timesCompleted`), currentTime);
+    //obtains the last time the user has instantiated a new Journal entry in Unix time (stored in user profile)
+    ///push(child(ref(db), `/habits/${habitID}/timesCompleted`), Date.now());
+}
+
+
 //Queries the database for all the journals created by this user
 export async function getJournalsByUserID(userID: string): Promise<Journal[]>{
     //Grabs all the Journal data references under the user's profile
