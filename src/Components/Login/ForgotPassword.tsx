@@ -9,7 +9,7 @@ import { login } from '../../firebase/Database'
 //if click outside keyboard get rid off, no worky in android?
 //confirm password
 
-export default function LoginPage({navigation}:any) {
+export default function LoginPage({navigation}) {
     let [email, setEmail] = React.useState('');
     let [password, setPassword] = React.useState('');
 
