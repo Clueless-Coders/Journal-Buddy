@@ -11,6 +11,7 @@ export interface ButtonInput {
 
 export interface CheckboxInput extends ButtonInput{
     checked?: boolean
+    key?: string
 }
 
 export type Quotes = {

@@ -81,30 +81,6 @@ export default function HomeMenu({ navigation }: any) {
     } 
     
 
-    function HabitAddTime(habit : Habit){
-        //
-        if(habit.timesCompleted !== undefined){
-            let listTimesDone = Object.entries(habit.timesCompleted);
-            let currentTime = Date.now();
-            //listTimesDone.push([currentTime +'', {timeCompleted: UTCToTime(currentTime)}]);
-            //need to verify if this push is correct
-            //convert it back to object
-            //update the habits atrtibute
-            //tell database to update the habit in dataabase with corresponding ID
-        }
-    }
-    function HabitRemoveTime(habit: Habit){
-        if(habit.timesCompleted !== undefined){
-            let listTimesDone = Object.entries(habit.timesCompleted);
-            let currentTime = Date.now();
-            listTimesDone.pop();
-            //need to verify if this pop is correct
-            //convert listTimesDone back to object
-            //update the habits atrtibute
-            //tell database to update the habit in dataabase with corresponding ID
-        }
-    }
-
     async function getQuote(){
         const url:string ="https://zenquotes.io/api/random";
         const response = await fetch(url);
@@ -148,20 +124,20 @@ export default function HomeMenu({ navigation }: any) {
                         </Text>
                     </View>
                     <View style = {styles.habitBox}>
-                        {   
+                        {   DATA.length > 0 ?
                             DATA.map((item) => {
                             return <CheckboxButton  onPress={() => {
-                                if(HabitIsDone(item)){
-                                    console.log("Habit is done today, switch to not done");
-                                    addHabitTime(item.uid);
-                                    //item.daysCompleted?.push(new Date().toDateString());
-                                    //add logic to update database
-                                } else {
-                                    console.log("habit was not done, changing to completed");
-                                    //item.daysCompleted?.pop();
-                                }
-                            }} buttonText={item.title} containerStyle={styles.checkButton} checked = {HabitIsDone(item)}/>;
-                            }) 
+                                    if(HabitIsDone(item)){
+                                        console.log("Habit is done today, switch to not done");
+                                        
+                                        //item.daysCompleted?.push(new Date().toDateString());
+                                        //add logic to update database
+                                    } else {
+                                        console.log("habit was not done, changing to completed");
+                                        //item.daysCompleted?.pop();
+                                        addHabitTime(item.uid);
+                                    }}} buttonText={(item.uid === undefined)? "hello" : item.title} containerStyle={styles.checkButton} checked = {HabitIsDone(item)} key = {item.uid}/>;
+                            }) : <Text>:c</Text>
                         }
                     </View>
                     <View>
