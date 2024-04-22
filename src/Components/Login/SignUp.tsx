@@ -3,7 +3,7 @@ import {View, Text, StyleSheet, TextInput, ScrollView, SafeAreaView, Platform, S
 import GeneralButtonDark from '../Buttons/GeneralButtonDark';
 import { signup } from '../../firebase/Database';
 
-export default function SignUp({navigation}){
+export default function SignUp({navigation}: any){
     let [email, setEmail] = React.useState('');
     let [password, setPassword] = React.useState('');
     let [confirmedPassword, setConfirmedPassword] = React.useState('');
@@ -22,7 +22,7 @@ export default function SignUp({navigation}){
     let [passwordError, setPasswordError] = React.useState('');
     let [confirmedPasswordError, setConfirmedPasswordError] = React.useState('');
 
-    function validateEmail(email) {
+    function validateEmail(email: string) {
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         if (!emailRegex.test(email)) {
             setEmailError('Invalid email format');
@@ -32,7 +32,7 @@ export default function SignUp({navigation}){
         return true;
     }
     
-    function validatePassword(password) {
+    function validatePassword(password: string) {
         if (password.length < 6) {
             setPasswordError('Enter 6 or more characters');
             return false;
@@ -41,7 +41,7 @@ export default function SignUp({navigation}){
         return true;
     }
 
-    function validatePasswordsMatch(password, confirmedPassword) {
+    function validatePasswordsMatch(password: string, confirmedPassword: string) {
         if (password !== confirmedPassword) {
             setConfirmedPasswordError('Passwords do not match');
             return false;
