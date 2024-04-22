@@ -37,9 +37,7 @@ export type Habit = {
     },
     timesToComplete?: {
         [index: number]: {
-            hour: number,
-            minute: number,
-            afternoon: boolean
+            time: number //time from 12AM - time to complete in milliseconds
         }
          //is in the afternoon?
     }, //can have multiple times of day to complete the task

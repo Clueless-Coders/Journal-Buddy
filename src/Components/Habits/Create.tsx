@@ -6,7 +6,10 @@ import GeneralButtonDark from '../Buttons/GeneralButtonDark';
 
 export default function HabitPage({navigation}: any) {
     let [title, setTitle] = React.useState('');
-    let [description, setDescription] = React.useState('');    
+    let [description, setDescription] = React.useState('');
+    let [after, setAfternoon] = React.useState({
+        afternoon: false
+    });
     let [daysSet, setDaysSet] = React.useState({
       sunday: false,
       monday: false,
@@ -22,6 +25,13 @@ export default function HabitPage({navigation}: any) {
     const toggleDay = (index) => {
         const day = dayKeys[index];
         setDaysSet(prev => ({ ...prev, [day]: !prev[day] }));
+    };
+
+    const afternoon = ['AM', 'PM'];
+    const afternoonKeys = ['AM', 'PM']
+    const toggleTime = (index) => {
+        const time = afternoonKeys[index];
+        setAfternoon(prev => ({ ...prev, [time]: !prev[time] }));
     };
 
     function handleCreateHabit() {
@@ -92,6 +102,35 @@ export default function HabitPage({navigation}: any) {
                     </Text>
                     <View style={{flexDirection: 'row', alignItems:'center', gap: 10, marginTop: 10}}>
                         {days?.map((item, index) => (
+                                <Pressable 
+                                    key = {index}
+                                    style={{
+                                        width: 40,
+                                        height: 40,
+                                        borderRadius: 5,
+                                        justifyContent: 'center',
+                                        alignItems: 'center',
+                                        backgroundColor: daysSet[dayKeys[index]] ? '#8DB1F7' : '#ccc' }} onPress={() => toggleDay(index)}>
+                                <Text style={{ color: 'white' }}>{item}</Text>
+                                </Pressable>    
+                            ))}
+                    </View>
+                </View>
+
+                <View style={{flexDirection: 'row', alignItems:'center', gap: 10, marginTop: 10}}>
+                    <View style={styles.timeTextBoxWithLabel}>
+                        <Text style={styles.label}>
+                            Time:
+                        </Text>
+                        <TextInput style={styles.timeInput}
+                            editable 
+                            onChangeText={text => setAfternoon(text)} 
+                            // value={after} placeholder="" 
+                            autoCapitalize="none"
+                            numberOfLines={3}
+                        />
+                    </View>
+                        {afternoon?.map((item, index) => (
                             <Pressable 
                                 key = {index}
                                 style={{
@@ -100,16 +139,12 @@ export default function HabitPage({navigation}: any) {
                                     borderRadius: 5,
                                     justifyContent: 'center',
                                     alignItems: 'center',
-                                    backgroundColor: daysSet[dayKeys[index]] ? '#8DB1F7' : '#ccc' }} onPress={() => toggleDay(index)}>
+                                    backgroundColor: after[afternoonKeys[index]] ? '#8DB1F7' : '#ccc' }} onPress={() => toggleTime(index)}>
                             <Text style={{ color: 'white' }}>{item}</Text>
                             </Pressable>    
                         ))}
-                    </View>
                 </View>
 
-                <View>
-                    
-                </View>
                 <View style={styles.div} />
                 <GeneralButtonDark buttonText={"Create"} onPress={handleCreateHabit} textStyle={styles.textStyle} containerStyle={{width: '60%', marginTop: "1%"}}/>
 
@@ -157,6 +192,19 @@ const styles = StyleSheet.create( {
         backgroundColor: '#E7EFFF70',
         padding: '3%',
         height: '50%'
+    },
+    timeInput: {
+        width: "100%", 
+        marginBottom: 2,
+        borderRadius: 5,
+        backgroundColor: '#E7EFFF70',
+        padding: '3%',
+        height: '50%'
+    },
+    timeTextBoxWithLabel: {
+        width: '55%',
+        height: 100,
+        marginBottom: -10
     },
     textStyle: {
         fontSize: 20,
