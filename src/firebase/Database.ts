@@ -140,6 +140,10 @@ export function createHabit(newHabit: Habit){
 
 export async function addHabitTime(habitID: string){
     const db = getDatabase(); 
+    if(habitID === undefined){
+        console.log("Undefined id");
+        return;
+    }
     let currentTime = Date.now();
     await push(child(ref(db), `/habits/${habitID}/timesCompleted`), currentTime);
     //obtains the last time the user has instantiated a new Journal entry in Unix time (stored in user profile)

@@ -1,12 +1,10 @@
 import React from 'react';
 import { Inter_400Regular, useFonts } from '@expo-google-fonts/inter';
-import { View, Text, StyleSheet, ScrollView, SafeAreaView, Platform, StatusBar, FlatList} from 'react-native';
+import { View, Text, StyleSheet, ScrollView, SafeAreaView, Platform, StatusBar, FlatList, Pressable} from 'react-native';
 import GeneralButtonDark from '../Buttons/GeneralButtonDark';
 import { Quotes} from '../../Types';
 import { getAuth, signOut } from 'firebase/auth';
 import GeneralButtonLight from '../Buttons/GeneralButtonLight';
-import DailyPrompt from '../Journal-Pages/DailyPrompt';
-import Menu from '../HamburgerMenu/Menu';
 import CheckboxButton from '../Buttons/CheckboxButton';
 import { getDatabase, onValue, ref } from 'firebase/database'
 import { Habit, addHabitTime, getHabitByID, getHabitsByCurrentUser } from '../../firebase/Database';
@@ -22,6 +20,7 @@ export default function HomeMenu({ navigation }: any) {
 
     let [quote, updateQuote] = React.useState({q: 'haiii', a: '- T'});
     //let user = getAuth().currentUser?.uid;
+    
     React.useEffect(() => {
         let ignore = false;
         async function getHabits(){
@@ -48,16 +47,17 @@ export default function HomeMenu({ navigation }: any) {
         let DaysDone =  habit.timesCompleted;
         if( DaysDone !== undefined){
             let timeKeys: string[] = Object.keys(DaysDone);
-            let lastDateDone: string = new Date(parseInt(timeKeys[timeKeys.length - 1])).toDateString(); //gets date of when it was last done
-            if(currentDate === lastDateDone){
+            //let lastDateDone: string = new Date(parseInt(timeKeys[timeKeys.length - 1])).toDateString(); //gets date of when it was last done
+            let lastDone: number = Object.values(DaysDone[timeKeys[timeKeys.length - 1]])[0];
+            
+            //if they're same date, check for specific time slot
+            if(currentDate === new Date().toDateString()){
                 //let timesObject = Object.values(DaysDone);
                 
                 //get's latest habit time completed ... i think
-                let recentTime: number = Object.values(DaysDone[timeKeys[timeKeys.length - 1]])[0];
+                let recentTime: number = UTCToTime(Object.values(DaysDone[timeKeys[timeKeys.length - 1]])[0]);
 
                 let timesToCompleteKeys: string[] = Object.keys(habit.timesToComplete);
-                //let timeToCompleteValues = Object.values(habit.timesToComplete);
-                // console.log(timesToDo);
                 let i: number = 0;
                 let currentTime = UTCToTime(Date.now());
                 //keep going until it reaches just a past
@@ -125,7 +125,7 @@ export default function HomeMenu({ navigation }: any) {
                     </View>
                     <View style = {styles.habitBox}>
                         {   DATA.length > 0 ?
-                            DATA.map((item) => {
+                            DATA.map((item, index) => {
                             return <CheckboxButton  onPress={() => {
                                     if(HabitIsDone(item)){
                                         console.log("Habit is done today, switch to not done");
@@ -134,14 +134,15 @@ export default function HomeMenu({ navigation }: any) {
                                         //add logic to update database
                                     } else {
                                         console.log("habit was not done, changing to completed");
-                                        //item.daysCompleted?.pop();
+                                        //item.daysCompleted?.pop();w
                                         addHabitTime(item.uid);
-                                    }}} buttonText={(item.uid === undefined)? "hello" : item.title} containerStyle={styles.checkButton} checked = {HabitIsDone(item)} key = {item.uid}/>;
+                                    }}} buttonText={(item.uid === undefined)? "Brush teeth" : item.title} containerStyle={styles.checkButton} checked = {HabitIsDone(item)} key = {index + ""}/>;
                             }) : <Text>:c</Text>
                         }
                     </View>
+
                     <View>
-                    
+                    {/* <GeneralButtonLight buttonText='refresh' onPress={()=> getHa}></GeneralButtonLight> */}
                     </View>
                     <GeneralButtonDark onPress={ () => signOut(getAuth()) } buttonText='Sign Out'/>
                 </View>
