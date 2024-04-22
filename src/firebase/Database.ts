@@ -1,3 +1,5 @@
+import { Quotes } from '../Types';
+import OpenAI from "openai";
 import { get, set, child, ref, getDatabase, push } from 'firebase/database';
 import { createUserWithEmailAndPassword, getAuth, signInWithEmailAndPassword } from 'firebase/auth';
 
@@ -239,3 +241,34 @@ export function signup (email: string, password: string) {
         createUser(userCredential.user?.uid)
     });
 }
+
+
+const quote_url:string ="https://zenquotes.io/api/quotes/";
+const gptKey:string = "sk-proj-E0fX6zTCwwDJ5Ngx3BzNT3BlbkFJHIzYJrlOnhWSb5RcOFYk";
+
+const openai = new OpenAI({
+  organization: 'org-Af8CoixBBszCPCBHo1PxTV2A',
+  project: 'proj_gRH8KmIgrcCaeSxuD2hO5iMX',
+});
+
+async function getQuote()
+{
+    fetch(quote_url)
+    .then (response => response.json()).then(console.log);
+    
+}
+
+async function getPrompt() {
+  const completion = await openai.chat.completions.create({
+    messages: [{"role": "system", "content": "You are a helpful assistant."},
+        {"role": "user", "content": "Generate a journal topic for a user to write about in their journal"}
+        ],
+    model: "gpt-3.5-turbo",
+  });
+
+  console.log(completion.choices[0]);
+}
+
+//const reference = ref(db, 'users/')
+
+//date.now
