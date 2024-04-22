@@ -10,7 +10,7 @@ export type PromptPageProps = {
     journal?: Journal,
     prompt?: string
 }
-export default function DailyPrompt(props: PromptPageProps) {
+export default function DailyPrompt({ navigation, route }: any) {
     let [response, setResponse] = React.useState('');
     let [prompt, setPrompt ] = React.useState('');
     
@@ -25,16 +25,19 @@ export default function DailyPrompt(props: PromptPageProps) {
             dayWritten: Date.now()
         };
         createJournal(newJournal);
+        navigation.navigate('JournalEntries');
     }
-    if(props.journal !== undefined) 
-        setResponse(props.journal.entry);
 
-    if(props.prompt !== undefined){
-        setPrompt(props.prompt);
-    }
-    console.log(props);
-
-
+    React.useEffect(() => {
+        if(route.params?.item) {
+            setResponse(route.params.item.entry);
+        }
+        if(route.params?.prompt) {
+            setPrompt(route.params.prompt);
+        }
+        console.log(route.params);
+    }, [route.params])
+    
     return (
         <SafeAreaView style={styles.overlord}>
             <ScrollView style={styles.wrapper}>
