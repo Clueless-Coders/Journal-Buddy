@@ -24,8 +24,9 @@ export default function DailyPrompt({ navigation, route }: any) {
             entry: response,
             dayWritten: Date.now()
         };
-        createJournal(newJournal);
-        navigation.navigate('JournalEntries');
+        createJournal(newJournal).then(() => {
+            navigation.navigate('JournalEntries', { update: true });
+        });
     }
 
     React.useEffect(() => {
