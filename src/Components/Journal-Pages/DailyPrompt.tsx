@@ -3,14 +3,17 @@ import { View, Text, StyleSheet, TextInput, ScrollView, SafeAreaView, Platform, 
 import GeneralButtonDark from '../Buttons/GeneralButtonDark';
 import BackButton from '../Buttons/BackButton';
 import { Inter_400Regular, useFonts } from '@expo-google-fonts/inter';
-import { createJournal, Journal } from '../../firebase/Database';
+import { createJournal, getJournalByID, Journal } from '../../firebase/Database';
 import { getAuth } from 'firebase/auth';
 
-export default function DailyPrompt() {
-    //TODO: Add functions to do their respective tasks once they are implemented
-    //TODO: Interface with the backend in order to save the user's response.
-    let [input, onChangeInput] = React.useState('');
-    const [fontsLoaded] = useFonts({Inter_400Regular});
+export type PromptPageProps = {
+    journal?: Journal,
+    prompt?: string
+}
+export default function DailyPrompt({ navigation, route }: any) {
+    let [response, setResponse] = React.useState('');
+    let [prompt, setPrompt ] = React.useState('');
+    
     function handleSubmit() {
         const auth = getAuth();
         if(auth.currentUser === undefined || auth.currentUser === null)
@@ -18,31 +21,43 @@ export default function DailyPrompt() {
 
         const newJournal: Journal = {
             user: auth.currentUser.uid,
-            entry: input,
+            entry: response,
             dayWritten: Date.now()
         };
-        createJournal(newJournal);
+        createJournal(newJournal).then(() => {
+            navigation.navigate('JournalEntries', { update: true });
+        });
     }
+
+    React.useEffect(() => {
+        if(route.params?.item) {
+            setResponse(route.params.item.entry);
+        }
+        if(route.params?.prompt) {
+            setPrompt(route.params.prompt);
+        }
+        console.log(route.params);
+    }, [route.params])
+    
     return (
         <SafeAreaView style={styles.overlord}>
             <ScrollView style={styles.wrapper}>
-                {/*<View style={styles.top}>
-                    <BackButton onPress={() => console.log("hello")} buttonText='Past Entries'/>
-                    <Text style={styles.date}>
-                        {new Date().toDateString()}
-                    </Text>
-                </View>*/}
                 <View style={styles.container}>
-                    
                     <View style={styles.headerWrapper}>
                         <Text style={styles.header}>
                             Daily Prompt:
                         </Text>
                         <Text style={styles.prompt}>
-                            Recall a moment from your past that still lingers in your memory. 
-                            Explore the details of that moment, the emotions it evoked, and the lessons you may have learned. 
-                            How does that memory shape your present perspectives or decisions?
-                            Reflect on the impact it had on your personal growth and the person you've become today.
+                            {prompt !== undefined || prompt !== null ? 
+                            <Text>
+                                Recall a moment from your past that still lingers in your memory. 
+                                Explore the details of that moment, the emotions it evoked, and the lessons you may have learned. 
+                                How does that memory shape your present perspectives or decisions?
+                                Reflect on the impact it had on your personal growth and the person you've become today.
+                            </Text> : 
+                            <Text> 
+                                {prompt} 
+                            </Text> }
                         </Text>
                     </View>
                     <GeneralButtonDark buttonText={"Save Response"} onPress={() => handleSubmit()} containerStyle={styles.submit}/>
@@ -50,8 +65,8 @@ export default function DailyPrompt() {
                 <TextInput 
                     editable 
                     multiline 
-                    onChangeText={text => onChangeInput(text)} 
-                    value={input} placeholder="Enter your response here." 
+                    onChangeText={text => setResponse(text)} 
+                    value={response} placeholder="Enter your response here." 
                     style={styles.inputField} 
                     numberOfLines={20}
                 />
