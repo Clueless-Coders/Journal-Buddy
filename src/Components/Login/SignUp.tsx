@@ -1,12 +1,12 @@
 import React, { useContext } from 'react';
 import {View, Text, StyleSheet, TextInput, ScrollView, SafeAreaView, Platform, StatusBar, TouchableWithoutFeedback, Keyboard, KeyboardAvoidingView, Image, TouchableHighlight, Pressable } from 'react-native';
 import GeneralButtonDark from '../Buttons/GeneralButtonDark';
-import { signup } from '../../firebase/Database.ts'
+import { signup } from '../../firebase/Database'
 
 //ask tristan about setPassword with the confirm, rn it just types in both
 //like is there a handleSignUp function?
 
-export default function SignUp({navigation}){
+export default function SignUp({navigation}: any){
     let [email, setEmail] = React.useState('');
     let [password, setPassword] = React.useState('');
 
@@ -64,7 +64,7 @@ export default function SignUp({navigation}){
                     autoCapitalize="none"
                     secureTextEntry
                     style={styles.inputField} 
-                    numberOfLines={1}
+                    numberOfLines={3}
                 />
            </View>
            <GeneralButtonDark buttonText={"Sign Up"} onPress={handleSignup} textStyle={styles.textStyle} containerStyle={{width: '60%', marginTop: 10}}/>
@@ -99,7 +99,7 @@ const styles = StyleSheet.create({
         borderRadius: 5,
         backgroundColor: '#E7EFFF70',
         padding: '3%',
-        height: '50%'
+        height: '100%'
     },
     texboxWithLabel: {
         width: '78%',
