@@ -1,8 +1,8 @@
 import { get, set, child, ref, getDatabase, push } from 'firebase/database';
 import { createUserWithEmailAndPassword, getAuth, signInWithEmailAndPassword } from 'firebase/auth';
 
-const MILLISECONDS_IN_DAY = 86400000;
-const SUBMIT_HABIT_COOLDOWN_MILLISECONDS = 10000;
+const SECONDS_IN_DAY = 86400
+const SUBMIT_HABIT_COOLDOWN_SECONDS = 10;
 
 export type UserData = {
     habits: {
@@ -22,8 +22,7 @@ export type UserData = {
 export type Journal = {
    user: string, //unique ident for owner of this journal
    entry: string, //actual entry text
-   dayWritten: number, //unix timestamp
-   uid?: string
+   dayWritten: number //unix timestamp
 };
 
 export type Habit = {
@@ -36,9 +35,9 @@ export type Habit = {
         friday?: boolean,
         saturday?: boolean
     },
-    timesToComplete: {
-        [index: string]: { //
-            time: number, //ms from 12 am that day
+    timesToComplete?: {
+        [index: number]: {
+            tume: number
         }
          //is in the afternoon?
     }, //can have multiple times of day to complete the task
@@ -49,12 +48,10 @@ export type Habit = {
     endDate?: number //Unix timestamp
     timesCompleted?: {
         [index: string]: {
-            timeCompleted: number, //unix time
+            timeCompleted: number,
         }
     }
 };
-
-
 
 //Initializes user with flag to complete first-time account setup
 export function createUser(userID: string) {
@@ -86,11 +83,11 @@ export async function createJournal(journal: Journal) {
         }
     }).then(async () =>{
         //if the user has created a Journal entry in the last day, it will update that entry instead of creating a new one
-        if(previousJournalTime !== 0 && Date.now() - previousJournalTime < MILLISECONDS_IN_DAY){
+        if(previousJournalTime !== 0 && Date.now() - previousJournalTime < SECONDS_IN_DAY){
             get(ref(getDatabase(), `/users/${user}/lastJournalEntryID`)).then((data) => {
                 //if somehow the database managed to store the time and not the entry ID, something has gone terribly wrong
                 if(data.exists()){
-                    set(child(ref(db), `/journals/${data.val()}/entry`), journal.entry); 
+                    set(child(ref(db), `/journals/${data.val()}`), journal); 
                 }
             });
         } else {
@@ -121,7 +118,7 @@ export function createHabit(newHabit: Habit){
         }
     }).then(async () =>{
         //if the user has created a Journal entry in the last day, it will update that entry instead of creating a new one
-        if(Date.now() - previousHabitTime < SUBMIT_HABIT_COOLDOWN_MILLISECONDS){
+        if(Date.now() - previousHabitTime < SUBMIT_HABIT_COOLDOWN_SECONDS){
             get(ref(getDatabase(), `/users/${user}/lastHabitlEntryID`)).then((data) => {
                 //if somehow the database managed to store the time and not the entry ID, something has gone terribly wrong
                 if(data.exists()){
@@ -134,23 +131,9 @@ export function createHabit(newHabit: Habit){
             set(ref(db, `/users/${user}/habits/${habitUID}`), habitUID);
             set(ref(db, `/users/${user}/lastHabitEntryTime`), Date.now());
             set(ref(db, `/users/${user}/lastHabitEntryID`), habitUID);
-            
         }
     });
 }
-
-export async function addHabitTime(habitID: string){
-    const db = getDatabase(); 
-    if(habitID === undefined){
-        console.log("Undefined id");
-        return;
-    }
-    let currentTime = Date.now();
-    await push(child(ref(db), `/habits/${habitID}/timesCompleted`), currentTime);
-    //obtains the last time the user has instantiated a new Journal entry in Unix time (stored in user profile)
-    ///push(child(ref(db), `/habits/${habitID}/timesCompleted`), Date.now());
-}
-
 
 //Queries the database for all the journals created by this user
 export async function getJournalsByUserID(userID: string): Promise<Journal[]>{
@@ -166,6 +149,7 @@ export async function getJournalsByUserID(userID: string): Promise<Journal[]>{
 
             //waits for all DB queries to finish, then returns the journals as an Array
             Promise.all(promises).then((journals) => {
+                console.log(journals);
                 resolve(journals);
             });
         } else {
@@ -249,8 +233,6 @@ export function getHabitByID(habitID: string): Promise<Habit>{
     })
 }
 
-
-
 export function login (email: string, password: string) {
     signInWithEmailAndPassword(getAuth(), email, password);
 }
@@ -260,4 +242,3 @@ export function signup (email: string, password: string) {
         createUser(userCredential.user?.uid)
     });
 }
-

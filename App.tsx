@@ -8,6 +8,7 @@ import HomeMenu from './src/Components/HomePage/HomeMenu';
 import JournalEntries from './src/Components/Journal-Pages/JournalEntries';
 import { FontAwesome5 } from '@expo/vector-icons';
 import LoginPage from './src/Components/Login/LoginPage';
+import CalendarPage from './src/Components/Journal-Pages/CalendarPage';
 import SignUp from './src/Components/Login/SignUp';
 import ForgotPassword from './src/Components/Login/ForgotPassword';
 import { initializeApp } from "firebase/app";
@@ -28,7 +29,6 @@ function TabGroup() {
 
   return (
     <Tab.Navigator
-      
       screenOptions={({ route, navigation }) => ({
         tabBarIcon: (focused: boolean, color: string, size: number) => {
           let iconName;
@@ -43,9 +43,9 @@ function TabGroup() {
         }
       }) }
     >
-      <Tab.Screen name="Home" component={HomeStack} options = {{headerShown:false}}/>
-      <Tab.Screen name="NewJournal" component={DailyPrompt} />
-      <Tab.Screen name="Calendar" component={HomeMenu}/>
+      <Tab.Screen name="Home" component={HomeStack}/>
+      <Tab.Screen name="NewJournal" component={DailyPrompt}/>
+      <Tab.Screen name="Calendar" component={CalendarPage}/>
     </Tab.Navigator>
   );
 }
