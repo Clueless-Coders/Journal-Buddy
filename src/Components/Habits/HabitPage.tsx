@@ -3,7 +3,7 @@ import {Image, View, Text, StyleSheet, TextInput, ScrollView, SafeAreaView, Plat
 import { Ionicons } from "@expo/vector-icons";
 import GeneralButtonDark from '../Buttons/GeneralButtonDark';
 
-export default function HabitPage({navigation}) {
+export default function HabitPage({navigation}: any) {
     return(
         <SafeAreaView style={styles.overlord}>
         <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : "height"}>

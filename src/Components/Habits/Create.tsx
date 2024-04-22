@@ -1,16 +1,53 @@
 import React, { useContext } from 'react';
 import {Image, View, Text, StyleSheet, TextInput, ScrollView, SafeAreaView, Platform, StatusBar, TouchableWithoutFeedback, Keyboard, KeyboardAvoidingView, TouchableHighlight, Pressable } from 'react-native';
 import { Ionicons } from "@expo/vector-icons";
+import { createHabit, Habit } from '../../firebase/Database';
 import GeneralButtonDark from '../Buttons/GeneralButtonDark';
 
 export default function HabitPage({navigation}: any) {
     let [title, setTitle] = React.useState('');
     let [description, setDescription] = React.useState('');    
-    let [daysSet, setDaysSet] = React.useState('');
-
-    
+    let [daysSet, setDaysSet] = React.useState({
+      sunday: false,
+      monday: false,
+      tuesday: false,
+      wednesday: false,
+      thursday: false,
+      friday: false,
+      saturday: false,
+    });
 
     const days = ['S', 'M', 'T', 'W', 'Th', 'F', 'S'];
+    const dayKeys = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
+    const toggleDay = (index) => {
+        const day = dayKeys[index];
+        setDaysSet(prev => ({ ...prev, [day]: !prev[day] }));
+    };
+
+    function handleCreateHabit() {
+        const newHabit: Habit = {
+            daysToComplete: daysSet,
+            title: title,
+            description: description,
+            uid: '', 
+            user: '',
+        };
+
+        createHabit(newHabit);
+
+        setTitle('');
+        setDescription('');
+        setDaysSet({
+        sunday: false,
+        monday: false,
+        tuesday: false,
+        wednesday: false,
+        thursday: false,
+        friday: false,
+        saturday: false,
+    });
+        navigation.goBack();
+    };
 
     return(
         <SafeAreaView style={styles.overlord}>
@@ -61,11 +98,9 @@ export default function HabitPage({navigation}: any) {
                                     width: 40,
                                     height: 40,
                                     borderRadius: 5,
-                                    backgroundColor: '#8DB1F7',
                                     justifyContent: 'center',
-                                    alignItems: 'center'
-                                }}
-                            >
+                                    alignItems: 'center',
+                                    backgroundColor: daysSet[dayKeys[index]] ? '#8DB1F7' : '#ccc' }} onPress={() => toggleDay(index)}>
                             <Text style={{ color: 'white' }}>{item}</Text>
                             </Pressable>    
                         ))}
@@ -75,7 +110,8 @@ export default function HabitPage({navigation}: any) {
                 <View>
                     
                 </View>
-                <GeneralButtonDark buttonText={"Log In"} onPress={handleLogin} textStyle={styles.textStyle} containerStyle={{width: '60%', marginTop: "7%"}}/>
+                <View style={styles.div} />
+                <GeneralButtonDark buttonText={"Create"} onPress={handleCreateHabit} textStyle={styles.textStyle} containerStyle={{width: '60%', marginTop: "1%"}}/>
 
             </View>
         </ScrollView>
@@ -94,11 +130,11 @@ const styles = StyleSheet.create( {
         width: "90%",
         height: 1,
         backgroundColor: 'gray',
-        marginBottom: '2%'
+        marginBottom: '5%',
+        marginTop: '5%'
     },
     header: {
-        marginTop: '1%',
-        marginBottom: '1%',
+        marginTop: '5%',
         fontSize: 30,
         fontWeight: 'bold',
         color: '#050B24',
@@ -121,6 +157,10 @@ const styles = StyleSheet.create( {
         backgroundColor: '#E7EFFF70',
         padding: '3%',
         height: '50%'
+    },
+    textStyle: {
+        fontSize: 20,
+        color: 'white'
     },
     overlord: {
         paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0,
