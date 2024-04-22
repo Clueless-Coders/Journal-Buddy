@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import {Image, View, Text, StyleSheet, TextInput, ScrollView, SafeAreaView, Platform, StatusBar, TouchableWithoutFeedback, Keyboard, KeyboardAvoidingView, TouchableHighlight, Pressable } from 'react-native';
 import GeneralButtonDark from '../Buttons/GeneralButtonDark';
-import { login } from '../../firebase/Database.tsx'
+import { login } from '../../firebase/Database'
 
 
 //potentionally add eye icon to mask and unmask
@@ -9,7 +9,7 @@ import { login } from '../../firebase/Database.tsx'
 //if click outside keyboard get rid off, no worky in android?
 //confirm password
 
-export default function LoginPage({navigation}) {
+export default function LoginPage({navigation}:any) {
     let [email, setEmail] = React.useState('');
     let [password, setPassword] = React.useState('');
 

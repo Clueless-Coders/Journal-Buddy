@@ -1,26 +1,30 @@
 import isEmpty from 'lodash/isEmpty';
 import React, {useCallback} from 'react';
 import {StyleSheet, Alert, View, Text, TouchableOpacity, Button} from 'react-native';
+import { Habit } from '../../firebase/Database';
 
 //The Agenda Item wrapper class used in CalendarPage
-
-//dunno again, ask Tristan
 interface ItemProps {
   item: any;
 }
 
-//actual item
+//actual item; change props : ItemProps to props : Habit
 const AgendaItem = (props: ItemProps) => {
-  const {item} = props;
+  let isHabitDone = false;
+    let item = props.item;
+
+  //let isHabitDone = props.;
 
   //Show a popup when you click the "see more" button
   const buttonPressed = useCallback(() => {
-    Alert.alert('Show me more');
+    isHabitDone = !isHabitDone;
+    Alert.alert("Habit updated!");
   }, []);
 
   //Same thing for getting info for a particular habit
   const itemPressed = useCallback(() => {
-    Alert.alert(item.title);
+    let string = isHabitDone ? "Habit: Done!" : "Habit: Not done!";
+    Alert.alert(item.title, string);
   }, []);
 
   //Return something indicating a empty list of habit if no habits made
@@ -37,11 +41,10 @@ const AgendaItem = (props: ItemProps) => {
     <TouchableOpacity onPress={itemPressed} style={styles.item} testID={'item'}>
       <View>
         <Text style={styles.itemHourText}>{item.hour}</Text>
-        <Text style={styles.itemDurationText}>{item.duration}</Text>
       </View>
       <Text style={styles.itemTitleText}>{item.title}</Text>
       <View style={styles.itemButtonContainer}>
-        <Button color={'grey'} title={'Info'} onPress={buttonPressed}/>
+        <Button color={'grey'} title={'PressMe'} onPress={buttonPressed}/>
       </View>
     </TouchableOpacity>
   );

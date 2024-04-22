@@ -37,9 +37,7 @@ export type Habit = {
     },
     timesToComplete?: {
         [index: number]: {
-            hour: number,
-            minute: number,
-            afternoon: boolean
+            tume: number
         }
          //is in the afternoon?
     }, //can have multiple times of day to complete the task
@@ -48,6 +46,11 @@ export type Habit = {
     uid: string //unique identifier for this specific habit
     user: string, //unique ident for habit owner user
     endDate?: number //Unix timestamp
+    timesCompleted?: {
+        [index: string]: {
+            timeCompleted: number,
+        }
+    }
 };
 
 //Initializes user with flag to complete first-time account setup

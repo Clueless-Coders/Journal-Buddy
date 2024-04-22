@@ -3,7 +3,7 @@ import { Platform, StyleSheet, View } from 'react-native';
 import {Calendar, Agenda, CalendarList, CalendarProvider, AgendaList, ExpandableCalendar, WeekCalendar} from 'react-native-calendars';
 import isEmpty from 'lodash/isEmpty';
 import { MarkedDates } from 'react-native-calendars/src/types';
-import AgendaItem from '../AgendaItem';
+import AgendaItem from '../Calendar/AgendaItem';
 
 //huge thanks to "react-native-calendars" for being what we want immediately with no drawbacks...
 //except please don't abstract your example code that much next time
@@ -11,19 +11,20 @@ import AgendaItem from '../AgendaItem';
 //Dates for general reference
 //Today, 3 days ago, and the future days
 const today = new Date().toISOString().split('T')[0];
-const pastDate = getPastDate(3);
-const futureDates = getFutureDates(12);
+const pastDate = getPastDate(5);
+const futureDates = getFutureDates(7);
 //this is our arrays for accessing dates
 const dates = [pastDate, today].concat(futureDates);
 
 //require pngs in this path file
 //modify if changing icons tho
-const leftArrowIcon = require('../CalendarPictures/previous.png');
-const rightArrowIcon = require('../CalendarPictures/next.png');
+const leftArrowIcon = require('../Calendar/previous.png');
+const rightArrowIcon = require('../Calendar/next.png');
 
 //general colors used in Theme and generally across this entire file
 const themeColor = '#00AAAF';
 const lightThemeColor = '#f2f7f7';
+
 
 //Actual data for habits to be tracked
 //it's massive so please collapse
@@ -117,9 +118,14 @@ const agendaItems = [
     data: [
       {hour: '12am', duration: '1h', title: 'Last Yoga'}
     ]
-  }
+  },
+  {
+    title: dates[14], 
+    data: [{}]
+  },
 ];
-const ITEMS: any[] = agendaItems;
+
+// const ITEMS: any[] = agendaItems;
 
 //Getting what dates we have data in, i.e. habits in each day
 function getMarkedDates() { 
@@ -189,6 +195,7 @@ function getFutureDates(numberOfDays: number) {
     }
     const date = new Date(d + 864e5 * index); // 864e5 == 86400000 == 24*60*60*1000
     const dateString = date.toISOString().split('T')[0];
+    console.log(dateString);
     array.push(dateString);
   }
   return array;
@@ -217,7 +224,7 @@ const CalendarPage = (props: Props) => {
 
   return (
 
-    <CalendarProvider date = {ITEMS[1]?.title} theme = {todayBtnTheme.current}> 
+    <CalendarProvider date = {agendaItems[1]?.title} theme = {todayBtnTheme.current}> 
     {weekView ? ( <WeekCalendar testID={'menu'} firstDay={1} markedDates={marked.current}/>
       ) : (
         <ExpandableCalendar
@@ -242,7 +249,7 @@ const CalendarPage = (props: Props) => {
         />
       )}
       <AgendaList
-        sections={ITEMS}
+        sections={agendaItems}
         renderItem={renderItem}
         sectionStyle={styles.section}
       />

@@ -6,7 +6,7 @@ import { signup } from '../../firebase/Database'
 //ask tristan about setPassword with the confirm, rn it just types in both
 //like is there a handleSignUp function?
 
-export default function SignUp({navigation}){
+export default function SignUp({navigation}:any){
     let [email, setEmail] = React.useState('');
     let [password, setPassword] = React.useState('');
 
