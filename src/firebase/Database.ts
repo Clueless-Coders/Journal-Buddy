@@ -1,8 +1,8 @@
 import { get, set, child, ref, getDatabase, push } from 'firebase/database';
 import { createUserWithEmailAndPassword, getAuth, signInWithEmailAndPassword } from 'firebase/auth';
 
-const SECONDS_IN_DAY = 86400
-const SUBMIT_HABIT_COOLDOWN_SECONDS = 10;
+const MILLISECONDS_IN_DAY = 86400000;
+const SUBMIT_HABIT_COOLDOWN_MILLISECONDS = 10000;
 
 export type UserData = {
     habits: {
@@ -22,7 +22,8 @@ export type UserData = {
 export type Journal = {
    user: string, //unique ident for owner of this journal
    entry: string, //actual entry text
-   dayWritten: number //unix timestamp
+   dayWritten: number, //unix timestamp
+   uid?: string
 };
 
 export type Habit = {
@@ -80,11 +81,11 @@ export async function createJournal(journal: Journal) {
         }
     }).then(async () =>{
         //if the user has created a Journal entry in the last day, it will update that entry instead of creating a new one
-        if(previousJournalTime !== 0 && Date.now() - previousJournalTime < SECONDS_IN_DAY){
+        if(previousJournalTime !== 0 && Date.now() - previousJournalTime < MILLISECONDS_IN_DAY){
             get(ref(getDatabase(), `/users/${user}/lastJournalEntryID`)).then((data) => {
                 //if somehow the database managed to store the time and not the entry ID, something has gone terribly wrong
                 if(data.exists()){
-                    set(child(ref(db), `/journals/${data.val()}`), journal); 
+                    set(child(ref(db), `/journals/${data.val()}/entry`), journal.entry); 
                 }
             });
         } else {
@@ -115,7 +116,7 @@ export function createHabit(newHabit: Habit){
         }
     }).then(async () =>{
         //if the user has created a Journal entry in the last day, it will update that entry instead of creating a new one
-        if(Date.now() - previousHabitTime < SUBMIT_HABIT_COOLDOWN_SECONDS){
+        if(Date.now() - previousHabitTime < SUBMIT_HABIT_COOLDOWN_MILLISECONDS){
             get(ref(getDatabase(), `/users/${user}/lastHabitlEntryID`)).then((data) => {
                 //if somehow the database managed to store the time and not the entry ID, something has gone terribly wrong
                 if(data.exists()){
@@ -146,7 +147,6 @@ export async function getJournalsByUserID(userID: string): Promise<Journal[]>{
 
             //waits for all DB queries to finish, then returns the journals as an Array
             Promise.all(promises).then((journals) => {
-                console.log(journals);
                 resolve(journals);
             });
         } else {

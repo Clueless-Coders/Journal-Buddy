@@ -7,8 +7,7 @@ import { Journal, getJournalsByCurrentUser, getJournalsByUserID } from '../../fi
 import { getDatabase, onValue, ref } from 'firebase/database'
 import { getAuth } from 'firebase/auth';
 
-export default function JournalEntries() {
-    
+export default function JournalEntries({ navigation }: any) {
     let [ data, setData ] = React.useState([] as Journal[])
 
     React.useEffect(() => {
@@ -37,10 +36,10 @@ export default function JournalEntries() {
             </View>
             <TextInput placeholder='Search' style={styles.inputBox}/>
             <ScrollView contentContainerStyle = {styles.mainContent}>
-                <GeneralButtonDark  onPress={() => console.log(data)} buttonText={'Start today\'s journal!'} containerStyle={styles.containerStyle} />
+                <GeneralButtonDark  onPress={() => navigation.navigate('NewJournal')} buttonText={'Start today\'s journal!'} containerStyle={styles.containerStyle} />
                 { data.length > 0 ? data.reverse().map((item, index) => {
-                    return <GeneralButtonLight  key={index} onPress={() => console.log('hello')} buttonText={new Date(item.dayWritten).toDateString()} containerStyle={styles.containerStyle}/>;
-                }) : <Text>bad</Text>}
+                    return <GeneralButtonLight  key={index} onPress={() => navigation.navigate('NewJournal', { item })} buttonText={new Date(item.dayWritten).toDateString()} containerStyle={styles.containerStyle}/>;
+                }) : <Text>Create a journal to see your previous responses!</Text>}
             </ScrollView>
         </SafeAreaView>
     );
