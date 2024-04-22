@@ -42,9 +42,9 @@ function TabGroup() {
 
           return (<FontAwesome5 name={iconName} size={20} color={color} />) ;
         }
-      })}
+      }) }
     >
-      <Tab.Screen name="Home" component={HomeStack}/>
+      <Tab.Screen name="Home" component={HomeStack} options = {{headerShown:false}}/>
       <Tab.Screen name="NewJournal" component={DailyPrompt} />
       <Tab.Screen name="Calendar" component={HomeMenu}/>
     </Tab.Navigator>
@@ -53,7 +53,7 @@ function TabGroup() {
 
 function JournalStack() {
   return (
-    <Stack.Navigator>
+    <Stack.Navigator screenOptions={{headerShown: false}}>
       <Stack.Screen name="JournalEntries" component={JournalEntries} />
     </Stack.Navigator>
   )
@@ -61,7 +61,7 @@ function JournalStack() {
 
 function HomeStack() {
   return(
-    <Stack.Navigator>
+    <Stack.Navigator screenOptions={{headerShown: false}}>
       <Stack.Screen name="Drawer" component={DrawerGroup} />
 
     </Stack.Navigator>
@@ -70,7 +70,7 @@ function HomeStack() {
 
 function DrawerGroup() {
   return(
-    <Drawer.Navigator initialRouteName='HomeStack'>
+    <Drawer.Navigator initialRouteName='HomeStack' >
       <Stack.Screen name="Home" component={HomeMenu} />
       <Stack.Screen name="JournalStack" component={JournalStack} />
       <Stack.Screen name="Habits" component={HabitPage} />
