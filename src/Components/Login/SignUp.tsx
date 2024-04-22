@@ -1,17 +1,53 @@
 import React, { useContext } from 'react';
 import {View, Text, StyleSheet, TextInput, ScrollView, SafeAreaView, Platform, StatusBar, TouchableWithoutFeedback, Keyboard, KeyboardAvoidingView, Image, TouchableHighlight, Pressable } from 'react-native';
 import GeneralButtonDark from '../Buttons/GeneralButtonDark';
-import { signup } from '../../firebase/Database.ts'
+import { signup } from '../../firebase/Database';
 
-//ask tristan about setPassword with the confirm, rn it just types in both
-//like is there a handleSignUp function?
-
-export default function SignUp({navigation}){
+export default function SignUp({navigation}: any){
     let [email, setEmail] = React.useState('');
     let [password, setPassword] = React.useState('');
+    let [confirmedPassword, setConfirmedPassword] = React.useState('');
 
-    function handleSignup(){
-        signup(email, password);
+    function handleSignup() {
+        const isEmailValid = validateEmail(email);
+        const isPasswordValid = validatePassword(password);
+        const passwordsMatch = validatePasswordsMatch(password, confirmedPassword);
+    
+        if (isEmailValid && isPasswordValid && passwordsMatch) {
+            signup(email, password);
+        }
+    }
+
+    let [emailError, setEmailError] = React.useState('');
+    let [passwordError, setPasswordError] = React.useState('');
+    let [confirmedPasswordError, setConfirmedPasswordError] = React.useState('');
+
+    function validateEmail(email: string) {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(email)) {
+            setEmailError('Invalid email format');
+            return false;
+        }
+        setEmailError('');
+        return true;
+    }
+    
+    function validatePassword(password: string) {
+        if (password.length < 6) {
+            setPasswordError('Enter 6 or more characters');
+            return false;
+        }
+        setPasswordError('');
+        return true;
+    }
+
+    function validatePasswordsMatch(password: string, confirmedPassword: string) {
+        if (password !== confirmedPassword) {
+            setConfirmedPasswordError('Passwords do not match');
+            return false;
+        }
+        setConfirmedPassword('');
+        return true;
     }
 
     return(
@@ -22,7 +58,7 @@ export default function SignUp({navigation}){
         <ScrollView>
             <View style={styles.container}>
             <Image source={require('./cat.png')}
-                   style={{width: 250, height: 250, marginTop: "1%"}}  />
+                   style={{width: 250, height: 250, marginTop: "7%"}} />
             <Text style={styles.header}>
                 Sign Up            
             </Text>
@@ -37,7 +73,9 @@ export default function SignUp({navigation}){
                     autoCapitalize="none"
                     style={styles.inputField} 
                     numberOfLines={1}
+                    onBlur={() => validateEmail(email)}
                 />
+                {emailError ? <Text style={styles.errorText}>{emailError}</Text> : null}
            </View>
            <View style={styles.texboxWithLabel}>
                 <Text style={styles.label}>
@@ -50,8 +88,9 @@ export default function SignUp({navigation}){
                     autoCapitalize="none"
                     secureTextEntry
                     style={styles.inputField} 
-                    numberOfLines={1}
+                    onBlur={() => validateEmail(email)}
                 />
+                {passwordError ? <Text style={styles.errorText}>{passwordError}</Text> : null}
            </View>
            <View style={styles.texboxWithLabel}>
                 <Text style={styles.label}>
@@ -59,13 +98,14 @@ export default function SignUp({navigation}){
                 </Text>
                 <TextInput
                     editable 
-                    onChangeText={text => setPassword(text)} 
-                    value={password} placeholder="" 
+                    onChangeText={text => setConfirmedPassword(text)} 
+                    value={confirmedPassword} placeholder="" 
                     autoCapitalize="none"
                     secureTextEntry
                     style={styles.inputField} 
                     numberOfLines={1}
                 />
+                {confirmedPasswordError ? <Text style={styles.errorText}>{confirmedPasswordError}</Text> : null}
            </View>
            <GeneralButtonDark buttonText={"Sign Up"} onPress={handleSignup} textStyle={styles.textStyle} containerStyle={{width: '60%', marginTop: 10}}/>
         </View>
@@ -87,12 +127,11 @@ const styles = StyleSheet.create({
         fontSize: 50,
         fontWeight: 'bold',
         color: '#050B24',
-        
     },
     label: {
         color: '#050B24',
         marginBottom: 2,
-        textAlign: 'left' //how to align labels to the left of the boxes, not screen?? use views!!
+        textAlign: 'left'
     },
     inputField: {
         marginBottom: 2,
@@ -109,6 +148,12 @@ const styles = StyleSheet.create({
     textStyle: {
         fontSize: 20,
         color: 'white'
+    },
+    errorText: {
+        fontSize: 14,
+        fontWeight: '100',
+        color: 'red',
+        textAlign: 'right'
     },
     overlord: {
         backgroundColor: 'white',
