@@ -2,22 +2,108 @@ import React from 'react';
 import { Inter_400Regular, useFonts } from '@expo-google-fonts/inter';
 import { View, Text, StyleSheet, ScrollView, SafeAreaView, Platform, StatusBar, FlatList} from 'react-native';
 import GeneralButtonDark from '../Buttons/GeneralButtonDark';
-import { Quotes, Habit } from '../../Types';
+import { Quotes} from '../../Types';
 import { getAuth, signOut } from 'firebase/auth';
 import GeneralButtonLight from '../Buttons/GeneralButtonLight';
 import DailyPrompt from '../Journal-Pages/DailyPrompt';
 import Menu from '../HamburgerMenu/Menu';
 import CheckboxButton from '../Buttons/CheckboxButton';
+import { getDatabase, onValue, ref } from 'firebase/database'
+import { Habit, getHabitByID, getHabitsByCurrentUser } from '../../firebase/Database';
 //import { FlatList } from 'react-native-gesture-handler';
 // import { getapi } from '../../Quotes';
-let DATA : Habit[] = [{task:'haiiii', isDone:false, id: '123'}, {task:':3', isDone:true, id: '456'}];
+
 
 export default function HomeMenu({ navigation }: any) {
     //TODO: Add functions to do their respective tasks once they are implemented
     //TODO: Interface with the backend in order to save the user's response.
-    let [quote, updateQuote] = React.useState({q: 'haiii', a: '- T'});
+    let [DATA, setData] = React.useState([] as Habit[])
+    //let [ data, setData ] = React.useState([] as Journal[])
 
+    let [quote, updateQuote] = React.useState({q: 'haiii', a: '- T'});
+    //let user = getAuth().currentUser?.uid;
+    React.useEffect(() => {
+        let ignore = false;
+        async function getHabits(){
+            getHabitsByCurrentUser().then((habits) => {
+                if(!ignore){
+                    setData(habits);
+                }
+            });
+        }
+
+        onValue(ref(getDatabase(), `users/${getAuth().currentUser?.uid}/habits`), (data) =>{
+            getHabits();
+        })
+        return () => {ignore = true};
+    }, []);
     const [fontsLoaded] = useFonts({Inter_400Regular});
+
+    function UTCToTime(UTCms: number){
+        return UTCms%86400000;
+    }
+    
+    function HabitDoneToday(habit : Habit): boolean {
+        let currentDate: string = new Date().toDateString();
+        let DaysDone =  habit.timesCompleted;
+        if( DaysDone !== undefined){
+            let TimesDone: string[] = Object.keys(DaysDone);
+            let lastDateDone: string = new Date(parseInt(TimesDone[TimesDone.length - 1])).toDateString(); //gets date of when it was last done
+            if(currentDate === lastDateDone){
+                //let timesObject = Object.values(DaysDone);
+                
+                //get's latest habit time completed ... i think
+                let recentTime: number = Object.values(DaysDone[TimesDone[TimesDone.length - 1]])[0];
+
+                let timesToCompleteKeys: string[] = Object.keys(habit.timesToComplete);
+                //let timeToCompleteValues = Object.values(habit.timesToComplete);
+                // console.log(timesToDo);
+                let i: number = 0;
+                let currentTime = UTCToTime(Date.now());
+                //keep going until it reaches just a past
+                while(currentTime > Object.values(habit.timesToComplete[timesToCompleteKeys[i]])[0]){
+                    i++;
+                }
+
+                let j: number = 0;
+                while(recentTime > Object.values(habit.timesToComplete[timesToCompleteKeys[j]])[0]){
+                    j++;
+                }
+
+                //if both times are in the same time slot to be done, then it's done
+                return j===i;
+            } else {
+                return false;
+            }
+        } else {
+            return false;
+        }
+    } 
+    ///push(child(ref(db), `/habits/${habitID}/timesCompleted), Date.now());
+
+    function HabitAddTime(habit : Habit){
+        //
+        if(habit.timesCompleted !== undefined){
+            let listTimesDone = Object.entries(habit.timesCompleted);
+            let currentTime = Date.now();
+            //listTimesDone.push([currentTime +'', {timeCompleted: UTCToTime(currentTime)}]);
+            //need to verify if this push is correct
+            //convert it back to object
+            //update the habits atrtibute
+            //tell database to update the habit in dataabase with corresponding ID
+        }
+    }
+    function HabitRemoveTime(habit: Habit){
+        if(habit.timesCompleted !== undefined){
+            let listTimesDone = Object.entries(habit.timesCompleted);
+            let currentTime = Date.now();
+            listTimesDone.pop();
+            //need to verify if this pop is correct
+            //convert listTimesDone back to object
+            //update the habits atrtibute
+            //tell database to update the habit in dataabase with corresponding ID
+        }
+    }
 
     async function getQuote(){
         const url:string ="https://zenquotes.io/api/random";
@@ -62,9 +148,20 @@ export default function HomeMenu({ navigation }: any) {
                         </Text>
                     </View>
                     <View style = {styles.habitBox}>
-                        { DATA.map((item) => {
-                        return <CheckboxButton  onPress={() => {console.log('hai'); item.isDone = !item.isDone; console.log("isDone: " + item.isDone)}} buttonText={item.task} containerStyle={styles.checkButton} checked = {item.isDone}/>;
-                        }) }
+                        {   
+                            DATA.map((item) => {
+                            return <CheckboxButton  onPress={() => {
+                                if(HabitDoneToday(item)){
+                                    console.log("Habit is done today, switch to not done");
+                                    //item.daysCompleted?.push(new Date().toDateString());
+                                    //add logic to update database
+                                } else {
+                                    console.log("habit was not done, changing to completed");
+                                    //item.daysCompleted?.pop();
+                                }
+                            }} buttonText={item.title} containerStyle={styles.checkButton} checked = {HabitDoneToday(item)}/>;
+                            }) 
+                        }
                     </View>
                     <View>
                     
