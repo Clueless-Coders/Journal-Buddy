@@ -18,8 +18,8 @@ const dates = [pastDate, today].concat(futureDates);
 
 //require pngs in this path file
 //modify if changing icons tho
-const leftArrowIcon = require('../TempPictures/previous.png');
-const rightArrowIcon = require('../TempPictures/next.png');
+const leftArrowIcon = require('../CalendarPictures/previous.png');
+const rightArrowIcon = require('../CalendarPictures/next.png');
 
 //general colors used in Theme and generally across this entire file
 const themeColor = '#00AAAF';

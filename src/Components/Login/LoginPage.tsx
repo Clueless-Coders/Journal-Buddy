@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import {Image, View, Text, StyleSheet, TextInput, ScrollView, SafeAreaView, Platform, StatusBar, TouchableWithoutFeedback, Keyboard, KeyboardAvoidingView, TouchableHighlight, Pressable } from 'react-native';
 import GeneralButtonDark from '../Buttons/GeneralButtonDark';
-import { login, signup } from '../../firebase/Database';
+import { login, signup } from '../../firebase/Database.tsx';
 
 //potentionally add eye icon to mask and unmask
 //incorrect password/email

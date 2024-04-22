@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import {View, Text, StyleSheet, TextInput, ScrollView, SafeAreaView, Platform, StatusBar, TouchableWithoutFeedback, Keyboard, KeyboardAvoidingView, Image, TouchableHighlight, Pressable } from 'react-native';
 import GeneralButtonDark from '../Buttons/GeneralButtonDark';
-import { signup } from '../../firebase/Database.ts'
+import { signup } from '../../firebase/Database'
 
 //ask tristan about setPassword with the confirm, rn it just types in both
 //like is there a handleSignUp function?
