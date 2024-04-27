@@ -11,6 +11,8 @@ import LoginPage from './src/Components/Login/LoginPage';
 import CalendarPage from './src/Components/Calendar/CalendarPage';
 import SignUp from './src/Components/Login/SignUp';
 import ForgotPassword from './src/Components/Login/ForgotPassword';
+import HabitPage from './src/Components/Habits/HabitPage';
+import Create from './src/Components/Habits/Create';
 import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
 import { initializeAuth, getReactNativePersistence, getAuth, onAuthStateChanged } from 'firebase/auth';
@@ -43,9 +45,9 @@ function TabGroup() {
         }
       }) }
     >
-      <Tab.Screen name="Home" component={HomeStack}/>
-      <Tab.Screen name="NewJournal" component={DailyPrompt}/>
-      <Tab.Screen name="Calendar" component={CalendarPage}/>
+      <Tab.Screen name="Home" component={HomeStack} options = {{headerShown:false}}/>
+      <Tab.Screen name="NewJournal" component={DailyPrompt} />
+      <Tab.Screen name="Calendar" component={HomeMenu}/>
     </Tab.Navigator>
   );
 }
@@ -72,6 +74,8 @@ function DrawerGroup() {
     <Drawer.Navigator initialRouteName='HomeStack' >
       <Stack.Screen name="Home" component={HomeMenu} />
       <Stack.Screen name="JournalStack" component={JournalStack} />
+      <Stack.Screen name="Habits" component={HabitPage} />
+      <Stack.Screen name="Create Habit" component={Create} />
     </Drawer.Navigator>
   );
 }

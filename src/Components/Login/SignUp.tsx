@@ -103,7 +103,7 @@ export default function SignUp({navigation}: any){
                     autoCapitalize="none"
                     secureTextEntry
                     style={styles.inputField} 
-                    numberOfLines={1}
+                    numberOfLines={3}
                 />
                 {confirmedPasswordError ? <Text style={styles.errorText}>{confirmedPasswordError}</Text> : null}
            </View>
@@ -138,7 +138,7 @@ const styles = StyleSheet.create({
         borderRadius: 5,
         backgroundColor: '#E7EFFF70',
         padding: '3%',
-        height: '50%'
+        height: '100%'
     },
     texboxWithLabel: {
         width: '78%',
