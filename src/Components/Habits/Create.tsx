@@ -7,9 +7,7 @@ import GeneralButtonDark from '../Buttons/GeneralButtonDark';
 export default function HabitPage({navigation}: any) {
     let [title, setTitle] = React.useState('');
     let [description, setDescription] = React.useState('');
-    let [after, setAfternoon] = React.useState({
-        afternoon: false
-    });
+    let [time, setTime] = React.useState('');
     let [daysSet, setDaysSet] = React.useState({
       sunday: false,
       monday: false,
@@ -19,6 +17,9 @@ export default function HabitPage({navigation}: any) {
       friday: false,
       saturday: false,
     });
+    let [endDate, setEndDate] = React.useState('');
+
+    //how to fetch the users stuff and save this to their account ask tristan
 
     const days = ['S', 'M', 'T', 'W', 'Th', 'F', 'S'];
     const dayKeys = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
@@ -27,12 +28,7 @@ export default function HabitPage({navigation}: any) {
         setDaysSet(prev => ({ ...prev, [day]: !prev[day] }));
     };
 
-    const afternoon = ['AM', 'PM'];
-    const afternoonKeys = ['AM', 'PM']
-    const toggleTime = (index) => {
-        const time = afternoonKeys[index];
-        setAfternoon(prev => ({ ...prev, [time]: !prev[time] }));
-    };
+    //time & date
 
     function handleCreateHabit() {
         const newHabit: Habit = {
@@ -56,7 +52,7 @@ export default function HabitPage({navigation}: any) {
         friday: false,
         saturday: false,
     });
-        navigation.goBack();
+        console.log('Habit created:', { title, description, endDate, time });
     };
 
     return(
@@ -116,7 +112,8 @@ export default function HabitPage({navigation}: any) {
                             ))}
                     </View>
                 </View>
-
+                
+                {/* //non operational / old
                 <View style={{flexDirection: 'row', alignItems:'center', gap: 10, marginTop: 10}}>
                     <View style={styles.timeTextBoxWithLabel}>
                         <Text style={styles.label}>
@@ -143,7 +140,7 @@ export default function HabitPage({navigation}: any) {
                             <Text style={{ color: 'white' }}>{item}</Text>
                             </Pressable>    
                         ))}
-                </View>
+                </View> */}
 
                 <View style={styles.div} />
                 <GeneralButtonDark buttonText={"Create"} onPress={handleCreateHabit} textStyle={styles.textStyle} containerStyle={{width: '60%', marginTop: "1%"}}/>
