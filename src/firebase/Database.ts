@@ -46,7 +46,8 @@ export type Habit = {
     description?: string
     uid: string //unique identifier for this specific habit
     user: string, //unique ident for habit owner user
-    endDate?: number //Unix timestamp
+    endDate?: number, //Unix timestamp
+    lastTimeComplete?: number,
     timesCompleted?: {
         [index: string]: {
             timeCompleted: number, //unix time
@@ -147,6 +148,8 @@ export async function addHabitTime(habitID: string){
     }
     let currentTime = Date.now();
     await push(child(ref(db), `/habits/${habitID}/timesCompleted`), currentTime);
+    await set(ref(db, `/habits/${habitID}/lastTimeComplete`),currentTime);
+    //set(ref(db, `/users/${user}/lastJournalEntryTime`), Date.now());
     //obtains the last time the user has instantiated a new Journal entry in Unix time (stored in user profile)
     ///push(child(ref(db), `/habits/${habitID}/timesCompleted`), Date.now());
 }
@@ -239,7 +242,7 @@ export function getJournalByID(journalID: string): Promise<Journal>{
 //returns the habit data specified by the journalID
 export function getHabitByID(habitID: string): Promise<Habit>{
     return new Promise((resolve, reject) => {
-        get(child(ref(getDatabase()), `/journals/${habitID}`)).then((data) => {
+        get(child(ref(getDatabase()), `/habits/${habitID}`)).then((data) => {
             if(data.exists()){
                 resolve(data.val());
             } else {

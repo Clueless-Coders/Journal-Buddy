@@ -8,6 +8,7 @@ import GeneralButtonLight from '../Buttons/GeneralButtonLight';
 import CheckboxButton from '../Buttons/CheckboxButton';
 import { getDatabase, onValue, ref } from 'firebase/database'
 import { Habit, addHabitTime, getHabitByID, getHabitsByCurrentUser } from '../../firebase/Database';
+import { time } from 'console';
 //import { FlatList } from 'react-native-gesture-handler';
 // import { getapi } from '../../Quotes';
 
@@ -27,6 +28,8 @@ export default function HomeMenu({ navigation }: any) {
             getHabitsByCurrentUser().then((habits) => {
                 if(!ignore){
                     setData(habits);
+                    //console.log("habit done:");
+                    //console.log(DATA);
                 }
             });
         }
@@ -43,41 +46,84 @@ export default function HomeMenu({ navigation }: any) {
     }
     
     function HabitIsDone(habit : Habit): boolean {
+        console.log(habit);
         let currentDate: string = new Date().toDateString();
-        let DaysDone =  habit.timesCompleted;
-        if( DaysDone !== undefined){
-            let timeKeys: string[] = Object.keys(DaysDone);
-            //let lastDateDone: string = new Date(parseInt(timeKeys[timeKeys.length - 1])).toDateString(); //gets date of when it was last done
-            let lastDone: number = Object.values(DaysDone[timeKeys[timeKeys.length - 1]])[0];
-            
-            //if they're same date, check for specific time slot
-            if(currentDate === new Date().toDateString()){
-                //let timesObject = Object.values(DaysDone);
-                
-                //get's latest habit time completed ... i think
-                let recentTime: number = UTCToTime(Object.values(DaysDone[timeKeys[timeKeys.length - 1]])[0]);
-
-                let timesToCompleteKeys: string[] = Object.keys(habit.timesToComplete);
-                let i: number = 0;
+        console.log("current date: " + currentDate);
+        if(habit.lastTimeComplete !== undefined){
+            let lastDone: number = habit.lastTimeComplete;
+            console.log("Last UTC time done: " + lastDone);
+            if(currentDate === new Date(lastDone).toDateString()){
+                let recentTime: number = UTCToTime(lastDone);
+                console.log("Recent UTC to time: " + recentTime);
                 let currentTime = UTCToTime(Date.now());
-                //keep going until it reaches just a past
-                while(currentTime > Object.values(habit.timesToComplete[timesToCompleteKeys[i]])[0]){
-                    i++;
-                }
+                console.log(currentTime);
+                console.log("Current time UTC to time: " + currentTime);
+                //correct keys
+                // let timesToCompleteKeys: string[] = Object.keys(habit.timesToComplete);
+                //console.log(timesToCompleteKeys[0]);
+                // let TimeList = Object.values(habit.timesToComplete)[0];
+                
 
-                let j: number = 0;
-                while(recentTime > Object.values(habit.timesToComplete[timesToCompleteKeys[j]])[0]){
-                    j++;
-                }
-
-                //if both times are in the same time slot to be done, then it's done
-                return j===i;
+                // console.log(TimeList.time);
+                // console.log(TimeList[0].time);
+                // let i: number = 0;
+                // while(currentTime > TimeList[i].time){
+                //     i++;
+                // }
+        
+                // let j: number = 0;
+                // while(currentTime > TimeList[j].time){
+                //     j++;
+                // }
+                // console.log("i: " + i);
+                // console.log("j: " + j);
+                // return i === j;
+                return true;
             } else {
+                console.log("no previous time logged")
                 return false;
             }
+
+            
+
         } else {
             return false;
         }
+        // let DaysDone =  habit.timesCompleted;
+        // if( DaysDone !== undefined){
+        //     let timeKeys: string[] = Object.keys(DaysDone);
+        //     //let lastDateDone: string = new Date(parseInt(timeKeys[timeKeys.length - 1])).toDateString(); //gets date of when it was last done
+        
+
+            
+        //     //if they're same date, check for specific time slot
+        //     if(currentDate === new Date(lastDone).toDateString()){
+        //         let recentTime: number = UTCToTime(lastDone);
+        //         console.log("Recent UTC to time: " + recentTime);
+
+        //         let timesToCompleteKeys: string[] = Object.keys(habit.timesToComplete);
+        //         let i: number = 0;
+        //         let currentTime = UTCToTime(Date.now());
+        //         console.log("Current time UTC to time: " + currentTime);
+        //         //keep going until it reaches just a past
+        //         while(currentTime > Object.values(habit.timesToComplete[timesToCompleteKeys[i]])[1]){
+        //             i++;
+        //         }
+        //         console.log("i: " + i);
+        //         let j: number = 0;
+        //         while(recentTime > Object.values(habit.timesToComplete[timesToCompleteKeys[j]])[1]){
+        //             j++;
+        //         }
+        //         console.log("j: " + j);
+
+        //         //if both times are in the same time slot to be done, then it's done
+        //         return j===i;
+        //     } else {
+        //         return false;
+        //     }
+        // } else {
+        //     return false;
+        // }
     } 
     
 
@@ -136,7 +182,7 @@ export default function HomeMenu({ navigation }: any) {
                                         console.log("habit was not done, changing to completed");
                                         //item.daysCompleted?.pop();w
                                         addHabitTime(item.uid);
-                                    }}} buttonText={(item.uid === undefined)? "Brush teeth" : item.title} containerStyle={styles.checkButton} checked = {HabitIsDone(item)} key = {index + ""}/>;
+                                    }}} buttonText={(item.uid === undefined)? ":c" : item.title} containerStyle={styles.checkButton} checked = {HabitIsDone(item)} key = {index + ""}/>;
                             }) : <Text>:c</Text>
                         }
                     </View>
