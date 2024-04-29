@@ -15,33 +15,26 @@ export default function SliderPage({ navigation }: any) {
     );
 }
 
-
 const styles = StyleSheet.create({
     wrapper: {
         flex: 1
-    },
-    container: {
-        flex: 1,
-        zIndex: 0,
-        alignItems: 'center'
     },
     header: {
         fontSize: 30,
         // fontWeight: 'bold',
         color: '#050B24',
     },
-    headerWrapper: {
-        width: '100%',
-        marginBottom: 10,
-        alignItems: 'center',
-        backgroundColor: '#f2f9ff',
-        flex:1
-    },
     overlord: {
         paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0,
         backgroundColor: 'white',
         flex: 1,
         fontFamily: "Inter_400Regular"
+    },
+    image: {
+
+    },
+    content: {
+        
     }
 }
 )

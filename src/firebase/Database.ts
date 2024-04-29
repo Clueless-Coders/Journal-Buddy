@@ -37,9 +37,7 @@ export type Habit = {
         saturday?: boolean
     },
     timesToComplete: {
-        [index: string]: { //
-            time: number, //ms from 12 am that day
-        }
+        [index: string]: number, //ms from 12 am that day
          //is in the afternoon?
     }, //can have multiple times of day to complete the task
     title: string,
@@ -140,15 +138,15 @@ export function createHabit(newHabit: Habit){
     });
 }
 
-export async function addHabitTime(habitID: string){
+export async function addHabitTime(habitID: string, timestamp: number){
     const db = getDatabase(); 
     if(habitID === undefined){
         console.log("Undefined id");
         return;
     }
-    let currentTime = Date.now();
-    await push(child(ref(db), `/habits/${habitID}/timesCompleted`), currentTime);
-    await set(ref(db, `/habits/${habitID}/lastTimeComplete`),currentTime);
+    
+    await push(child(ref(db), `/habits/${habitID}/timesCompleted`), timestamp);
+    await set(ref(db, `/habits/${habitID}/lastTimeComplete`),timestamp);
     //set(ref(db, `/users/${user}/lastJournalEntryTime`), Date.now());
     //obtains the last time the user has instantiated a new Journal entry in Unix time (stored in user profile)
     ///push(child(ref(db), `/habits/${habitID}/timesCompleted`), Date.now());

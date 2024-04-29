@@ -27,7 +27,18 @@ export default function HomeMenu({ navigation }: any) {
         async function getHabits(){
             getHabitsByCurrentUser().then((habits) => {
                 if(!ignore){
-                    setData(habits);
+                    let todaysHabits: Habit[] = [];
+                    habits.forEach(function (i) {
+                        let week:boolean[] = Object.values(i.daysToComplete);
+                        console.log(week);
+                        let currentDay:number = new Date().getDay();
+                        if(week[currentDay] === true){
+                            todaysHabits.push(i);
+                            console.log(i);
+                        }
+                    });
+                    console.log(todaysHabits);
+                    setData(todaysHabits);
                     //console.log("habit done:");
                     //console.log(DATA);
                 }
@@ -58,27 +69,21 @@ export default function HomeMenu({ navigation }: any) {
                 let currentTime = UTCToTime(Date.now());
                 console.log(currentTime);
                 console.log("Current time UTC to time: " + currentTime);
-                //correct keys
-                // let timesToCompleteKeys: string[] = Object.keys(habit.timesToComplete);
-                //console.log(timesToCompleteKeys[0]);
-                // let TimeList = Object.values(habit.timesToComplete)[0];
+                let TimeList = Object.values(habit.timesToComplete);
                 
-
-                // console.log(TimeList.time);
-                // console.log(TimeList[0].time);
-                // let i: number = 0;
-                // while(currentTime > TimeList[i].time){
-                //     i++;
-                // }
+                let i: number = 0;
+                while(currentTime > TimeList[i]){
+                    i++;
+                }
         
-                // let j: number = 0;
-                // while(currentTime > TimeList[j].time){
-                //     j++;
-                // }
-                // console.log("i: " + i);
-                // console.log("j: " + j);
-                // return i === j;
-                return true;
+                let j: number = 0;
+                while(currentTime > TimeList[j]){
+                    j++;
+                }
+                console.log("i: " + i);
+                console.log("j: " + j);
+                return i === j;
+                // return true;
             } else {
                 console.log("no previous time logged")
                 return false;
@@ -89,41 +94,6 @@ export default function HomeMenu({ navigation }: any) {
         } else {
             return false;
         }
-        // let DaysDone =  habit.timesCompleted;
-        // if( DaysDone !== undefined){
-        //     let timeKeys: string[] = Object.keys(DaysDone);
-        //     //let lastDateDone: string = new Date(parseInt(timeKeys[timeKeys.length - 1])).toDateString(); //gets date of when it was last done
-        
-
-            
-        //     //if they're same date, check for specific time slot
-        //     if(currentDate === new Date(lastDone).toDateString()){
-        //         let recentTime: number = UTCToTime(lastDone);
-        //         console.log("Recent UTC to time: " + recentTime);
-
-        //         let timesToCompleteKeys: string[] = Object.keys(habit.timesToComplete);
-        //         let i: number = 0;
-        //         let currentTime = UTCToTime(Date.now());
-        //         console.log("Current time UTC to time: " + currentTime);
-        //         //keep going until it reaches just a past
-        //         while(currentTime > Object.values(habit.timesToComplete[timesToCompleteKeys[i]])[1]){
-        //             i++;
-        //         }
-        //         console.log("i: " + i);
-        //         let j: number = 0;
-        //         while(recentTime > Object.values(habit.timesToComplete[timesToCompleteKeys[j]])[1]){
-        //             j++;
-        //         }
-        //         console.log("j: " + j);
-
-        //         //if both times are in the same time slot to be done, then it's done
-        //         return j===i;
-        //     } else {
-        //         return false;
-        //     }
-        // } else {
-        //     return false;
-        // }
     } 
     
 
@@ -175,13 +145,14 @@ export default function HomeMenu({ navigation }: any) {
                             return <CheckboxButton  onPress={() => {
                                     if(HabitIsDone(item)){
                                         console.log("Habit is done today, switch to not done");
-                                        
-                                        //item.daysCompleted?.push(new Date().toDateString());
-                                        //add logic to update database
+                                        //uncomment later when you have habiti time removal done
+                                        //item.lastTimeComplete = undefined;
+                                        //add database logic later :3
                                     } else {
                                         console.log("habit was not done, changing to completed");
-                                        //item.daysCompleted?.pop();w
-                                        addHabitTime(item.uid);
+                                        let timestamp: number = Date.now();
+                                        item.lastTimeComplete = timestamp;
+                                        addHabitTime(item.uid, timestamp);
                                     }}} buttonText={(item.uid === undefined)? ":c" : item.title} containerStyle={styles.checkButton} checked = {HabitIsDone(item)} key = {index + ""}/>;
                             }) : <Text>:c</Text>
                         }
