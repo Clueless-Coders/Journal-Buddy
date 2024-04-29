@@ -47,7 +47,7 @@ function TabGroup() {
     >
       <Tab.Screen name="Home" component={HomeStack} options = {{headerShown:false}}/>
       <Tab.Screen name="NewJournal" component={DailyPrompt} />
-      <Tab.Screen name="Calendar" component={HomeMenu}/>
+      <Tab.Screen name="Calendar" component={CalendarPage}/>
     </Tab.Navigator>
   );
 }

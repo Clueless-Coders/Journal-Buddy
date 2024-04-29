@@ -2,11 +2,18 @@ import isEmpty from 'lodash/isEmpty';
 import React, {useCallback} from 'react';
 import {StyleSheet, Alert, View, Text, TouchableOpacity, Button} from 'react-native';
 import { Habit } from '../../firebase/Database';
+import GeneralButtonDark from '../Buttons/GeneralButtonDark';
+import CheckboxButton from '../Buttons/CheckboxButton';
+
+const yes = 'green';
+const no = "red";
+
 
 //The Agenda Item wrapper class used in CalendarPage
 interface ItemProps {
   item: any;
 }
+
 
 //actual item; change props : ItemProps to props : Habit
 const AgendaItem = (props: ItemProps) => {
@@ -44,7 +51,7 @@ const AgendaItem = (props: ItemProps) => {
       </View>
       <Text style={styles.itemTitleText}>{item.title}</Text>
       <View style={styles.itemButtonContainer}>
-        <Button color={'grey'} title={'PressMe'} onPress={buttonPressed}/>
+          <CheckboxButton checked = {isHabitDone} onPress={buttonPressed} buttonText='Update Habit'></CheckboxButton>
       </View>
     </TouchableOpacity>
   );
@@ -78,7 +85,9 @@ const styles = StyleSheet.create({
   },
   itemButtonContainer: {
     flex: 1,
-    alignItems: 'flex-end'
+    alignItems: 'flex-end',
+    width: 10,
+    height: 20,
   },
   emptyItem: {
     paddingLeft: 20,
