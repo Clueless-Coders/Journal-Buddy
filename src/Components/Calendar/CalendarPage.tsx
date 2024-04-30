@@ -9,12 +9,12 @@ import AgendaItem from '../Calendar/AgendaItem';
 //except please don't abstract your example code that much next time
 
 //Dates for general reference
-//Today, 3 days ago, and the future days
-const today = new Date().toISOString().split('T')[0];
-const pastDate = getPastDate(5);
-const futureDates = getFutureDates(7);
+const timeRange = 5; //our total time reference
+const bias = 2 //how many days we want to find for, both future and past
+const pastAndTodayDate = getPastDates(timeRange - bias);
+const futureDates = getFutureDates(timeRange - bias);
 //this is our arrays for accessing dates
-const dates = [pastDate, today].concat(futureDates);
+const dates = pastAndTodayDate.concat(futureDates);
 
 //require pngs in this path file
 //modify if changing icons tho
@@ -24,115 +24,28 @@ const rightArrowIcon = require('../Calendar/next.png');
 //general colors used in Theme and generally across this entire file
 const themeColor = '#00AAAF';
 const lightThemeColor = '#f2f7f7';
-
+const agendaItems: {title: string, data: [{hour: string, duration: string, title: string}]}[] = [];
 
 //Actual data for habits to be tracked
-//it's massive so please collapse
-//refer to this for database stuff!!
-const agendaItems = [
-  {
-    title: dates[0],
-    data: [{hour: '12am', duration: '1h', title: 'First Yoga'}]
-  },
-  {
-    title: dates[1],
-    data: [
-      {hour: '4pm', duration: '1h', title: 'Pilates ABC'},
-      {hour: '5pm', duration: '1h', title: 'Vinyasa Yoga'}
-    ]
-  },
-  {
-    title: dates[2],
-    data: [
-      {hour: '1pm', duration: '1h', title: 'Ashtanga Yoga'},
-      {hour: '2pm', duration: '1h', title: 'Deep Stretches'},
-      {hour: '3pm', duration: '1h', title: 'Private Yoga'}
-    ]
-  },
-  {
-    title: dates[3],
-    data: [{hour: '12am', duration: '1h', title: 'Ashtanga Yoga'}]
-  },
-  {
-    title: dates[4],
-    data: [{}]
-  },
-  {
-    title: dates[5],
-    data: [
-      {hour: '9pm', duration: '1h', title: 'Middle Yoga'},
-      {hour: '10pm', duration: '1h', title: 'Ashtanga'},
-      {hour: '11pm', duration: '1h', title: 'TRX'},
-      {hour: '12pm', duration: '1h', title: 'Running Group'}
-    ]
-  },
-  {
-    title: dates[6], 
-    data: [
-      {hour: '12am', duration: '1h', title: 'Ashtanga Yoga'}
-    ]
-  },
-  {
-    title: dates[7], 
-    data: [{}]
-  },
-  {
-    title: dates[8],
-    data: [
-      {hour: '9pm', duration: '1h', title: 'Pilates Reformer'},
-      {hour: '10pm', duration: '1h', title: 'Ashtanga'},
-      {hour: '11pm', duration: '1h', title: 'TRX'},
-      {hour: '12pm', duration: '1h', title: 'Running Group'}
-    ]
-  },
-  {
-    title: dates[9],
-    data: [
-      {hour: '1pm', duration: '1h', title: 'Ashtanga Yoga'},
-      {hour: '2pm', duration: '1h', title: 'Deep Stretches'},
-      {hour: '3pm', duration: '1h', title: 'Private Yoga'}
-    ]
-  },
-  {
-    title: dates[10], 
-    data: [
-      {hour: '12am', duration: '1h', title: 'Last Yoga'}
-    ]
-  },
-  {
-    title: dates[11],
-    data: [
-      {hour: '1pm', duration: '1h', title: 'Ashtanga Yoga'},
-      {hour: '2pm', duration: '1h', title: 'Deep Stretches'},
-      {hour: '3pm', duration: '1h', title: 'Private Yoga'}
-    ]
-  },
-  {
-    title: dates[12], 
-    data: [
-      {hour: '12am', duration: '1h', title: 'Last Yoga'}
-    ]
-  },
-  {
-    title: dates[13], 
-    data: [
-      {hour: '12am', duration: '1h', title: 'Last Yoga'}
-    ]
-  },
-  {
-    title: dates[14], 
-    data: [{}]
-  },
-];
+//Populating our date array using... arrays.
+for (let i = 0; i < dates.length; i++){
+  agendaItems.push(
+    {
+      //title, date in UTC format
+      //data: array of objects that each have properties to be displayed
+      //The data will be the stuff we poll from the database
+      title: dates[i],
+      data: [{hour: '1pm', duration: '10h', title: 'fortnite'}]
+    }
+    );
+}
 
-// const ITEMS: any[] = agendaItems;
 
 //Getting what dates we have data in, i.e. habits in each day
 function getMarkedDates() { 
   const marked: MarkedDates = {};
-
   agendaItems.forEach(item => {
-    if (item.data && item.data.length > 0 && !isEmpty(item.data[0])){
+    if (item.data.length > 0 && !isEmpty(item.data[0])){
       marked[item.title] = {marked: true};
     } else {
       marked[item.title] = {disabled: true};
@@ -182,30 +95,32 @@ function getTheme() {
   };
 }
 
-
 //creates an array, queries through it and sets new future dates
 function getFutureDates(numberOfDays: number) {
   const array: string[] = [];
-  for (let index = 1; index <= numberOfDays; index++) {
+  for (let index = 0; index < numberOfDays; index++) {
     let d = Date.now();
+    //need to fix updating dates for next month!
     if (index > 8) {
-      // set dates on the next month
       const newMonth = new Date(d).getMonth() + 1;
       d = new Date(d).setMonth(newMonth);
     }
     const date = new Date(d + 864e5 * index); // 864e5 == 86400000 == 24*60*60*1000
     const dateString = date.toISOString().split('T')[0];
-    console.log(dateString);
     array.push(dateString);
   }
   return array;
 }
 //Subtracts 864000 seconds per day from right now, and get our furthest past date
-function getPastDate(numberOfDays: number) {
-  return new Date(Date.now() - 864e5 * numberOfDays).toISOString().split('T')[0];
+function getPastDates(numberOfDays: number) {
+  let pastDates = [];
+  for (let i = numberOfDays; i > 0; i--){
+      pastDates.push(new Date(Date.now() - 864e5 * i).toISOString().split('T')[0]);
+  }
+  return pastDates;
 }
 
-//dunno actually, please explain.
+//Props to pass into page, for right now just a bool for week/expandable calendar
 interface Props {
   weekView?: boolean;
 }
@@ -213,46 +128,17 @@ interface Props {
 //actual component we throw into 
 const CalendarPage = (props: Props) => {
   const {weekView} = props;
-  const marked = useRef(getMarkedDates());
-  const theme = useRef(getTheme());
+  const marked = useRef(getMarkedDates()); //getting the dates to mark on expandable calendar
+  const theme = useRef(getTheme()); //
   const todayBtnTheme = useRef({todayButtonTextColor : '#00AAAF' });
-
-  const renderItem = useCallback(({item}: any) => {
-    return <AgendaItem item={item}/>;
-  }, []);              
-
+  //the rendering method for each AgendaItem
+  const renderItem = useCallback(({item}: any) => {return <AgendaItem item={item}/>; }, []);           
 
   return (
-
-    <CalendarProvider date = {agendaItems[1]?.title} theme = {todayBtnTheme.current}> 
-    {weekView ? ( <WeekCalendar testID={'menu'} firstDay={1} markedDates={marked.current}/>
-      ) : (
-        <ExpandableCalendar
-          testID={'menu'}
-          // horizontal={false}
-          // hideArrows
-          // disablePan
-          // hideKnob
-          // initialPosition={ExpandableCalendar.positions.OPEN}
-          // calendarStyle={styles.calendar}
-          // headerStyle={styles.header} // for horizontal only
-          // disableWeekScroll
-          theme={theme.current}
-          // disableAllTouchEventsForDisabledDays
-          firstDay={1}
-          markedDates={marked.current}
-          //requires pngs for arrows
-          leftArrowImageSource={leftArrowIcon}
-          rightArrowImageSource={rightArrowIcon}
-          // animateScroll
-          // closeOnDayPress={false}
-        />
-      )}
-      <AgendaList
-        sections={agendaItems}
-        renderItem={renderItem}
-        sectionStyle={styles.section}
-      />
+    <CalendarProvider date = {pastAndTodayDate[pastAndTodayDate.length-1]} theme = {todayBtnTheme.current}> 
+    {weekView ? (<WeekCalendar testID={'menu'} firstDay={1} markedDates={marked.current}/>) 
+              : (<ExpandableCalendar testID={'menu'} theme={theme.current} firstDay={1} markedDates={marked.current} leftArrowImageSource={leftArrowIcon} rightArrowImageSource={rightArrowIcon} /> )}
+      <AgendaList sections={agendaItems} renderItem={renderItem} sectionStyle={styles.section}/>
     </CalendarProvider>
   );
 };
@@ -273,5 +159,6 @@ const styles = StyleSheet.create({
     backgroundColor: lightThemeColor,
     color: 'grey',
     textTransform: 'capitalize'
+
   }
 });

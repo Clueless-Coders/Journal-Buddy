@@ -1,17 +1,14 @@
 import isEmpty from 'lodash/isEmpty';
-import React, {useCallback} from 'react';
+import React, {memo, useCallback} from 'react';
 import {StyleSheet, Alert, View, Text, TouchableOpacity, Button} from 'react-native';
 import { Habit } from '../../firebase/Database';
-import GeneralButtonDark from '../Buttons/GeneralButtonDark';
 import CheckboxButton from '../Buttons/CheckboxButton';
 
 const yes = 'green';
 const no = "red";
 
-
-//The Agenda Item wrapper class used in CalendarPage
 interface ItemProps {
-  item: any;
+  item: any
 }
 
 
@@ -31,7 +28,7 @@ const AgendaItem = (props: ItemProps) => {
   //Same thing for getting info for a particular habit
   const itemPressed = useCallback(() => {
     let string = isHabitDone ? "Habit: Done!" : "Habit: Not done!";
-    Alert.alert(item.title, string);
+    Alert.alert(item.title, string + "\nDuration: " + item.duration);
   }, []);
 
   //Return something indicating a empty list of habit if no habits made
@@ -47,19 +44,18 @@ const AgendaItem = (props: ItemProps) => {
   return (
     <TouchableOpacity onPress={itemPressed} style={styles.item} testID={'item'}>
       <View>
-        <Text style={styles.itemHourText}>{item.hour}</Text>
+          <Text style={styles.itemHourText}>{item.hour}</Text>
       </View>
       <Text style={styles.itemTitleText}>{item.title}</Text>
       <View style={styles.itemButtonContainer}>
-          <CheckboxButton checked = {isHabitDone} onPress={buttonPressed} buttonText='Update Habit'></CheckboxButton>
+          <CheckboxButton checked = {isHabitDone} onPress={buttonPressed} buttonText='Update Habit' containerStyle={styles.buttonStyle}></CheckboxButton>
       </View>
     </TouchableOpacity>
   );
 };
 
-export default React.memo(AgendaItem);
+export default AgendaItem;
 
-//styles B-b
 const styles = StyleSheet.create({
   item: {
     padding: 20,
@@ -99,5 +95,9 @@ const styles = StyleSheet.create({
   emptyItemText: {
     color: 'lightgrey',
     fontSize: 14
-  }
+  },
+  buttonStyle: {
+    height: 40, 
+    width: 190,
+  },
 });
