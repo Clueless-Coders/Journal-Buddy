@@ -86,6 +86,12 @@ export async function createJournal(journal: Journal) {
             console.log(previousJournalTime);
         }
     }).then(async () =>{
+        //convert UTC to curent date
+        
+        let previousDate = new Date(previousJournalTime);
+        //get current time and convert that to tdate also
+        //compare the strings. if they're different, then it's a new day.
+        
         //if the user has created a Journal entry in the last day, it will update that entry instead of creating a new one
         if(previousJournalTime !== 0 && Date.now() - previousJournalTime < SECONDS_IN_DAY){
             get(ref(getDatabase(), `/users/${user}/lastJournalEntryID`)).then((data) => {
@@ -265,11 +271,11 @@ export function signup (email: string, password: string) {
 
 
 const quote_url:string ="https://zenquotes.io/api/quotes/";
-const gptKey:string = "sk-proj-E0fX6zTCwwDJ5Ngx3BzNT3BlbkFJHIzYJrlOnhWSb5RcOFYk";
 
 const openai = new OpenAI({
   organization: 'org-Af8CoixBBszCPCBHo1PxTV2A',
   project: 'proj_gRH8KmIgrcCaeSxuD2hO5iMX',
+  apiKey: 'sk-proj-E0fX6zTCwwDJ5Ngx3BzNT3BlbkFJHIzYJrlOnhWSb5RcOFYk'
 });
 
 async function getQuote()
@@ -290,6 +296,29 @@ async function getPrompt() {
   console.log(completion.choices[0]);
 }
 
-//const reference = ref(db, 'users/')
+async function getDaily() {
+    const db = getDatabase();
+    let previousDailyTime = 0;
 
-//date.now
+    let quote = getQuote();
+    let prompt = getPrompt();
+
+    get(ref(getDatabase(), `/Daily/lastUpdated`)).then((data) => {
+        if(data.exists()){
+            previousDailyTime = data.val();
+            console.log(previousDailyTime);
+        }
+    }).then(async () =>{
+        //if the user has created a Journal entry in the last day, it will update that entry instead of creating a new one
+        if(previousDailyTime !== 0 && previousDailyTime - Date.now() < SECONDS_IN_DAY){ 
+            //creates a new Journal entry in the database initialized with the user's input
+            const DailyID = await push(child(ref(db), `/Daily/`), ).key;
+            set(ref(db, `/Daily/${DailyID}`), DailyID);
+            set(ref(db, `/Daily/lastUpdated`), Date.now());
+            set(ref(db, `/Daily/${Date.now}/`), DailyID);
+            set(ref(db, `/Daily/${Date.now}/`), quote);
+            set(ref(db, `/Daily/${Date.now}/`), prompt);
+        } 
+    });
+}
+
