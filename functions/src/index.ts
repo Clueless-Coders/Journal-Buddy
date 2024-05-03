@@ -7,12 +7,13 @@
  * See a full list of supported triggers at https://firebase.google.com/docs/functions
  */
 
-import {onRequest} from "firebase-functions/v2/https";
-import * as logger from "firebase-functions/logger";
-import { getDatabase, get, set, ref, push, child } from 'firebase/database';
-import { initializeApp } from "firebase/app";
+import {getDatabase, get, set, ref, push, child} from "firebase/database";
+import {initializeApp} from "firebase/app";
+import OpenAI from "openai";
+import {openAIKey, firebaseConfig} from "./key";
+import {onSchedule} from "firebase-functions/v2/scheduler";
 
-const { onSchedule } = require("firebase-functions/v2/scheduler")
+const quoteURL = "https://zenquotes.io/api/quotes/";
 
 // Start writing functions
 // https://firebase.google.com/docs/functions/typescript
@@ -22,27 +23,64 @@ const { onSchedule } = require("firebase-functions/v2/scheduler")
 //   response.send("Hello from Firebase!");
 // });
 
-export const updateDaily = onSchedule("every day 00:00", async (event) => {
+const openai = new OpenAI(openAIKey);
 
-    const db = getDatabase();
-    let previousDailyTime = 0;
+/**
+ * Gets Daily Quote from ZenQuote
+ */
+async function getQuote() {
+  const resp = await fetch(quoteURL);
+  const respJSON = await resp.json();
+  console.log(respJSON);
+  return resp.json();
+}
 
-    let quote = getQuote();
-    let prompt = getPrompt();
+/**
+ * Gets journal prompt from ChatGPT API
+ */
+async function getPrompt() {
+  const completion = await openai.chat.completions.create({
+    messages: [
+      {
+        role: "system",
+        content: `Generate a single unique journal prompt 
+        that will help me reflect on events that happened today`,
+      },
+      {
+        role: "user",
+        content:
+          "Generate a journal topic for a user to write about in their journal",
+      },
+    ],
+    model: "gpt-3.5-turbo",
+  });
 
-    get(ref(getDatabase(), `/Daily/lastUpdated`)).then((data) => {
-        if(data.exists()){
-            previousDailyTime = data.val();
-            console.log(previousDailyTime);
-        }
-    }).then(async () =>{
-        //if the user has created a Journal entry in the last day, it will update that entry instead of creating a new one
-            //creates a new Journal entry in the database initialized with the user's input
-        const DailyID = await push(child(ref(db), `/Daily/`), ).key;
-        set(ref(db, `/Daily/${DailyID}`), DailyID);
-        set(ref(db, `/Daily/lastUpdated`), Date.now());
-        set(ref(db, `/Daily/${Date.now}/`), DailyID);
-        set(ref(db, `/Daily/${Date.now}/`), quote);
-        set(ref(db, `/Daily/${Date.now}/`), prompt);
+  console.log(completion.choices[0]);
+
+  return completion.choices[0];
+}
+
+export const updateDaily = onSchedule("every day 00:00", async () => {
+  const app = initializeApp(firebaseConfig);
+  const db = getDatabase(app);
+  let previousDailyTime = 0;
+
+  const quote = await getQuote();
+  const prompt = await getPrompt();
+
+  get(ref(getDatabase(), "/Daily/lastUpdated"))
+    .then((data) => {
+      if (data.exists()) {
+        previousDailyTime = data.val();
+        console.log(previousDailyTime);
+      }
+    })
+    .then(async () => {
+      const DailyID = await push(child(ref(db), "/Daily/")).key;
+      set(ref(db, `/Daily/${DailyID}`), DailyID);
+      set(ref(db, "/Daily/lastUpdated"), Date.now());
+      set(ref(db, `/Daily/${Date.now}/`), DailyID);
+      set(ref(db, `/Daily/${Date.now}/`), quote);
+      set(ref(db, `/Daily/${Date.now}/`), prompt);
     });
-})
+});
