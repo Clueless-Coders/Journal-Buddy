@@ -7,13 +7,13 @@
  * See a full list of supported triggers at https://firebase.google.com/docs/functions
  */
 
-import {getDatabase, get, set, ref, push, child} from "firebase/database";
+import {getDatabase, get, set, ref} from "firebase/database";
 import {initializeApp} from "firebase/app";
 import OpenAI from "openai";
 import {openAIKey, firebaseConfig} from "./key";
 import {onSchedule} from "firebase-functions/v2/scheduler";
 
-const quoteURL = "https://zenquotes.io/api/quotes/";
+const quoteURL = "https://zenquotes.io/api/random/";
 
 // Start writing functions
 // https://firebase.google.com/docs/functions/typescript
@@ -31,7 +31,6 @@ const openai = new OpenAI(openAIKey);
 async function getQuote() {
   const resp = await fetch(quoteURL);
   const respJSON = await resp.json();
-  console.log(respJSON);
   return respJSON;
 }
 
@@ -43,8 +42,8 @@ async function getPrompt() {
     messages: [
       {
         role: "system",
-        content: `Generate a single unique journal prompt 
-        that will help me reflect on events that happened today`,
+        content: `You are a mental health expert 
+        helping people think positively`,
       },
       {
         role: "user",
@@ -54,8 +53,6 @@ async function getPrompt() {
     ],
     model: "gpt-3.5-turbo",
   });
-
-  console.log(completion.choices[0]);
 
   return completion.choices[0];
 }
@@ -76,11 +73,13 @@ export const updateDaily = onSchedule("every day 00:00", async () => {
       }
     })
     .then(async () => {
-      const DailyID = await push(child(ref(db), "/Daily/")).key;
-      set(ref(db, `/Daily/${DailyID}`), DailyID);
-      set(ref(db, "/Daily/lastUpdated"), Date.now());
-      set(ref(db, `/Daily/${Date.now}/`), DailyID);
-      set(ref(db, `/Daily/${Date.now}/`), quote);
-      set(ref(db, `/Daily/${Date.now}/`), prompt);
+      const day = new Date();
+      const newDaily = {
+        quote: quote[0],
+        prompt: prompt.message.content,
+      };
+      console.log(newDaily);
+      set(ref(db, `/Daily/${day.toDateString()}`), newDaily);
+      set(ref(db, "/Daily/lastUpdated"), day.toDateString());
     });
 });
