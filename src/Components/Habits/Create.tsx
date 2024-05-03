@@ -19,8 +19,10 @@ export default function HabitPage({navigation}: any) {
       saturday: false,
     });
 
-    let [timesToComplete, setTimesToComplete] = React.useState('');
-    let [endDate, setEndDate] = React.useState('');
+    let [timesToComplete, setTimesToComplete] = React.useState('12:00');
+    let [endDate, setEndDate] = React.useState(new Date());
+    let [isPickerShow, setIsPickerShow] = React.useState(false);
+    let [mode, setMode] = React.useState('date');
 
     //how to fetch the users stuff and save this to their account ask tristan
 
@@ -31,13 +33,29 @@ export default function HabitPage({navigation}: any) {
         setDaysSet(prev => ({ ...prev, [day]: !prev[day] }));
     };
 
-    //time & date
+    const showPicker = (pickerMode) => {
+        setIsPickerShow(true);
+        setMode(pickerMode);
+    };
+
+    const onChange = (event, selectedValue) => {
+        setIsPickerShow(Platform.OS === 'ios');
+        if (mode === 'time') {
+            const selectedTime = selectedValue || timesToComplete;
+            setTimesToComplete(selectedTime);
+        } else {
+            const selectedDate = selectedValue || endDate;
+            setEndDate(selectedDate);
+        }
+    };
 
     function handleCreateHabit() {
         const newHabit: Habit = {
             daysToComplete: daysSet,
             title: title,
             description: description,
+            timesToComplete: { time: timesToComplete.getTime() },
+            endDate: endDate.getTime(),
             uid: '', 
             user: '',
         };
@@ -55,7 +73,7 @@ export default function HabitPage({navigation}: any) {
         friday: false,
         saturday: false,
     });
-        console.log('Habit created:', { title, description, endDate });
+        console.log('Habit created:', { title, description, endDate, timesToComplete });
     };
 
     return(
@@ -116,6 +134,20 @@ export default function HabitPage({navigation}: any) {
                     </View>
                 </View>
 
+                <View>
+                <GeneralButtonDark buttonText="Set Time" onPress={() => showPicker('time')} />
+                            <GeneralButtonDark buttonText="Set End Date" onPress={() => showPicker('date')} />
+                            {isPickerShow && (
+                                <DateTimePicker
+                                    testID="dateTimePicker"
+                                    value={mode === 'time' ? timesToComplete : endDate}
+                                    mode={mode}
+                                    is24Hour={true}
+                                    display="default"
+                                    onChange={onChange}
+                                />
+                            )}    
+                </View>
                 {/* //non operational / old
                 <View style={{flexDirection: 'row', alignItems:'center', gap: 10, marginTop: 10}}>
                     <View style={styles.timeTextBoxWithLabel}>
