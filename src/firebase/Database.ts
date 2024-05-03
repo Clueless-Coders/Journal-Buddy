@@ -91,6 +91,7 @@ export async function createJournal(journal: Journal) {
         } else {
             //creates a new Journal entry in the database initialized with the user's input
             const journalUID = await push(child(ref(db), `/journals/`), journal).key;
+            set(ref(db, `/journals/${journalUID}/uid`), journalUID)
             set(ref(db, `/users/${user}/journals/${journalUID}`), journalUID);
             set(ref(db, `/users/${user}/lastJournalEntryTime`), Date.now());
             set(ref(db, `/users/${user}/lastJournalEntryID`), journalUID);

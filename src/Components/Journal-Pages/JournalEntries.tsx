@@ -21,15 +21,16 @@ export default function JournalEntries({ navigation, route }: any) {
         }
         
         onValue(ref(getDatabase(), `users/${getAuth().currentUser?.uid}/journals`), async (data) =>{
-            await getJournals();
+            getJournals();
+            console.log(data.toJSON());
         })
     }, []);
 
     React.useEffect(() => {
         async function getJournals(){
-            getJournalsByCurrentUser().then((journals) => {
-                setData(journals);
-            });
+            let journals = await getJournalsByCurrentUser();
+            console.log(journals);
+            setData(journals);
         }
 
         if(route.params !== undefined && route.params.update) {
@@ -49,7 +50,7 @@ export default function JournalEntries({ navigation, route }: any) {
             <ScrollView contentContainerStyle = {styles.mainContent}>
                 <GeneralButtonDark  onPress={() => navigation.navigate('NewJournal')} buttonText={'Start today\'s journal!'} containerStyle={styles.containerStyle} />
                 { data.length > 0 ? data.reverse().map((item, index) => {
-                    return <GeneralButtonLight  key={index} onPress={() => { navigation.navigate('NewJournal', { item })}} buttonText={new Date(item.dayWritten).toDateString()} containerStyle={styles.containerStyle}/>;
+                    return <GeneralButtonLight  key={index} onPress={() => { navigation.navigate('NewJournal', { journalID: item.uid })}} buttonText={new Date(item.dayWritten).toDateString()} containerStyle={styles.containerStyle}/>;
                 }) : <Text>Create a journal to see your previous responses!</Text>}
             </ScrollView>
         </SafeAreaView>

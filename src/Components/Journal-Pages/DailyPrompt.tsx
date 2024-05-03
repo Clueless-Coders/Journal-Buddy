@@ -25,17 +25,21 @@ export default function DailyPrompt({ navigation, route }: any) {
             dayWritten: Date.now()
         };
         createJournal(newJournal).then(() => {
-            navigation.navigate('JournalEntries', { update: true });
+            route.params = undefined;
+            navigation.navigate('JournalEntries');
         });
     }
 
     React.useEffect(() => {
-        if(route.params?.item) {
-            setResponse(route.params.item.entry);
+        async function getJournal(journalID: string){
+            let journal = await getJournalByID(journalID);
+            setResponse(journal.entry);
         }
-        if(route.params?.prompt) {
-            setPrompt(route.params.prompt);
+        if(route.params?.journalID) {
+            getJournal(route.params.journalID);
         }
+        
+        console.log('In DailyPrompt: ');
         console.log(route.params);
     }, [route.params])
     
