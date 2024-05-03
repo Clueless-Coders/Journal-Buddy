@@ -28,13 +28,13 @@ export type Journal = {
 
 export type Habit = {
     daysToComplete: {
-        sunday?: boolean,
-        monday?: boolean,
-        tuesday?: boolean, 
-        wednesday?: boolean,
-        thursday?: boolean,
-        friday?: boolean,
-        saturday?: boolean
+        sunday: boolean,
+        monday: boolean,
+        tuesday: boolean, 
+        wednesday: boolean,
+        thursday: boolean,
+        friday: boolean,
+        saturday: boolean
     },
     timesToComplete: {
         [index: string]: number, //ms from 12 am that day

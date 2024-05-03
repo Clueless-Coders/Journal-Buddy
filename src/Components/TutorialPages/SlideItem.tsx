@@ -47,6 +47,7 @@ const styles = StyleSheet.create({
     },
     content: {
         alignItems: 'center',
+        flex: 0.4,
 
     },
     container: {
@@ -56,7 +57,8 @@ const styles = StyleSheet.create({
 
     },
     text: {
-
+        fontSize: 18,
+        marginVertical: 12
     }
 }
 )

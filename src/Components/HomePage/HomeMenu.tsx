@@ -18,6 +18,7 @@ export default function HomeMenu({ navigation }: any) {
     //TODO: Interface with the backend in order to save the user's response.
     let [DATA, setData] = React.useState([] as Habit[])
     //let [ data, setData ] = React.useState([] as Journal[])
+    let days:string[] = ["monday", "tuesday", "wednsday", "thursday", "friday"];
 
     let [quote, updateQuote] = React.useState({q: 'haiii', a: '- T'});
     //let user = getAuth().currentUser?.uid;
@@ -27,18 +28,16 @@ export default function HomeMenu({ navigation }: any) {
         async function getHabits(){
             getHabitsByCurrentUser().then((habits) => {
                 if(!ignore){
-                    let todaysHabits: Habit[] = [];
-                    habits.forEach(function (i) {
-                        let week:boolean[] = Object.values(i.daysToComplete);
-                        console.log(week);
-                        let currentDay:number = new Date().getDay();
-                        if(week[currentDay] === true){
-                            todaysHabits.push(i);
-                            console.log(i);
-                        }
-                    });
-                    console.log(todaysHabits);
-                    setData(todaysHabits);
+                    // let todaysHabits: Habit[] = [];
+                    // let currentDay:number = new Date().getDay();
+                    // habits.forEach(function (i) {
+                    //     i.daysToComplete[days[currentDay]];
+                        
+                        
+                         
+                    // });
+                    // console.log(todaysHabits);
+                    setData(habits);
                     //console.log("habit done:");
                     //console.log(DATA);
                 }

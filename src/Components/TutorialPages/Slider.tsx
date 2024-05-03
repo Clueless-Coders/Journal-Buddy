@@ -25,7 +25,14 @@ export default function Slider({ navigation }: any) {
 
     return (
         <View>
-            <FlatList data = {Slides} renderItem={({item}) => <SlideItem subtitle={item.subtitle} ImageLocation={item.ImageLocation} id={item.id}/>}/>
+            <FlatList 
+            data = {Slides} 
+            renderItem={({item}) => <SlideItem subtitle={item.subtitle} 
+            ImageLocation={item.ImageLocation} id={item.id}/>}
+            horizontal
+            pagingEnabled
+            snapToAlignment='center'
+            />
 
             
         </View>
