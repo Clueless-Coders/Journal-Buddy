@@ -48,8 +48,8 @@ export type Habit = {
     lastTimeComplete?: number,
     timesCompleted?: {
         [index: string]: {
-            timeCompleted: number, //unix time
-        }
+            [index: string]: number
+        } 
     }
 };
 
@@ -139,13 +139,15 @@ export function createHabit(newHabit: Habit){
 }
 
 export async function addHabitTime(habitID: string, timestamp: number){
-    const db = getDatabase(); 
+    const db = getDatabase();
+    let currentDate:string = new Date(timestamp).toDateString()
+
     if(habitID === undefined){
         console.log("Undefined id");
         return;
     }
     
-    await push(child(ref(db), `/habits/${habitID}/timesCompleted`), timestamp);
+    await push(child(ref(db), `/habits/${habitID}/timesCompleted/${currentDate}`), timestamp);
     await set(ref(db, `/habits/${habitID}/lastTimeComplete`),timestamp);
     //set(ref(db, `/users/${user}/lastJournalEntryTime`), Date.now());
     //obtains the last time the user has instantiated a new Journal entry in Unix time (stored in user profile)

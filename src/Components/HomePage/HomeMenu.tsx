@@ -56,7 +56,12 @@ export default function HomeMenu({ navigation }: any) {
     }
     
     function HabitIsDone(habit : Habit): boolean {
-        console.log(habit);
+        
+        if(habit.timesCompleted !== undefined){
+            let times = Object.values(habit.timesCompleted["may3"]);
+            console.log(times);
+
+        }
         let currentDate: string = new Date().toDateString();
         console.log("current date: " + currentDate);
         if(habit.lastTimeComplete !== undefined){
