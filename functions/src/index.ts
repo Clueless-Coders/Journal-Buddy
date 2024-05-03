@@ -32,7 +32,7 @@ async function getQuote() {
   const resp = await fetch(quoteURL);
   const respJSON = await resp.json();
   console.log(respJSON);
-  return resp.json();
+  return respJSON;
 }
 
 /**
