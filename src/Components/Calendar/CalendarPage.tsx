@@ -1,9 +1,10 @@
-import React, {useCallback, useRef, useState} from 'react';
+import React, {memo, useCallback, useRef, useState} from 'react';
 import { Platform, StyleSheet, View } from 'react-native';
 import {Calendar, Agenda, CalendarList, CalendarProvider, AgendaList, ExpandableCalendar, WeekCalendar} from 'react-native-calendars';
 import isEmpty from 'lodash/isEmpty';
 import { MarkedDates } from 'react-native-calendars/src/types';
 import AgendaItem from '../Calendar/AgendaItem';
+import { Habit } from '../../firebase/Database';
 
 //huge thanks to "react-native-calendars" for being what we want immediately with no drawbacks...
 //except please don't abstract your example code that much next time
@@ -21,10 +22,7 @@ const dates = pastAndTodayDate.concat(futureDates);
 const leftArrowIcon = require('../Calendar/previous.png');
 const rightArrowIcon = require('../Calendar/next.png');
 
-//general colors used in Theme and generally across this entire file
-const themeColor = '#00AAAF';
-const lightThemeColor = '#f2f7f7';
-const agendaItems: {title: string, data: [{hour: string, duration: string, title: string}]}[] = [];
+const agendaItems: {title: string, data: Habit[]} [] = [];
 
 //Actual data for habits to be tracked
 //Populating our date array using... arrays.
@@ -35,11 +33,10 @@ for (let i = 0; i < dates.length; i++){
       //data: array of objects that each have properties to be displayed
       //The data will be the stuff we poll from the database
       title: dates[i],
-      data: [{hour: '1pm', duration: '10h', title: 'fortnite'}]
-    }
-    );
+      data: [{duration: '1h', title: 'fortnite', description: 'gooning'}]
+    });
+    //Should update to being generative with database info later on
 }
-
 
 //Getting what dates we have data in, i.e. habits in each day
 function getMarkedDates() { 
@@ -52,7 +49,6 @@ function getMarkedDates() {
     }
   });
   return marked;
-
 }
 
 //function to return theme. should be abstracted in later git commits
@@ -64,7 +60,7 @@ function getTheme() {
     arrowColor: 'black',
     arrowStyle: {padding: 0},
     // knob
-    expandableKnobColor: themeColor,
+    expandableKnobColor: '#00AAAF',
     // month
     monthTextColor: 'black',
     textMonthFontSize: 16,
@@ -76,19 +72,19 @@ function getTheme() {
     textDayHeaderFontFamily: 'Inter_400Regular',
     textDayHeaderFontWeight: 'normal' as const,
     // dates
-    dayTextColor: themeColor,
+    dayTextColor: '#00AAAF',
     todayTextColor: '#af0078',
     textDayFontSize: 18,
     textDayFontFamily: 'Inter_400Regular',
     textDayFontWeight: '500' as const,
     textDayStyle: {marginTop: Platform.OS === 'android' ? 2 : 4},
     // selected date
-    selectedDayBackgroundColor: themeColor,
+    selectedDayBackgroundColor: '#00AAAF',
     selectedDayTextColor: 'white',
     // disabled date
     textDisabledColor: disabledColor,
     // dot (marked date)
-    dotColor: themeColor,
+    dotColor: '#00AAAF',
     selectedDotColor: 'white',
     disabledDotColor: disabledColor,
     dotStyle: {marginTop: -2}
@@ -142,7 +138,7 @@ const CalendarPage = (props: Props) => {
     </CalendarProvider>
   );
 };
-export default CalendarPage;
+export default memo(CalendarPage);
 
 
 //styles. should move getTheme into here honestly
@@ -156,9 +152,9 @@ const styles = StyleSheet.create({
     backgroundColor: 'lightgrey'
   },
   section: {
-    backgroundColor: lightThemeColor,
-    color: 'grey',
-    textTransform: 'capitalize'
-
+    backgroundColor: '#f2f7f7',
+    color: '#1c2833',
+    textTransform: 'capitalize',
+    fontSize: 20,
   }
 });

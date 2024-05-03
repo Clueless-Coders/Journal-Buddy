@@ -7,15 +7,14 @@ import CheckboxButton from '../Buttons/CheckboxButton';
 const yes = 'green';
 const no = "red";
 
-interface ItemProps {
-  item: any
+interface Props {
+  item: any,
 }
 
-
 //actual item; change props : ItemProps to props : Habit
-const AgendaItem = (props: ItemProps) => {
+const AgendaItem = (props: Props) => {
   let isHabitDone = false;
-    let item = props.item;
+  let item = props.item;
 
   //let isHabitDone = props.;
 
@@ -44,7 +43,7 @@ const AgendaItem = (props: ItemProps) => {
   return (
     <TouchableOpacity onPress={itemPressed} style={styles.item} testID={'item'}>
       <View>
-          <Text style={styles.itemHourText}>{item.hour}</Text>
+          <Text style={styles.itemHourText}>{item.duration}</Text>
       </View>
       <Text style={styles.itemTitleText}>{item.title}</Text>
       <View style={styles.itemButtonContainer}>
@@ -99,5 +98,6 @@ const styles = StyleSheet.create({
   buttonStyle: {
     height: 40, 
     width: 190,
+    alignItems: 'center'
   },
 });
