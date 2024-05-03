@@ -7,7 +7,7 @@ import { getAuth, signOut } from 'firebase/auth';
 import GeneralButtonLight from '../Buttons/GeneralButtonLight';
 import CheckboxButton from '../Buttons/CheckboxButton';
 import { getDatabase, onValue, ref } from 'firebase/database'
-import { Habit, addHabitTime, getHabitByID, getHabitsByCurrentUser } from '../../firebase/Database';
+import { Habit, addHabitTime, getHabitByID, getHabitsByCurrentUser, getDaily } from '../../firebase/Database';
 //import { FlatList } from 'react-native-gesture-handler';
 // import { getapi } from '../../Quotes';
 
@@ -80,14 +80,14 @@ export default function HomeMenu({ navigation }: any) {
         }
     } 
     
-
-    async function getQuote(){
+    getDaily();
+    /*async function getQuote(){
         const url:string ="https://zenquotes.io/api/random";
         const response = await fetch(url);
         let data = await response.json();
         let quotes: Quotes = data[0];
         updateQuote(quotes);
-    }
+    }*/
 
     let [input, onChangeInput] = React.useState('');
     return (

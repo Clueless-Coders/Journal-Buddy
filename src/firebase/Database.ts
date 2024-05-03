@@ -269,8 +269,7 @@ export function signup (email: string, password: string) {
     });
 }
 
-
-const quote_url:string ="https://zenquotes.io/api/quotes/";
+const quote_url:string ="https://zenquotes.io/api/random";
 
 const openai = new OpenAI({
   organization: 'org-Af8CoixBBszCPCBHo1PxTV2A',
@@ -290,13 +289,13 @@ async function getPrompt() {
     messages: [{"role": "system", "content": "You are a helpful assistant."},
         {"role": "user", "content": "Generate a journal topic for a user to write about in their journal"}
         ],
-    model: "gpt-3.5-turbo",
+    model: "gpt-4",
   });
 
   console.log(completion.choices[0]);
 }
 
-async function getDaily() {
+export async function getDaily() {
     const db = getDatabase();
     let previousDailyTime = 0;
 
