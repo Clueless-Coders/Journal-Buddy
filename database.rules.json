@@ -1,0 +1,22 @@
+{
+  "rules": {
+    "users": {
+      "$userId": {
+        ".write": "$userId === auth.uid",
+        ".read": "$userId === auth.uid"
+      }
+    },
+    "journals": {
+      ".write": "auth.uid !== null",
+      ".read": "auth.uid !== null"
+    },
+    "habits" : {
+      ".write": "auth.uid !== null",
+      ".read": "auth.uid !== null"
+    },
+    "Daily" : {
+      ".read": true,
+      ".write": true
+    }
+  }
+}
