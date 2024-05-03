@@ -3,11 +3,12 @@ import {Image, View, Text, StyleSheet, TextInput, ScrollView, SafeAreaView, Plat
 import { Ionicons } from "@expo/vector-icons";
 import { createHabit, Habit } from '../../firebase/Database';
 import GeneralButtonDark from '../Buttons/GeneralButtonDark';
+import DateTimePicker from '@react-native-community/datetimepicker';
+import Modal from 'react-native-modal';
 
 export default function HabitPage({navigation}: any) {
     let [title, setTitle] = React.useState('');
     let [description, setDescription] = React.useState('');
-    let [time, setTime] = React.useState('');
     let [daysSet, setDaysSet] = React.useState({
       sunday: false,
       monday: false,
@@ -17,6 +18,8 @@ export default function HabitPage({navigation}: any) {
       friday: false,
       saturday: false,
     });
+
+    let [timesToComplete, setTimesToComplete] = React.useState('');
     let [endDate, setEndDate] = React.useState('');
 
     //how to fetch the users stuff and save this to their account ask tristan
@@ -52,7 +55,7 @@ export default function HabitPage({navigation}: any) {
         friday: false,
         saturday: false,
     });
-        console.log('Habit created:', { title, description, endDate, time });
+        console.log('Habit created:', { title, description, endDate });
     };
 
     return(
@@ -112,7 +115,7 @@ export default function HabitPage({navigation}: any) {
                             ))}
                     </View>
                 </View>
-                
+
                 {/* //non operational / old
                 <View style={{flexDirection: 'row', alignItems:'center', gap: 10, marginTop: 10}}>
                     <View style={styles.timeTextBoxWithLabel}>
@@ -161,7 +164,7 @@ const styles = StyleSheet.create( {
     div: {
         width: "90%",
         height: 1,
-        backgroundColor: 'gray',
+        backgroundColor: '#E7EFFF70',
         marginBottom: '5%',
         marginTop: '5%'
     },
