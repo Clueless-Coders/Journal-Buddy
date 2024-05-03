@@ -33,7 +33,7 @@ for (let i = 0; i < dates.length; i++){
       //data: array of objects that each have properties to be displayed
       //The data will be the stuff we poll from the database
       title: dates[i],
-      data: [{duration: '1h', title: 'fortnite', description: 'gooning'}]
+      data: [{uid: '4', duration: '1h', title: 'fortnite', description: 'gooning', daysToComplete:{}, timesToComplete:{}}]
     });
     //Should update to being generative with database info later on
 }

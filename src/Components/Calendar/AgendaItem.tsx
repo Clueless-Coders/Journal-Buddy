@@ -15,7 +15,6 @@ interface Props {
 const AgendaItem = (props: Props) => {
   let isHabitDone = false;
   let item = props.item;
-
   //let isHabitDone = props.;
 
   //Show a popup when you click the "see more" button
@@ -76,13 +75,12 @@ const styles = StyleSheet.create({
     color: 'black',
     marginLeft: 16,
     fontWeight: 'bold',
-    fontSize: 16
+    fontSize: 16,
   },
   itemButtonContainer: {
     flex: 1,
     alignItems: 'flex-end',
-    width: 10,
-    height: 20,
+    minHeight: 20,
   },
   emptyItem: {
     paddingLeft: 20,
@@ -96,7 +94,8 @@ const styles = StyleSheet.create({
     fontSize: 14
   },
   buttonStyle: {
-    height: 40, 
+    color: 'black',
+    height: 45, 
     width: 190,
     alignItems: 'center'
   },
