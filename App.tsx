@@ -17,6 +17,7 @@ import { getAnalytics } from "firebase/analytics";
 import { initializeAuth, getReactNativePersistence, getAuth, onAuthStateChanged } from 'firebase/auth';
 import ReactNativeAsyncStorage from '@react-native-async-storage/async-storage';
 import { firebaseConfig } from './Keys';
+import Slider from './src/Components/TutorialPages/Slider';
 
 
 //TODO: Allow each page to change the currentPage state in order to switch which page is being displayed.
@@ -69,6 +70,14 @@ function HomeStack() {
   )
 }
 
+function TutorialStack() {
+  return(
+    <Stack.Navigator screenOptions={{headerShown: false}}>
+      <Stack.Screen name="Tutorial" component={Slider} />
+    </Stack.Navigator>
+  )
+}
+
 function DrawerGroup() {
   return(
     <Drawer.Navigator initialRouteName='HomeStack' >
@@ -76,6 +85,7 @@ function DrawerGroup() {
       <Stack.Screen name="JournalStack" component={JournalStack} />
       <Stack.Screen name="Habits" component={HabitPage} />
       <Stack.Screen name="Create Habit" component={Create} />
+      <Stack.Screen name="Tutorial" component={Slider} />
     </Drawer.Navigator>
   );
 }

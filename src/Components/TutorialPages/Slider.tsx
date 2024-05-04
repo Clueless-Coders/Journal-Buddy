@@ -24,7 +24,7 @@ let Slides:Slide[] =  [
 
 //export default function Slider({ navigation }: any)
 
-const Slider = () => {
+export default function Slider ({ navigation }: any) {
     const [index, setindex] = useState(0);
     const scrollX = useRef(new Animated.Value(0)).current
     
