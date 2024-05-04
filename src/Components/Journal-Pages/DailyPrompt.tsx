@@ -70,15 +70,14 @@ export default function DailyPrompt({ navigation, route }: any) {
                         </Text>
                     </View>
                     <GeneralButtonDark buttonText={"Save Response"} onPress={() => handleSubmit()} containerStyle={styles.submit}/>
+                    <TextInput 
+                        editable 
+                        multiline 
+                        onChangeText={text => setJournal({...journal, entry: text})} 
+                        value={journal.entry} placeholder="Enter your response here." 
+                        style={styles.inputField} 
+                    />
                 </View>
-                <TextInput 
-                    editable 
-                    multiline 
-                    onChangeText={text => setJournal({...journal, entry: text})} 
-                    value={journal.entry} placeholder="Enter your response here." 
-                    style={styles.inputField} 
-                    numberOfLines={20}
-                />
             </ScrollView>
         </SafeAreaView>
     );
@@ -93,8 +92,7 @@ const styles = StyleSheet.create({
             margin: 10
         },
         container: {
-            flex: 1,
-            zIndex: 0,
+            height: '100%',
             alignItems: 'center'
         },
         header: {
@@ -110,15 +108,17 @@ const styles = StyleSheet.create({
             fontSize: 15,
             color: 'black',
             padding: 10,
-            
         },
         inputField: {
             marginLeft: 5,
             marginRight: 5,
             textAlign: 'left',
+            textAlignVertical: 'top',
             borderWidth: 1,
             padding: 10,
-            height: '100%'
+            flex: 1,
+            width: '95%',
+            height: 450 
         },
         backButton: {
             fontSize: 20,
