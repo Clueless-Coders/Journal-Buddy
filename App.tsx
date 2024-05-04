@@ -10,10 +10,13 @@ import { FontAwesome5 } from '@expo/vector-icons';
 import LoginPage from './src/Components/Login/LoginPage';
 import SignUp from './src/Components/Login/SignUp';
 import ForgotPassword from './src/Components/Login/ForgotPassword';
+import HabitPage from './src/Components/Habits/HabitPage';
+import Create from './src/Components/Habits/Create';
 import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
 import { initializeAuth, getReactNativePersistence, getAuth, onAuthStateChanged } from 'firebase/auth';
 import ReactNativeAsyncStorage from '@react-native-async-storage/async-storage';
+import { firebaseConfig } from './Keys';
 
 
 //TODO: Allow each page to change the currentPage state in order to switch which page is being displayed.
@@ -28,7 +31,6 @@ function TabGroup() {
 
   return (
     <Tab.Navigator
-      
       screenOptions={({ route, navigation }) => ({
         tabBarIcon: (focused: boolean, color: string, size: number) => {
           let iconName;
@@ -41,9 +43,9 @@ function TabGroup() {
 
           return (<FontAwesome5 name={iconName} size={20} color={color} />) ;
         }
-      })}
+      }) }
     >
-      <Tab.Screen name="Home" component={HomeStack}/>
+      <Tab.Screen name="Home" component={HomeStack} options = {{headerShown:false}}/>
       <Tab.Screen name="NewJournal" component={DailyPrompt} />
       <Tab.Screen name="Calendar" component={HomeMenu}/>
     </Tab.Navigator>
@@ -52,7 +54,7 @@ function TabGroup() {
 
 function JournalStack() {
   return (
-    <Stack.Navigator>
+    <Stack.Navigator screenOptions={{headerShown: false}}>
       <Stack.Screen name="JournalEntries" component={JournalEntries} />
     </Stack.Navigator>
   )
@@ -60,7 +62,7 @@ function JournalStack() {
 
 function HomeStack() {
   return(
-    <Stack.Navigator>
+    <Stack.Navigator screenOptions={{headerShown: false}}>
       <Stack.Screen name="Drawer" component={DrawerGroup} />
 
     </Stack.Navigator>
@@ -69,9 +71,11 @@ function HomeStack() {
 
 function DrawerGroup() {
   return(
-    <Drawer.Navigator initialRouteName='HomeStack'>
+    <Drawer.Navigator initialRouteName='HomeStack' >
       <Stack.Screen name="Home" component={HomeMenu} />
       <Stack.Screen name="JournalStack" component={JournalStack} />
+      <Stack.Screen name="Habits" component={HabitPage} />
+      <Stack.Screen name="Create Habit" component={Create} />
     </Drawer.Navigator>
   );
 }
@@ -96,16 +100,7 @@ function AuthLogic() {
 
 export default function App() {
 
-  const firebaseConfig = {
-    apiKey: "AIzaSyCOshsr_f422QOgFGCtG6F2HFvAy4DIqpg",
-    authDomain: "journal-buddy-bfa71.firebaseapp.com",
-    databaseURL: "https://journal-buddy-bfa71-default-rtdb.firebaseio.com",
-    projectId: "journal-buddy-bfa71",
-    storageBucket: "journal-buddy-bfa71.appspot.com",
-    messagingSenderId: "750765241871",
-    appId: "1:750765241871:web:cf391de4e20373bb9f957a",
-    measurementId: "G-Q0VF0V7M1T"
-  };
+  
 
   const app = initializeApp(firebaseConfig);
   const auth = initializeAuth(app, {
