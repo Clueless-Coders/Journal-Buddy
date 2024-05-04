@@ -40,7 +40,7 @@ export default function HomeMenu({ navigation }: any) {
     }
     
     function HabitIsDone(habit : Habit): boolean {
-        let currentDate: string = new Date().toDateString();
+        /*let currentDate: string = new Date().toDateString();
         let DaysDone =  habit.timesCompleted;
         if( DaysDone !== undefined){
             let timeKeys: string[] = Object.keys(DaysDone);
@@ -74,7 +74,8 @@ export default function HomeMenu({ navigation }: any) {
             }
         } else {
             return false;
-        }
+        } */
+        return false;
     } 
 
     return (
