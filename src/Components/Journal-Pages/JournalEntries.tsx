@@ -6,36 +6,36 @@ import { Journal, getJournalsByCurrentUser } from '../../firebase/Database';
 import { getDatabase, onValue, ref } from 'firebase/database'
 import { getAuth } from 'firebase/auth';
 
-export default function JournalEntries({ navigation, route }: any) {
+export default function JournalEntries({ navigation }: any) {
     let [ data, setData ] = React.useState([] as Journal[]);
 
     React.useEffect(() => {
         async function getJournals(){
             const journals = await getJournalsByCurrentUser();
+            journals.sort((journalA, journalB) => {
+                return journalA.dayWritten - journalB.dayWritten;
+            })
             setData(journals);
+            console.log(journals);
         }
         
         onValue(ref(getDatabase(), `users/${getAuth().currentUser?.uid}/journals`), async (data) =>{
             getJournals();
         })
     }, []);
-
-    React.useEffect(() => {
-        async function getJournals(){
-            let journals = await getJournalsByCurrentUser();
-            setData(journals);
-        }
-
-        if(route.params !== undefined && route.params.update) {
-            getJournals();
-        }
-    }, [route.params])
     
     return (
         <SafeAreaView style={styles.overlord}>  
             <TextInput placeholder='Search' style={styles.inputBox}/>
             <ScrollView contentContainerStyle = {styles.mainContent}>
-                <GeneralButtonDark  onPress={() => navigation.navigate('Journal')} buttonText={'Start today\'s journal!'} containerStyle={styles.containerStyle} />
+                { (data.length > 0 && new Date(data[data.length - 1].dayWritten).toDateString() === new Date().toDateString()) ?  
+                    null :
+                    <GeneralButtonDark  
+                        onPress={() => navigation.navigate('Journal')} 
+                        buttonText={'Start today\'s journal!'} 
+                        containerStyle={styles.containerStyle} 
+                    /> 
+                }
                 { data.length > 0 ? data.reverse().map((item, index) => {
                     return <GeneralButtonLight  
                         key={index} 
