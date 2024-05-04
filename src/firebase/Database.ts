@@ -141,7 +141,7 @@ export function createHabit(newHabit: Habit){
             const habitUID = await push(child(ref(db), `/habits/`)).key;
             if(habitUID !== null){
                 newHabit.uid = habitUID;
-                push(child(ref(db), `/habits/`), newHabit);
+                set(child(ref(db), `/habits/${habitUID}`), newHabit);
                 set(ref(db, `/users/${user}/habits/${habitUID}`), habitUID);
                 set(ref(db, `/users/${user}/lastHabitEntryTime`), Date.now());
                 set(ref(db, `/users/${user}/lastHabitEntryID`), habitUID);
@@ -171,7 +171,6 @@ export async function addHabitTime(habitID: string){
     //obtains the last time the user has instantiated a new Journal entry in Unix time (stored in user profile)
     ///push(child(ref(db), `/habits/${habitID}/timesCompleted`), Date.now());
 }
-
 
 //Queries the database for all the journals created by this user
 export async function getJournalsByUserID(userID: string): Promise<Journal[]>{
@@ -260,7 +259,7 @@ export function getJournalByID(journalID: string): Promise<Journal>{
 //returns the habit data specified by the journalID
 export function getHabitByID(habitID: string): Promise<Habit>{
     return new Promise((resolve, reject) => {
-        get(child(ref(getDatabase()), `/journals/${habitID}`)).then((data) => {
+        get(child(ref(getDatabase()), `/habits/${habitID}`)).then((data) => {
             if(data.exists()){
                 resolve(data.val());
             } else {
