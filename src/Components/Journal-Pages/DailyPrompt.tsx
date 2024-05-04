@@ -1,30 +1,24 @@
 import React from 'react';
-import { View, Text, StyleSheet, TextInput, ScrollView, SafeAreaView, Platform, StatusBar, TouchableHighlight, Pressable } from 'react-native';
+import { View, Text, StyleSheet, TextInput, ScrollView, SafeAreaView, Platform, StatusBar, } from 'react-native';
 import GeneralButtonDark from '../Buttons/GeneralButtonDark';
-import BackButton from '../Buttons/BackButton';
-import { Inter_400Regular, useFonts } from '@expo-google-fonts/inter';
-import { createJournal, getJournalByID, Journal, updateJournal } from '../../firebase/Database';
+import { createJournal, getDailyByDay, getJournalByID, Journal, updateJournal } from '../../firebase/Database';
 import { getAuth } from 'firebase/auth';
+import { DailyContext } from '../../../App';
 
 export type PromptPageProps = {
     journal?: Journal,
     prompt?: string
 }
 export default function DailyPrompt({ navigation, route }: any) {
-    let [response, setResponse] = React.useState('');
-    let [prompt, setPrompt ] = React.useState('');
     let [journal, setJournal] = React.useState({} as Journal);
+    const [daily, setDaily] = React.useState(React.useContext(DailyContext));
     
     function handleSubmit() {
         const auth = getAuth();
         if(auth.currentUser === undefined || auth.currentUser === null)
             return;
 
-        console.log("Checking if we should edit or create...");
-        console.log(journal);
         if(route.params !== undefined && new Date().getUTCDate() === new Date(journal.dayWritten).getUTCDate()){
-            console.log("Editing instead of creating");
-            console.log(route.params.journalID);
             updateJournal(route.params.journalID, journal);
         } else {
             console.log("New journal detected! Creating a new journal entry in the DB");
@@ -44,15 +38,14 @@ export default function DailyPrompt({ navigation, route }: any) {
 
     React.useEffect(() => {
         async function getJournal(journalID: string){
-            let journal = await getJournalByID(journalID);
+            const journal = await getJournalByID(journalID);
             setJournal(journal);
+            const dailyForCurrJournal = await getDailyByDay(journal.dayWritten);
+            setDaily(dailyForCurrJournal);
         }
         if(route.params?.journalID) {
             getJournal(route.params.journalID);
         }
-        
-        console.log('In DailyPrompt: ');
-        console.log(route.params);
     }, [route.params])
     
     return (
@@ -64,15 +57,15 @@ export default function DailyPrompt({ navigation, route }: any) {
                             Daily Prompt:
                         </Text>
                         <Text style={styles.prompt}>
-                            {prompt !== undefined || prompt !== null ? 
+                            {daily.prompt !== undefined || daily.prompt !== null ? 
                             <Text>
+                                {daily.prompt}
+                            </Text> : 
+                            <Text> 
                                 Recall a moment from your past that still lingers in your memory. 
                                 Explore the details of that moment, the emotions it evoked, and the lessons you may have learned. 
                                 How does that memory shape your present perspectives or decisions?
                                 Reflect on the impact it had on your personal growth and the person you've become today.
-                            </Text> : 
-                            <Text> 
-                                {prompt} 
                             </Text> }
                         </Text>
                     </View>
@@ -94,7 +87,6 @@ export default function DailyPrompt({ navigation, route }: any) {
 const styles = StyleSheet.create({
         wrapper: {
             flex: 1,
-            fontFamily: "Inter_400Regular"
         },
         submit: {
             width: '70%',

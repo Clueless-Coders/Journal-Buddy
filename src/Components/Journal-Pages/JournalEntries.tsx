@@ -11,28 +11,23 @@ export default function JournalEntries({ navigation, route }: any) {
 
     React.useEffect(() => {
         async function getJournals(){
-            console.log('call');
             const journals = await getJournalsByCurrentUser();
-            console.log('set');
             setData(journals);
         }
         
         onValue(ref(getDatabase(), `users/${getAuth().currentUser?.uid}/journals`), async (data) =>{
             getJournals();
-            console.log(data.toJSON());
         })
     }, []);
 
     React.useEffect(() => {
         async function getJournals(){
             let journals = await getJournalsByCurrentUser();
-            console.log(journals);
             setData(journals);
         }
 
         if(route.params !== undefined && route.params.update) {
             getJournals();
-            console.log('exiting');
         }
     }, [route.params])
     

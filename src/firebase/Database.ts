@@ -271,7 +271,11 @@ export function getHabitByID(habitID: string): Promise<Habit>{
 }
 
 export async function getDaily(): Promise<Daily> {
-    const day = new Date();
+   return await getDailyByDay(Date.now()) 
+}
+
+export async function getDailyByDay(time: number): Promise<Daily> {
+    const day = new Date(time);
     const db = getDatabase();
     const data = await get(ref(db, `/Daily/${day.toDateString()}`));
     if(data.exists()){
