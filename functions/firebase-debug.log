@@ -1,0 +1,107 @@
+[debug] [2024-05-03T20:02:59.415Z] ----------------------------------------------------------------------
+[debug] [2024-05-03T20:02:59.416Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\trist\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js functions:shell
+[debug] [2024-05-03T20:02:59.417Z] CLI Version:   13.8.0
+[debug] [2024-05-03T20:02:59.417Z] Platform:      win32
+[debug] [2024-05-03T20:02:59.417Z] Node Version:  v20.10.0
+[debug] [2024-05-03T20:02:59.417Z] Time:          Fri May 03 2024 15:02:59 GMT-0500 (Central Daylight Time)
+[debug] [2024-05-03T20:02:59.417Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2024-05-03T20:02:59.468Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2024-05-03T20:02:59.469Z] > authorizing via signed-in user (mariotd9@gmail.com)
+[debug] [2024-05-03T20:02:59.469Z] [iam] checking project journal-buddy-bfa71 for permissions ["firebase.projects.get"]
+[debug] [2024-05-03T20:02:59.470Z] >>> [apiv2][query] POST https://cloudresourcemanager.googleapis.com/v1/projects/journal-buddy-bfa71:testIamPermissions [none]
+[debug] [2024-05-03T20:02:59.470Z] >>> [apiv2][(partial)header] POST https://cloudresourcemanager.googleapis.com/v1/projects/journal-buddy-bfa71:testIamPermissions x-goog-quota-user=projects/journal-buddy-bfa71
+[debug] [2024-05-03T20:02:59.471Z] >>> [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/journal-buddy-bfa71:testIamPermissions {"permissions":["firebase.projects.get"]}
+[debug] [2024-05-03T20:02:59.615Z] <<< [apiv2][status] POST https://cloudresourcemanager.googleapis.com/v1/projects/journal-buddy-bfa71:testIamPermissions 200
+[debug] [2024-05-03T20:02:59.615Z] <<< [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/journal-buddy-bfa71:testIamPermissions {"permissions":["firebase.projects.get"]}
+[debug] [2024-05-03T20:02:59.616Z] >>> [apiv2][query] GET http://127.0.0.1:4400/emulators [none]
+[debug] [2024-05-03T20:02:59.618Z] <<< [apiv2][status] GET http://127.0.0.1:4400/emulators 200
+[debug] [2024-05-03T20:02:59.618Z] <<< [apiv2][body] GET http://127.0.0.1:4400/emulators {"hub":{"listen":[{"address":"127.0.0.1","family":"IPv4","port":4400},{"address":"::1","family":"IPv6","port":4400}],"name":"hub","host":"127.0.0.1","port":4400},"ui":{"listen":[{"address":"127.0.0.1","family":"IPv4","port":4000},{"address":"::1","family":"IPv6","port":4000}],"name":"ui","host":"127.0.0.1","port":4000,"pid":18508},"logging":{"listen":[{"address":"127.0.0.1","family":"IPv4","port":4500}],"name":"logging","host":"127.0.0.1","port":4500},"functions":{"name":"functions","host":"127.0.0.1","port":5001},"database":{"listen":[{"address":"127.0.0.1","family":"IPv4","port":9000}],"name":"database","host":"127.0.0.1","port":9000,"pid":21616},"eventarc":{"name":"eventarc","host":"127.0.0.1","port":9299}}
+[debug] [2024-05-03T20:02:59.618Z] Running emulators:  {"hub":{"listen":[{"address":"127.0.0.1","family":"IPv4","port":4400},{"address":"::1","family":"IPv6","port":4400}],"name":"hub","host":"127.0.0.1","port":4400},"ui":{"listen":[{"address":"127.0.0.1","family":"IPv4","port":4000},{"address":"::1","family":"IPv6","port":4000}],"name":"ui","host":"127.0.0.1","port":4000,"pid":18508},"logging":{"listen":[{"address":"127.0.0.1","family":"IPv4","port":4500}],"name":"logging","host":"127.0.0.1","port":4500},"functions":{"name":"functions","host":"127.0.0.1","port":5001},"database":{"listen":[{"address":"127.0.0.1","family":"IPv4","port":9000}],"name":"database","host":"127.0.0.1","port":9000,"pid":21616},"eventarc":{"name":"eventarc","host":"127.0.0.1","port":9299}}
+[warn] !  functions: You are already running the Cloud Functions emulator on port 5001. Running the emulator and the Functions shell simultaenously can result in unexpected behavior. 
+[debug] [2024-05-03T20:02:59.621Z] [functions] Functions Emulator only supports listening on one address (127.0.0.1). Not listening on ::1
+[debug] [2024-05-03T20:02:59.623Z] defaultcredentials: writing to file C:\Users\trist\AppData\Roaming\firebase\mariotd9_gmail_com_application_default_credentials.json
+[debug] [2024-05-03T20:02:59.624Z] DEBUG: Setting GAC to C:\Users\trist\AppData\Roaming\firebase\mariotd9_gmail_com_application_default_credentials.json
+[debug] [2024-05-03T20:02:59.624Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/journal-buddy-bfa71/adminSdkConfig [none]
+[debug] [2024-05-03T20:02:59.889Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/journal-buddy-bfa71/adminSdkConfig 200
+[debug] [2024-05-03T20:02:59.889Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/journal-buddy-bfa71/adminSdkConfig {"projectId":"journal-buddy-bfa71","databaseURL":"https://journal-buddy-bfa71-default-rtdb.firebaseio.com","storageBucket":"journal-buddy-bfa71.appspot.com"}
+[debug] [2024-05-03T20:02:59.898Z] [functions] Watching "C:\dev\Journal-Buddy\functions" for Cloud Functions...
+[debug] [2024-05-03T20:02:59.902Z] Validating nodejs source
+[warn] !  functions: package.json indicates an outdated version of firebase-functions. Please upgrade using npm install --save firebase-functions@latest in your functions directory. 
+[debug] [2024-05-03T20:03:00.870Z] > [functions] package.json contents: {
+  "name": "functions",
+  "scripts": {
+    "lint": "eslint --ext .js,.ts .",
+    "build": "tsc",
+    "build:watch": "tsc --watch",
+    "serve": "npm run build && firebase emulators:start --only functions",
+    "shell": "npm run build && firebase functions:shell",
+    "start": "npm run shell",
+    "deploy": "firebase deploy --only functions",
+    "logs": "firebase functions:log"
+  },
+  "engines": {
+    "node": "18"
+  },
+  "main": "lib/index.js",
+  "dependencies": {
+    "firebase": "^10.11.1",
+    "firebase-admin": "^12.1.0",
+    "firebase-functions": "^5.0.0",
+    "openai": "^4.40.2",
+    "prettier": "^3.2.5"
+  },
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^5.12.0",
+    "@typescript-eslint/parser": "^5.12.0",
+    "eslint": "^8.9.0",
+    "eslint-config-google": "^0.14.0",
+    "eslint-plugin-import": "^2.25.4",
+    "firebase-functions-test": "^3.1.0",
+    "typescript": "^4.9.0"
+  },
+  "private": true
+}
+[debug] [2024-05-03T20:03:00.870Z] Building nodejs source
+[debug] [2024-05-03T20:03:00.870Z] Failed to find version of module node: reached end of search path C:\dev\Journal-Buddy\functions\node_modules
+[warn] !  functions: Your requested "node" version "18" doesn't match your global version "20". Using node@20 from host. 
+[debug] [2024-05-03T20:03:00.872Z] Could not find functions.yaml. Must use http discovery
+[debug] [2024-05-03T20:03:00.877Z] Found firebase-functions binary at 'C:\dev\Journal-Buddy\functions\node_modules\.bin\firebase-functions'
+[info] Serving at port 8708
+
+[debug] [2024-05-03T20:03:01.191Z] Got response from /__/functions.yaml {"endpoints":{"updateDaily":{"availableMemoryMb":null,"timeoutSeconds":null,"minInstances":null,"maxInstances":null,"ingressSettings":null,"concurrency":null,"serviceAccountEmail":null,"vpc":null,"platform":"gcfv2","labels":{},"scheduleTrigger":{"schedule":"every day 00:00","retryConfig":{"retryCount":null,"maxDoublings":null,"maxRetrySeconds":null,"minBackoffSeconds":null,"maxBackoffSeconds":null},"timeZone":null},"entryPoint":"updateDaily"}},"specVersion":"v1alpha1","requiredAPIs":[{"api":"cloudscheduler.googleapis.com","reason":"Needed for scheduled functions."}]}
+[debug] [2024-05-03T20:03:06.216Z] [functions] Loaded functions definitions from source: updateDaily.
+[debug] [2024-05-03T20:03:06.216Z] [functions[us-central1-updateDaily]] function ignored because the pubsub emulator does not exist or is not running.
+[info] i  functions: Loaded functions: updateDaily 
+[info] i  functions: Connected to running database emulator at 127.0.0.1:9000, calls to this service will affect the emulator 
+[info] i  functions: Connected to running eventarc emulator at 127.0.0.1:9299, calls to this service will affect the emulator 
+[warn] !  functions: The following emulators are not running, calls to these services will affect production: firestore, pubsub, storage 
+[debug] [2024-05-03T20:03:14.057Z] shell:updateDaily: trigger={"entryPoint":"updateDaily","platform":"gcfv2","region":"us-central1","name":"updateDaily","id":"us-central1-updateDaily","codebase":"default","availableMemoryMb":256,"labels":{"EVENTARC_CLOUD_EVENT_SOURCE":"run-emulated.googleapis.com/projects/journal-buddy-bfa71/locations/us-central1/services/updateDaily"},"timeoutSeconds":60,"secretEnvironmentVariables":[],"eventTrigger":{"eventType":"pubsub","resource":""},"schedule":{"schedule":"every day 00:00","timeZone":null,"retryConfig":{"maxBackoffSeconds":null,"minBackoffSeconds":null,"maxRetrySeconds":null,"retryCount":null,"maxDoublings":null}}}
+[debug] [2024-05-03T20:03:14.057Z] shell:updateDaily: opts={}, data={}
+[debug] [2024-05-03T20:03:14.067Z] DEBUG: [worker-pool] addWorker(us-central1-updateDaily)
+[debug] [2024-05-03T20:03:14.067Z] DEBUG: [worker-pool] Adding worker with key us-central1-updateDaily, total=1
+[debug] [2024-05-03T20:03:14.951Z] DEBUG: [runtime-status] [24884] Resolved module firebase-admin {"declared":true,"installed":true,"version":"12.1.0","resolution":"C:\\dev\\Journal-Buddy\\functions\\node_modules\\firebase-admin\\lib\\index.js"}
+[debug] [2024-05-03T20:03:14.953Z] DEBUG: [runtime-status] [24884] Resolved module firebase-functions {"declared":true,"installed":true,"version":"5.0.0","resolution":"C:\\dev\\Journal-Buddy\\functions\\node_modules\\firebase-functions\\lib\\v1\\index.js"}
+[debug] [2024-05-03T20:03:14.953Z] DEBUG: [runtime-status] [24884] Outgoing network have been stubbed. [{"name":"http","status":"mocked"},{"name":"http","status":"mocked"},{"name":"https","status":"mocked"},{"name":"https","status":"mocked"},{"name":"net","status":"mocked"}]
+[debug] [2024-05-03T20:03:14.954Z] DEBUG: [runtime-status] [24884] Resolved module firebase-functions {"declared":true,"installed":true,"version":"5.0.0","resolution":"C:\\dev\\Journal-Buddy\\functions\\node_modules\\firebase-functions\\lib\\v1\\index.js"}
+[debug] [2024-05-03T20:03:15.158Z] DEBUG: [runtime-status] [24884] Checked functions.config() {"config":{}}
+[debug] [2024-05-03T20:03:15.158Z] DEBUG: [runtime-status] [24884] firebase-functions has been stubbed. {"functionsResolution":{"declared":true,"installed":true,"version":"5.0.0","resolution":"C:\\dev\\Journal-Buddy\\functions\\node_modules\\firebase-functions\\lib\\v1\\index.js"}}
+[debug] [2024-05-03T20:03:15.158Z] DEBUG: [runtime-status] [24884] Resolved module firebase-functions {"declared":true,"installed":true,"version":"5.0.0","resolution":"C:\\dev\\Journal-Buddy\\functions\\node_modules\\firebase-functions\\lib\\v1\\index.js"}
+[debug] [2024-05-03T20:03:15.159Z] DEBUG: [runtime-status] [24884] Resolved module firebase-admin {"declared":true,"installed":true,"version":"12.1.0","resolution":"C:\\dev\\Journal-Buddy\\functions\\node_modules\\firebase-admin\\lib\\index.js"}
+[debug] [2024-05-03T20:03:15.161Z] DEBUG: [runtime-status] [24884] Resolved module firebase-functions {"declared":true,"installed":true,"version":"5.0.0","resolution":"C:\\dev\\Journal-Buddy\\functions\\node_modules\\firebase-functions\\lib\\v1\\index.js"}
+[debug] [2024-05-03T20:03:15.161Z] DEBUG: [runtime-status] [24884] firebase-admin has been stubbed. {"adminResolution":{"declared":true,"installed":true,"version":"12.1.0","resolution":"C:\\dev\\Journal-Buddy\\functions\\node_modules\\firebase-admin\\lib\\index.js"}}
+[debug] [2024-05-03T20:03:15.252Z] DEBUG: [runtime-status] [24884] Functions runtime initialized. {"cwd":"C:\\dev\\Journal-Buddy\\functions","node_version":"20.10.0"}
+[debug] [2024-05-03T20:03:15.253Z] DEBUG: [runtime-status] [24884] Listening to port: \\?\pipe\fire_emu_bdde19f4741e22b9
+[debug] [2024-05-03T20:03:15.283Z] DEBUG: [worker-us-central1-updateDaily-433b58d1-c4a9-4fe7-ade8-b8b1d66650bd]: IDLE
+[warn] !  External network resource requested!
+   - URL: "https://api.openai.com/v1/chat/completions"
+ - Be careful, this may be a production service. {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-updateDaily"},"extension":{},"message":"External network resource requested!\n   - URL: \"https://api.openai.com/v1/chat/completions\"\n - Be careful, this may be a production service."}}
+[info] >  Fri May 03 2024 {"user":"Fri May 03 2024","metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-updateDaily"},"extension":{},"message":"\u001b[90m> \u001b[39m Fri May 03 2024"}}
+[info] >  { {"user":"{","metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-updateDaily"},"extension":{},"message":"\u001b[90m> \u001b[39m {"}}
+[info] >    quote: { {"user":"  quote: {","metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-updateDaily"},"extension":{},"message":"\u001b[90m> \u001b[39m   quote: {"}}
+[info] >      q: "If you run you stand a chance of losing, but if you don't run you've already lost.", {"user":"    q: \"If you run you stand a chance of losing, but if you don't run you've already lost.\",","metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-updateDaily"},"extension":{},"message":"\u001b[90m> \u001b[39m     q: \"If you run you stand a chance of losing, but if you don't run you've already lost.\","}}
+[info] >      a: 'Barack Obama', {"user":"    a: 'Barack Obama',","metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-updateDaily"},"extension":{},"message":"\u001b[90m> \u001b[39m     a: 'Barack Obama',"}}
+[info] >      h: "<blockquote>&ldquo;If you run you stand a chance of losing, but if you don't run you've already lost.&rdquo; &mdash; <footer>Barack Obama</footer></blockquote>" {"user":"    h: \"<blockquote>&ldquo;If you run you stand a chance of losing, but if you don't run you've already lost.&rdquo; &mdash; <footer>Barack Obama</footer></blockquote>\"","metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-updateDaily"},"extension":{},"message":"\u001b[90m> \u001b[39m     h: \"<blockquote>&ldquo;If you run you stand a chance of losing, but if you don't run you've already lost.&rdquo; &mdash; <footer>Barack Obama</footer></blockquote>\""}}
+[info] >    }, {"user":"  },","metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-updateDaily"},"extension":{},"message":"\u001b[90m> \u001b[39m   },"}}
+[info] >    prompt: '"Gratitude Journal: Write about three things you are grateful for today and why they bring joy to your life."' {"user":"  prompt: '\"Gratitude Journal: Write about three things you are grateful for today and why they bring joy to your life.\"'","metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-updateDaily"},"extension":{},"message":"\u001b[90m> \u001b[39m   prompt: '\"Gratitude Journal: Write about three things you are grateful for today and why they bring joy to your life.\"'"}}
+[info] >  } {"user":"}","metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-updateDaily"},"extension":{},"message":"\u001b[90m> \u001b[39m }"}}
