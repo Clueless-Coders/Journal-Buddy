@@ -51,8 +51,8 @@ function TabGroup() {
             let iconName;
             if (route.name === "Home")
               iconName = "home";
-            else if (route.name === "NewJournal")
-              iconName = "plus-square";
+            else if (route.name === "Journals")
+              iconName = "book";
             else if (route.name === "Calendar")
               iconName = "calendar";
 
@@ -61,7 +61,7 @@ function TabGroup() {
         })}
       >
         <Tab.Screen name="Home" component={HomeStack} options={{ headerShown: false }} />
-        <Tab.Screen name="NewJournal" component={DailyPrompt} />
+        <Tab.Screen name="Journals" component={JournalStack} />
         <Tab.Screen name="Calendar" component={HomeMenu} />
       </Tab.Navigator>
     </DailyContext.Provider>
@@ -72,6 +72,7 @@ function JournalStack() {
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
       <Stack.Screen name="JournalEntries" component={JournalEntries} />
+      <Stack.Screen name="Journal" component={DailyPrompt} />
     </Stack.Navigator>
   )
 }
@@ -89,7 +90,7 @@ function DrawerGroup() {
   return (
     <Drawer.Navigator initialRouteName='HomeStack' >
       <Stack.Screen name="Home" component={HomeMenu} />
-      <Stack.Screen name="JournalStack" component={JournalStack} />
+      <Stack.Screen name="Journals" component={JournalStack} />
       <Stack.Screen name="Habits" component={HabitPage} />
       <Stack.Screen name="Create Habit" component={Create} />
     </Drawer.Navigator>

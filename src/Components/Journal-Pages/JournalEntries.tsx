@@ -35,11 +35,11 @@ export default function JournalEntries({ navigation, route }: any) {
         <SafeAreaView style={styles.overlord}>  
             <TextInput placeholder='Search' style={styles.inputBox}/>
             <ScrollView contentContainerStyle = {styles.mainContent}>
-                <GeneralButtonDark  onPress={() => navigation.navigate('NewJournal')} buttonText={'Start today\'s journal!'} containerStyle={styles.containerStyle} />
+                <GeneralButtonDark  onPress={() => navigation.navigate('Journal')} buttonText={'Start today\'s journal!'} containerStyle={styles.containerStyle} />
                 { data.length > 0 ? data.reverse().map((item, index) => {
                     return <GeneralButtonLight  
                         key={index} 
-                        onPress={() => { navigation.navigate('NewJournal', { journalID: item.uid })}} 
+                        onPress={() => { navigation.navigate('Journal', { journalID: item.uid })}} 
                         buttonText={new Date(item.dayWritten).toDateString()} 
                         containerStyle={styles.containerStyle}
                     />;
