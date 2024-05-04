@@ -3,7 +3,7 @@ import { View, Text, StyleSheet, TextInput, ScrollView, SafeAreaView, Platform, 
 import GeneralButtonDark from '../Buttons/GeneralButtonDark';
 import BackButton from '../Buttons/BackButton';
 import { Inter_400Regular, useFonts } from '@expo-google-fonts/inter';
-import { createJournal, getJournalByID, Journal } from '../../firebase/Database';
+import { createJournal, getJournalByID, Journal, updateJournal } from '../../firebase/Database';
 import { getAuth } from 'firebase/auth';
 
 export type PromptPageProps = {
@@ -13,27 +13,39 @@ export type PromptPageProps = {
 export default function DailyPrompt({ navigation, route }: any) {
     let [response, setResponse] = React.useState('');
     let [prompt, setPrompt ] = React.useState('');
+    let [journal, setJournal] = React.useState({} as Journal);
     
     function handleSubmit() {
         const auth = getAuth();
         if(auth.currentUser === undefined || auth.currentUser === null)
             return;
 
-        const newJournal: Journal = {
-            user: auth.currentUser.uid,
-            entry: response,
-            dayWritten: Date.now()
-        };
-        createJournal(newJournal).then(() => {
-            route.params = undefined;
-            navigation.navigate('JournalEntries');
-        });
+        console.log("Checking if we should edit or create...");
+        console.log(journal);
+        if(route.params !== undefined && new Date().getUTCDate() === new Date(journal.dayWritten).getUTCDate()){
+            console.log("Editing instead of creating");
+            console.log(route.params.journalID);
+            updateJournal(route.params.journalID, journal);
+        } else {
+            console.log("New journal detected! Creating a new journal entry in the DB");
+            const newJournal: Journal = {
+                user: auth.currentUser.uid,
+                entry: journal.entry,
+                uid: "unknown",
+                dayWritten: Date.now()
+            };
+            createJournal(newJournal).then(() => {
+                route.params = undefined;
+                setResponse("");
+            });
+        }
+        navigation.navigate('JournalEntries');
     }
 
     React.useEffect(() => {
         async function getJournal(journalID: string){
             let journal = await getJournalByID(journalID);
-            setResponse(journal.entry);
+            setJournal(journal);
         }
         if(route.params?.journalID) {
             getJournal(route.params.journalID);
@@ -69,8 +81,8 @@ export default function DailyPrompt({ navigation, route }: any) {
                 <TextInput 
                     editable 
                     multiline 
-                    onChangeText={text => setResponse(text)} 
-                    value={response} placeholder="Enter your response here." 
+                    onChangeText={text => setJournal({...journal, entry: text})} 
+                    value={journal.entry} placeholder="Enter your response here." 
                     style={styles.inputField} 
                     numberOfLines={20}
                 />
