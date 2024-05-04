@@ -92,10 +92,6 @@ export default function HomeMenu({ navigation }: any) {
                             {"-" + daily.quote.a}
                         </Text>
                     </View>
-                    <View style = {styles.buttonBox}>
-                        {/* <GeneralButton buttonText={"Start Today's Entry"} onPress = {() => null}/> */}
-                        <GeneralButtonDark onPress={() => navigation.navigate("NewJournal")} buttonText="Start Today's Entry" textStyle={styles.buttonText} containerStyle={styles.button}/>
-                    </View>
                     <View>
                         <Text style={styles.header2}>
                             Today's Task
