@@ -81,7 +81,6 @@ function HomeStack() {
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
       <Stack.Screen name="Drawer" component={DrawerGroup} />
-
     </Stack.Navigator>
   )
 }

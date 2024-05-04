@@ -19,14 +19,13 @@ export default function JournalEntries({ navigation }: any) {
             console.log(journals);
         }
         
-        onValue(ref(getDatabase(), `users/${getAuth().currentUser?.uid}/journals`), async (data) =>{
+        onValue(ref(getDatabase(), `users/${getAuth().currentUser?.uid}/journals`), async () =>{
             getJournals();
         })
     }, []);
     
     return (
         <SafeAreaView style={styles.overlord}>  
-            <TextInput placeholder='Search' style={styles.inputBox}/>
             <ScrollView contentContainerStyle = {styles.mainContent}>
                 { (data.length > 0 && new Date(data[data.length - 1].dayWritten).toDateString() === new Date().toDateString()) ?  
                     null :
@@ -49,7 +48,6 @@ export default function JournalEntries({ navigation }: any) {
     );
 }
 
-
 const styles = StyleSheet.create({
     overlord: {
         paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0,
@@ -58,15 +56,6 @@ const styles = StyleSheet.create({
     },
     mainContent: {
         alignItems: 'center'
-    },
-    inputBox: {
-        borderWidth: .5,
-        width: '80%',
-        backgroundColor: '#f2f9ff',
-        padding: 5,
-        borderRadius: 25,
-        margin: 5,
-        alignSelf: "center"
     },
     containerStyle: {
         width: '90%',
