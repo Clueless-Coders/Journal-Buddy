@@ -36,9 +36,9 @@ export default function DailyPrompt({ navigation, route }: any) {
             };
             createJournal(newJournal).then(() => {
                 route.params = undefined;
-                setResponse("");
             });
         }
+        setJournal({} as Journal);
         navigation.navigate('JournalEntries');
     }
 
