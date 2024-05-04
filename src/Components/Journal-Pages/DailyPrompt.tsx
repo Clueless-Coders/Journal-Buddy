@@ -1,42 +1,51 @@
 import React from 'react';
-import { View, Text, StyleSheet, TextInput, ScrollView, SafeAreaView, Platform, StatusBar, TouchableHighlight, Pressable } from 'react-native';
+import { View, Text, StyleSheet, TextInput, ScrollView, SafeAreaView, Platform, StatusBar, } from 'react-native';
 import GeneralButtonDark from '../Buttons/GeneralButtonDark';
-import BackButton from '../Buttons/BackButton';
-import { Inter_400Regular, useFonts } from '@expo-google-fonts/inter';
-import { createJournal, getJournalByID, Journal } from '../../firebase/Database';
+import { createJournal, getDailyByDay, getJournalByID, Journal, updateJournal } from '../../firebase/Database';
 import { getAuth } from 'firebase/auth';
+import { DailyContext } from '../../../App';
 
 export type PromptPageProps = {
     journal?: Journal,
     prompt?: string
 }
 export default function DailyPrompt({ navigation, route }: any) {
-    let [response, setResponse] = React.useState('');
-    let [prompt, setPrompt ] = React.useState('');
+    let [journal, setJournal] = React.useState({} as Journal);
+    const [daily, setDaily] = React.useState(React.useContext(DailyContext));
     
     function handleSubmit() {
         const auth = getAuth();
         if(auth.currentUser === undefined || auth.currentUser === null)
             return;
 
-        const newJournal: Journal = {
-            user: auth.currentUser.uid,
-            entry: response,
-            dayWritten: Date.now()
-        };
-        createJournal(newJournal).then(() => {
-            navigation.navigate('JournalEntries', { update: true });
-        });
+        if(route.params !== undefined && new Date().getUTCDate() === new Date(journal.dayWritten).getUTCDate()){
+            updateJournal(route.params.journalID, journal);
+        } else {
+            console.log("New journal detected! Creating a new journal entry in the DB");
+            const newJournal: Journal = {
+                user: auth.currentUser.uid,
+                entry: journal.entry,
+                uid: "unknown",
+                dayWritten: Date.now()
+            };
+            createJournal(newJournal).then(() => {
+                route.params = undefined;
+            });
+        }
+        setJournal({} as Journal);
+        navigation.navigate('JournalEntries');
     }
 
     React.useEffect(() => {
-        if(route.params?.item) {
-            setResponse(route.params.item.entry);
+        async function getJournal(journalID: string){
+            const journal = await getJournalByID(journalID);
+            setJournal(journal);
+            const dailyForCurrJournal = await getDailyByDay(journal.dayWritten);
+            setDaily(dailyForCurrJournal);
         }
-        if(route.params?.prompt) {
-            setPrompt(route.params.prompt);
+        if(route.params?.journalID) {
+            getJournal(route.params.journalID);
         }
-        console.log(route.params);
     }, [route.params])
     
     return (
@@ -48,28 +57,27 @@ export default function DailyPrompt({ navigation, route }: any) {
                             Daily Prompt:
                         </Text>
                         <Text style={styles.prompt}>
-                            {prompt !== undefined || prompt !== null ? 
+                            {daily.prompt !== undefined || daily.prompt !== null ? 
                             <Text>
+                                {daily.prompt}
+                            </Text> : 
+                            <Text> 
                                 Recall a moment from your past that still lingers in your memory. 
                                 Explore the details of that moment, the emotions it evoked, and the lessons you may have learned. 
                                 How does that memory shape your present perspectives or decisions?
                                 Reflect on the impact it had on your personal growth and the person you've become today.
-                            </Text> : 
-                            <Text> 
-                                {prompt} 
                             </Text> }
                         </Text>
                     </View>
                     <GeneralButtonDark buttonText={"Save Response"} onPress={() => handleSubmit()} containerStyle={styles.submit}/>
+                    <TextInput 
+                        editable 
+                        multiline 
+                        onChangeText={text => setJournal({...journal, entry: text})} 
+                        value={journal.entry} placeholder="Enter your response here." 
+                        style={styles.inputField} 
+                    />
                 </View>
-                <TextInput 
-                    editable 
-                    multiline 
-                    onChangeText={text => setResponse(text)} 
-                    value={response} placeholder="Enter your response here." 
-                    style={styles.inputField} 
-                    numberOfLines={20}
-                />
             </ScrollView>
         </SafeAreaView>
     );
@@ -78,15 +86,13 @@ export default function DailyPrompt({ navigation, route }: any) {
 const styles = StyleSheet.create({
         wrapper: {
             flex: 1,
-            fontFamily: "Inter_400Regular"
         },
         submit: {
             width: '70%',
             margin: 10
         },
         container: {
-            flex: 1,
-            zIndex: 0,
+            height: '100%',
             alignItems: 'center'
         },
         header: {
@@ -102,15 +108,17 @@ const styles = StyleSheet.create({
             fontSize: 15,
             color: 'black',
             padding: 10,
-            
         },
         inputField: {
             marginLeft: 5,
             marginRight: 5,
             textAlign: 'left',
+            textAlignVertical: 'top',
             borderWidth: 1,
             padding: 10,
-            height: '100%'
+            flex: 1,
+            width: '95%',
+            height: 450 
         },
         backButton: {
             fontSize: 20,

@@ -1,4 +1,6 @@
-<img src="https://github.com/CSC-3380-Spring-2024/Journal-Buddy/assets/111524307/77832e73-1c0a-4fab-8173-431279ccd6e3" width="400" height="400" />
+<p align="center">
+  <img src="https://github.com/CSC-3380-Spring-2024/Journal-Buddy/assets/111524307/77832e73-1c0a-4fab-8173-431279ccd6e3" width="400" height="400" />
+</p>
 
 # Journal Buddy
 
@@ -43,3 +45,9 @@ menu, as well as seeing your completion history in the calendar page!
 ### Calendar
 A centralized place to view all of your daily habits and journal entries! Helps you keep yourself accountable by showing you how much
 you really complete the habits you're tracking and your journal entries.
+
+## API Key
+If you are given the permission to work on the production build, the API Key file should be named and placed in this directory:
+`~/Journal-Buddy/Keys.ts`
+
+To request access, please contact <a href="mailto:tdesot3@lsu.edu">Tristan Desoto</a> 
