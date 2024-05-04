@@ -23,7 +23,7 @@ export type Journal = {
    user: string, //unique ident for owner of this journal
    entry: string, //actual entry text
    dayWritten: number, //unix timestamp
-   uid?: string
+   uid: string
 };
 
 export type Habit = {
@@ -54,7 +54,14 @@ export type Habit = {
     }
 };
 
-
+export type Daily = {
+    prompt: string,
+    quote: {
+        a: string,
+        h: string,
+        q: string,
+    }
+}
 
 //Initializes user with flag to complete first-time account setup
 export function createUser(userID: string) {
@@ -96,6 +103,7 @@ export async function createJournal(journal: Journal) {
         } else {
             //creates a new Journal entry in the database initialized with the user's input
             const journalUID = await push(child(ref(db), `/journals/`), journal).key;
+            set(ref(db, `/journals/${journalUID}/uid`), journalUID)
             set(ref(db, `/users/${user}/journals/${journalUID}`), journalUID);
             set(ref(db, `/users/${user}/lastJournalEntryTime`), Date.now());
             set(ref(db, `/users/${user}/lastJournalEntryID`), journalUID);
@@ -130,13 +138,26 @@ export function createHabit(newHabit: Habit){
             });
         } else {
             //creates a new Journal entry in the database initialized with the user's input
-            const habitUID = await push(child(ref(db), `/habits/`), newHabit).key;
-            set(ref(db, `/users/${user}/habits/${habitUID}`), habitUID);
-            set(ref(db, `/users/${user}/lastHabitEntryTime`), Date.now());
-            set(ref(db, `/users/${user}/lastHabitEntryID`), habitUID);
-            
+            const habitUID = await push(child(ref(db), `/habits/`)).key;
+            if(habitUID !== null){
+                newHabit.uid = habitUID;
+                set(child(ref(db), `/habits/${habitUID}`), newHabit);
+                set(ref(db, `/users/${user}/habits/${habitUID}`), habitUID);
+                set(ref(db, `/users/${user}/lastHabitEntryTime`), Date.now());
+                set(ref(db, `/users/${user}/lastHabitEntryID`), habitUID);
+            }
         }
     });
+}
+
+export function updateJournal(journalID: string, newJournal: Journal) {
+    const db = getDatabase();
+    const user = getAuth().currentUser?.uid;
+
+    if(user === null || user === undefined)
+        return;
+
+    set(ref(db, `/journals/${journalID}`), newJournal);
 }
 
 export async function addHabitTime(habitID: string){
@@ -150,7 +171,6 @@ export async function addHabitTime(habitID: string){
     //obtains the last time the user has instantiated a new Journal entry in Unix time (stored in user profile)
     ///push(child(ref(db), `/habits/${habitID}/timesCompleted`), Date.now());
 }
-
 
 //Queries the database for all the journals created by this user
 export async function getJournalsByUserID(userID: string): Promise<Journal[]>{
@@ -239,7 +259,7 @@ export function getJournalByID(journalID: string): Promise<Journal>{
 //returns the habit data specified by the journalID
 export function getHabitByID(habitID: string): Promise<Habit>{
     return new Promise((resolve, reject) => {
-        get(child(ref(getDatabase()), `/journals/${habitID}`)).then((data) => {
+        get(child(ref(getDatabase()), `/habits/${habitID}`)).then((data) => {
             if(data.exists()){
                 resolve(data.val());
             } else {
@@ -249,7 +269,27 @@ export function getHabitByID(habitID: string): Promise<Habit>{
     })
 }
 
+export async function getDaily(): Promise<Daily> {
+   return await getDailyByDay(Date.now()) 
+}
 
+export async function getDailyByDay(time: number): Promise<Daily> {
+    const day = new Date(time);
+    const db = getDatabase();
+    const data = await get(ref(db, `/Daily/${day.toDateString()}`));
+    if(data.exists()){
+        return data.val();
+    } else {
+        return {
+            prompt: "None",
+            quote: {
+                a: "None",
+                h: "None",
+                q: "None",
+            }
+        }
+    }
+}
 
 export function login (email: string, password: string) {
     signInWithEmailAndPassword(getAuth(), email, password);
@@ -260,4 +300,3 @@ export function signup (email: string, password: string) {
         createUser(userCredential.user?.uid)
     });
 }
-
