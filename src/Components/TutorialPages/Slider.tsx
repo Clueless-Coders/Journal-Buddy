@@ -1,8 +1,12 @@
-import React from 'react';
+import React, {useRef, useState} from 'react';
 import { Inter_400Regular, useFonts } from '@expo-google-fonts/inter';
 import { View, Text, StyleSheet, ScrollView, SafeAreaView, Platform, StatusBar, FlatList, Pressable} from 'react-native';
 import SlideItem from './SlideItem'
 import {Slide} from '../../Types'
+import Pagination from './Pagination'
+import Animated from 'react-native-reanimated';
+import type {PropsWithChildren} from 'react';
+import type {ViewStyle} from 'react-native';
 
 
 let Slides:Slide[] =  [
@@ -18,10 +22,41 @@ let Slides:Slide[] =  [
     }
 ];
 
-export default function Slider({ navigation }: any) {
+//export default function Slider({ navigation }: any)
+
+const Slider = () => {
+    const [index, setindex] = useState(0);
+    const scrollX = useRef(new Animated.Value(0)).current
     
+    const handleOnScroll = (event: any) => {
+        Animated.event([
+            {
+                nativeEvent: {
+                    contentOffset: {
+                        x: scrollX,
+                    }
+                }
+            }
+        ],
+        {
+            useNativeDriver: false,
+        }
+    ) (event);
+    };
+
+    //export default Slider
 
     const [fontsLoaded] = useFonts({Inter_400Regular});
+
+    const handleOnViewableItemsChanged = useRef((viewableItems: any) => 
+    {
+        // console.log('viewableItems', viewableItems);
+        setindex(viewableItems[0].current);
+    }).current;
+
+    const viewabilityConfig = useRef({
+        itemVisiblePercentThreshold: 50,
+    }).current
 
     return (
         <View>
@@ -32,8 +67,12 @@ export default function Slider({ navigation }: any) {
             horizontal
             pagingEnabled
             snapToAlignment='center'
+            showsHorizontalScrollIndicator={false}
+            onScroll={handleOnScroll}
+            onViewableItemsChanged={handleOnViewableItemsChanged}
+            viewabilityConfig={viewabilityConfig}
             />
-
+                <Pagination data = {Slides} scrollX={scrollX} index={index}/>
             
         </View>
     );
