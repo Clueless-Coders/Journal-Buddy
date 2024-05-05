@@ -19,7 +19,6 @@ import { initializeAuth, getReactNativePersistence, getAuth, onAuthStateChanged 
 import ReactNativeAsyncStorage from '@react-native-async-storage/async-storage';
 import { firebaseConfig } from './Keys';
 
-
 //TODO: Allow each page to change the currentPage state in order to switch which page is being displayed.
 //TODO: Create bottom taskbar
 
@@ -99,10 +98,7 @@ function AuthLogic() {
   return !loggedIn ? <AuthenticationStack /> : <TabGroup />
 }
 
-export default function App() {
-
-  
-
+export default function App() {  
   const app = initializeApp(firebaseConfig);
   const auth = initializeAuth(app, {
     persistence: getReactNativePersistence(ReactNativeAsyncStorage)

@@ -26,3 +26,8 @@ export type Habit = {
     id: string,
     index?: Number
 }
+
+export type AgendaItemData = {
+    date: Date,
+    data: Habit[],
+}

@@ -7,15 +7,15 @@ import CheckboxButton from '../Buttons/CheckboxButton';
 const yes = 'green';
 const no = "red";
 
-interface Props {
-  item: any,
+interface AgendaItemData {
+  date: Date,
+  data: Habit[],
 }
 
 //actual item; change props : ItemProps to props : Habit
-const AgendaItem = (props: Props) => {
+const AgendaItem = (props: AgendaItemData) => {
   let isHabitDone = false;
-  let item = props.item;
-  //let isHabitDone = props.;
+  let item = props;
 
   //Show a popup when you click the "see more" button
   const buttonPressed = useCallback(() => {
@@ -26,7 +26,7 @@ const AgendaItem = (props: Props) => {
   //Same thing for getting info for a particular habit
   const itemPressed = useCallback(() => {
     let string = isHabitDone ? "Habit: Done!" : "Habit: Not done!";
-    Alert.alert(item.title, string + "\nDuration: " + item.duration);
+    Alert.alert(item.data[0].title, string + "\nDuration: " + item.data[0].duration);
   }, []);
 
   //Return something indicating a empty list of habit if no habits made
