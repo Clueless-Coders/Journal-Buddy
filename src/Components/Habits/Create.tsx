@@ -1,7 +1,8 @@
 import React, { useContext } from 'react';
-import {Image, View, Text, StyleSheet, TextInput, ScrollView, SafeAreaView, Platform, StatusBar, TouchableWithoutFeedback, Keyboard, KeyboardAvoidingView, TouchableHighlight, Pressable } from 'react-native';
+import {View, Text, StyleSheet, TextInput, ScrollView, SafeAreaView, Platform, StatusBar, TouchableWithoutFeedback, Keyboard, KeyboardAvoidingView, TouchableHighlight, Pressable } from 'react-native';
 import { Ionicons } from "@expo/vector-icons";
 import { createHabit, Habit } from '../../firebase/Database';
+import { getAuth } from 'firebase/auth';
 import GeneralButtonDark from '../Buttons/GeneralButtonDark';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import Modal from 'react-native-modal';
@@ -19,19 +20,43 @@ export default function HabitPage({navigation}: any) {
       saturday: false,
     });
 
-    let [timesToComplete, setTimesToComplete] = React.useState('12:00');
-    let [endDate, setEndDate] = React.useState(new Date());
-    let [isPickerShow, setIsPickerShow] = React.useState(false);
-    let [mode, setMode] = React.useState('date');
-
-    //how to fetch the users stuff and save this to their account ask tristan
-
     const days = ['S', 'M', 'T', 'W', 'Th', 'F', 'S'];
     const dayKeys = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
     const toggleDay = (index) => {
         const day = dayKeys[index];
         setDaysSet(prev => ({ ...prev, [day]: !prev[day] }));
     };
+
+    let [timesToComplete, setTimesToComplete] = React.useState('');
+    let [endDate, setEndDate] = React.useState(new Date());
+    let [afternoon, setAfternoon] = React.useState('');
+    
+    const handleTimeInput = (input: string)=> {
+        const timeInput = input.replace(/[^\d]/g, '');
+        let formattedTime = timeInput;
+        if (timeInput.length >= 3) {
+          const hours = parseInt(timeInput.slice(0, 2), 10);
+          const minutes = parseInt(timeInput.slice(2, 4), 10);
+
+          if (hours > 12 || minutes > 59) return;
+
+          if (timeInput.length === 3) {
+            formattedTime = `${timeInput[0]}:${timeInput.substring(1)}`;
+          } else if (timeInput.length === 4) {
+            formattedTime = `${timeInput.substring(0, 2)}:${timeInput.substring(2)}`;
+          }
+        }
+        setTimesToComplete(formattedTime);
+    };
+    
+    const timeToMilliseconds = (time, afternoon) => {
+        if (!time) return 0;
+        const [hours, minutes] = time.split(':').map(Number);
+        return ((hours % 12) + (afternoon === 'PM' ? 12 : 0)) * 3600000 + minutes * 60000;
+    };
+
+    let [isPickerShow, setIsPickerShow] = React.useState(false);
+    let [mode, setMode] = React.useState('date');
 
     const showPicker = (pickerMode) => {
         setIsPickerShow(true);
@@ -47,17 +72,16 @@ export default function HabitPage({navigation}: any) {
             const selectedDate = selectedValue || endDate;
             setEndDate(selectedDate);
         }
-    };
+    }; 
 
+    const user = getAuth().currentUser?.uid;
     function handleCreateHabit() {
         const newHabit: Habit = {
+            title,
+            description,
             daysToComplete: daysSet,
-            title: title,
-            description: description,
-            timesToComplete: { time: timesToComplete.getTime() },
+            timesToComplete: { daysSet: {time: timeToMilliseconds(timesToComplete, afternoon)}},
             endDate: endDate.getTime(),
-            uid: '', 
-            user: '',
         };
 
         createHabit(newHabit);
@@ -73,7 +97,9 @@ export default function HabitPage({navigation}: any) {
         friday: false,
         saturday: false,
     });
-        console.log('Habit created:', { title, description, endDate, timesToComplete });
+        setTimesToComplete('');
+        setAfternoon('AM');
+        console.log('Habit created:', newHabit);
     };
 
     return(
@@ -117,7 +143,7 @@ export default function HabitPage({navigation}: any) {
                     <Text style={styles.label}>
                             Days:
                     </Text>
-                    <View style={{flexDirection: 'row', alignItems:'center', gap: 10, marginTop: 10}}>
+                    <View style={{flexDirection: 'row', alignItems:'center', gap: 10, marginTop: 5}}>
                         {days?.map((item, index) => (
                                 <Pressable 
                                     key = {index}
@@ -134,49 +160,49 @@ export default function HabitPage({navigation}: any) {
                     </View>
                 </View>
 
-                <View>
-                <GeneralButtonDark buttonText="Set Time" onPress={() => showPicker('time')} />
-                            <GeneralButtonDark buttonText="Set End Date" onPress={() => showPicker('date')} />
-                            {isPickerShow && (
-                                <DateTimePicker
-                                    testID="dateTimePicker"
-                                    value={mode === 'time' ? timesToComplete : endDate}
-                                    mode={mode}
-                                    is24Hour={true}
-                                    display="default"
-                                    onChange={onChange}
-                                />
-                            )}    
-                </View>
-                {/* //non operational / old
                 <View style={{flexDirection: 'row', alignItems:'center', gap: 10, marginTop: 10}}>
-                    <View style={styles.timeTextBoxWithLabel}>
-                        <Text style={styles.label}>
-                            Time:
-                        </Text>
-                        <TextInput style={styles.timeInput}
-                            editable 
-                            onChangeText={text => setAfternoon(text)} 
-                            // value={after} placeholder="" 
-                            autoCapitalize="none"
-                            numberOfLines={3}
-                        />
-                    </View>
-                        {afternoon?.map((item, index) => (
-                            <Pressable 
-                                key = {index}
-                                style={{
+                    <TextInput
+                        style={styles.timeInput}
+                        //keyboardType="numeric"
+                        onChangeText={handleTimeInput}
+                        value={timesToComplete}
+                        maxLength={5}
+                    />
+                    <Pressable style={{ 
                                     width: 40,
                                     height: 40,
                                     borderRadius: 5,
                                     justifyContent: 'center',
                                     alignItems: 'center',
-                                    backgroundColor: after[afternoonKeys[index]] ? '#8DB1F7' : '#ccc' }} onPress={() => toggleTime(index)}>
-                            <Text style={{ color: 'white' }}>{item}</Text>
-                            </Pressable>    
-                        ))}
-                </View> */}
+                                    backgroundColor: afternoon === 'AM' ? '#8DB1F7' : '#ccc' }}
+                        onPress={() => setAfternoon('AM')}>
+                        <Text style={{ color: 'white' }}>AM</Text>
+                    </Pressable>
+                    <Pressable style={{ 
+                                    width: 40,
+                                    height: 40,
+                                    borderRadius: 5,
+                                    justifyContent: 'center',
+                                    alignItems: 'center', 
+                                    backgroundColor: afternoon === 'PM' ? '#8DB1F7' : '#ccc' }}
+                        onPress={() => setAfternoon('PM')}>
+                        <Text style={{ color: 'white' }}>PM</Text>
+                    </Pressable>
+                </View>
 
+                <View>
+                <GeneralButtonDark buttonText="Set End Date" onPress={() => showPicker('date')} textStyle={styles.textStyle} />
+                {isPickerShow && (
+                    <DateTimePicker
+                        testID="dateTimePicker"
+                        value={mode === 'time' ? timesToComplete : endDate}
+                        mode={mode}
+                        is24Hour={true}
+                        display="default"
+                        onChange={onChange}
+                    />
+                )}    
+                </View>
                 <View style={styles.div} />
                 <GeneralButtonDark buttonText={"Create"} onPress={handleCreateHabit} textStyle={styles.textStyle} containerStyle={{width: '60%', marginTop: "1%"}}/>
 
@@ -226,12 +252,13 @@ const styles = StyleSheet.create( {
         height: '50%'
     },
     timeInput: {
-        width: "100%", 
+        width: "15%", 
         marginBottom: 2,
         borderRadius: 5,
         backgroundColor: '#E7EFFF70',
         padding: '3%',
-        height: '50%'
+        height: '80%',
+        textAlign: 'center'
     },
     timeTextBoxWithLabel: {
         width: '55%',
