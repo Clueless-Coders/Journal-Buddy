@@ -7,12 +7,12 @@ import { dot } from 'node:test/reporters';
 
 const {width} = Dimensions.get('screen')
 
-const Pagination = ({data, scrollX, index}: any) => {
+const Pagination = ({data, /*scrollX,*/ index}: any) => {
     return(
     <SafeAreaView style={styles.content}>
             {data.map((_ : any, idx : any) => {
             const inputRange = [(idx - 1) * width, idx * width, (idx + 1) * width];
-                const dotWidth = scrollX.interpolate({
+                /*const dotWidth = scrollX.interpolate({
                     inputRange,
                     outputRange: [12, 30, 12],
                     extrapolate: 'clamp',
@@ -21,9 +21,9 @@ const Pagination = ({data, scrollX, index}: any) => {
                     inputRange,
                     outputRange: [0.2, 1, 0.2],
                     extrapolate: 'clamp',
-                })
+                })*/
                 return <Animated.View key={idx.toString} style=
-            {[styles.dot, {width: dotWidth, opacity},
+            {[styles.dot, {},
                 idx === index && styles.dotActive
             ]} />;
         })}

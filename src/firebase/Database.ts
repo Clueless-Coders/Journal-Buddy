@@ -159,16 +159,6 @@ export function updateJournal(journalID: string, newJournal: Journal) {
     set(ref(db, `/journals/${journalID}`), newJournal);
 }
 
-export function updateJournal(journalID: string, newJournal: Journal) {
-    const db = getDatabase();
-    const user = getAuth().currentUser?.uid;
-
-    if(user === null || user === undefined)
-        return;
-
-    set(ref(db, `/journals/${journalID}`), newJournal);
-}
-
 export async function addHabitTime(habitID: string, timestamp: number){
     const db = getDatabase();
 

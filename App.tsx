@@ -86,14 +86,6 @@ function HomeStack() {
   )
 }
 
-function TutorialStack() {
-  return(
-    <Stack.Navigator screenOptions={{headerShown: false}}>
-      <Stack.Screen name="Drawer" component={DrawerGroup} />
-
-    </Stack.Navigator>
-  )
-}
 
 function TutorialStack() {
   return(
@@ -134,7 +126,7 @@ function AuthLogic() {
     });
   }, []);
   
-  return !loggedIn ? <AuthenticationStack /> : <TabGroup />
+  return !loggedIn ? <AuthenticationStack /> : <TutorialStack />
 }
 
 export default function App() {

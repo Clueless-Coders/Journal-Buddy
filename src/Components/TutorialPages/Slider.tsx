@@ -26,7 +26,8 @@ let Slides:Slide[] =  [
 
 export default function Slider ({ navigation }: any) {
     const [index, setindex] = useState(0);
-    const scrollX = useRef(new Animated.Value(0)).current
+    
+    /*const scrollX = useRef(new Animated.Value(0)).current;
     
     const handleOnScroll = (event: any) => {
         Animated.event([
@@ -42,7 +43,7 @@ export default function Slider ({ navigation }: any) {
             useNativeDriver: false,
         }
     ) (event);
-    };
+    };*/
 
     //export default Slider
 
@@ -51,7 +52,7 @@ export default function Slider ({ navigation }: any) {
     const handleOnViewableItemsChanged = useRef((viewableItems: any) => 
     {
         // console.log('viewableItems', viewableItems);
-        setindex(viewableItems[0].current);
+        setindex(viewableItems[0]);
     }).current;
 
     const viewabilityConfig = useRef({
@@ -68,11 +69,11 @@ export default function Slider ({ navigation }: any) {
             pagingEnabled
             snapToAlignment='center'
             showsHorizontalScrollIndicator={false}
-            onScroll={handleOnScroll}
+            //onScroll={handleOnScroll}
             onViewableItemsChanged={handleOnViewableItemsChanged}
             viewabilityConfig={viewabilityConfig}
             />
-                <Pagination data = {Slides} scrollX={scrollX} index={index}/>
+                <Pagination data = {Slides} /*scrollX={scrollX}*/ index={index}/>
             
         </View>
     );
