@@ -1,14 +1,12 @@
 import React from 'react';
-import { Inter_400Regular, useFonts } from '@expo-google-fonts/inter';
-import { View, Text, StyleSheet, ScrollView, SafeAreaView, Platform, StatusBar, FlatList, Pressable} from 'react-native';
+import { View, Text, StyleSheet, ScrollView, SafeAreaView, Platform, StatusBar } from 'react-native';
 import GeneralButtonDark from '../Buttons/GeneralButtonDark';
-import { Quotes} from '../../Types';
 import { getAuth, signOut } from 'firebase/auth';
-import GeneralButtonLight from '../Buttons/GeneralButtonLight';
 import CheckboxButton from '../Buttons/CheckboxButton';
 import { getDatabase, onValue, ref } from 'firebase/database'
-import { Habit, addHabitTime, getHabitByID, getHabitsByCurrentUser } from '../../firebase/Database';
+import { Habit, addHabitTime, getHabitsByCurrentUser } from '../../firebase/Database';
 import { time } from 'console';
+import { DailyContext } from '../../../App';
 //import { FlatList } from 'react-native-gesture-handler';
 // import { getapi } from '../../Quotes';
 
@@ -20,7 +18,7 @@ export default function HomeMenu({ navigation }: any) {
     //let [ data, setData ] = React.useState([] as Journal[])
     let days:string[] = ["monday", "tuesday", "wednsday", "thursday", "friday"];
 
-    let [quote, updateQuote] = React.useState({q: 'haiii', a: '- T'});
+    const daily = React.useContext(DailyContext);
     //let user = getAuth().currentUser?.uid;
     
     React.useEffect(() => {
@@ -44,37 +42,32 @@ export default function HomeMenu({ navigation }: any) {
             });
         }
 
-        onValue(ref(getDatabase(), `users/${getAuth().currentUser?.uid}/habits`), (data) =>{
+        onValue(ref(getDatabase(), `users/${getAuth().currentUser?.uid}/habits`), () =>{
             getHabits();
         })
         return () => {ignore = true};
     }, []);
-    const [fontsLoaded] = useFonts({Inter_400Regular});
 
     function UTCToTime(UTCms: number){
         return UTCms%86400000;
     }
     
     function HabitIsDone(habit : Habit): boolean {
-        
-        if(habit.timesCompleted !== undefined){
-            let times = Object.values(habit.timesCompleted["may3"]);
-            console.log(times);
-
-        }
-        let currentDate: string = new Date().toDateString();
-        console.log("current date: " + currentDate);
-        if(habit.lastTimeComplete !== undefined){
-            let lastDone: number = habit.lastTimeComplete;
-            console.log("Last UTC time done: " + lastDone);
-            if(currentDate === new Date(lastDone).toDateString()){
-                let recentTime: number = UTCToTime(lastDone);
-                console.log("Recent UTC to time: " + recentTime);
-                let currentTime = UTCToTime(Date.now());
-                console.log(currentTime);
-                console.log("Current time UTC to time: " + currentTime);
-                let TimeList = Object.values(habit.timesToComplete);
+        /*let currentDate: string = new Date().toDateString();
+        let DaysDone =  habit.timesCompleted;
+        if( DaysDone !== undefined){
+            let timeKeys: string[] = Object.keys(DaysDone);
+            //let lastDateDone: string = new Date(parseInt(timeKeys[timeKeys.length - 1])).toDateString(); //gets date of when it was last done
+            let lastDone: number = Object.values(DaysDone[timeKeys[timeKeys.length - 1]])[0];
+            
+            //if they're same date, check for specific time slot
+            if(currentDate === new Date().toDateString()){
+                //let timesObject = Object.values(DaysDone);
                 
+                //get's latest habit time completed ... i think
+                let recentTime: number = UTCToTime(Object.values(DaysDone[timeKeys[timeKeys.length - 1]])[0]);
+
+                let timesToCompleteKeys: string[] = Object.keys(habit.timesToComplete);
                 let i: number = 0;
                 while(currentTime > TimeList[i]){
                     i++;
@@ -97,19 +90,10 @@ export default function HomeMenu({ navigation }: any) {
 
         } else {
             return false;
-        }
+        } */
+        return false;
     } 
-    
 
-    async function getQuote(){
-        const url:string ="https://zenquotes.io/api/random";
-        const response = await fetch(url);
-        let data = await response.json();
-        let quotes: Quotes = data[0];
-        updateQuote(quotes);
-    }
-
-    let [input, onChangeInput] = React.useState('');
     return (
         <SafeAreaView style={styles.overlord}>
             {/*<View style={{zIndex: 1}}>
@@ -117,26 +101,13 @@ export default function HomeMenu({ navigation }: any) {
             </View>*/}
             <ScrollView style={styles.wrapper}>
                 <View style={styles.container}>
-                    <Text style={styles.header2}>
-                            Hi, John!
-                    </Text>
                     <View style={styles.headerWrapper}>
                         <Text style={styles.header2}>
-                            {"\"" + quote.q + "\""}
+                            {"\"" + daily.quote.q + "\""}
                         </Text>
                         <Text style={styles.prompt}>
-                            {"-" + quote.a}
+                            {"-" + daily.quote.a}
                         </Text>
-                    </View>
-                    <View>
-                        <Text>
-                            {new Date().toDateString()}
-                        </Text>
-                    </View>
-                    
-                    <View style = {styles.buttonBox}>
-                        {/* <GeneralButton buttonText={"Start Today's Entry"} onPress = {() => null}/> */}
-                        <GeneralButtonDark onPress={() => navigation.navigate("NewJournal")} buttonText="Start Today's Entry" textStyle={styles.buttonText} containerStyle={styles.button}/>
                     </View>
                     <View>
                         <Text style={styles.header2}>
@@ -240,7 +211,6 @@ const styles = StyleSheet.create({
         paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0,
         backgroundColor: 'white',
         flex: 1,
-        fontFamily: "Inter_400Regular"
     }
 }
 )

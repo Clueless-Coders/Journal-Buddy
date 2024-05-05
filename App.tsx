@@ -1,8 +1,8 @@
 import DailyPrompt from './src/Components/Journal-Pages/DailyPrompt';
-import React, { useContext } from 'react';
+import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
-import { NavigationContainer, NavigatorScreenParams } from '@react-navigation/native';
+import { NavigationContainer } from '@react-navigation/native';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import HomeMenu from './src/Components/HomePage/HomeMenu';
 import JournalEntries from './src/Components/Journal-Pages/JournalEntries';
@@ -13,55 +13,80 @@ import ForgotPassword from './src/Components/Login/ForgotPassword';
 import HabitPage from './src/Components/Habits/HabitPage';
 import Create from './src/Components/Habits/Create';
 import { initializeApp } from "firebase/app";
-import { getAnalytics } from "firebase/analytics";
 import { initializeAuth, getReactNativePersistence, getAuth, onAuthStateChanged } from 'firebase/auth';
 import ReactNativeAsyncStorage from '@react-native-async-storage/async-storage';
 import { firebaseConfig } from './Keys';
 import Slider from './src/Components/TutorialPages/Slider';
+import { Daily, getDaily } from './src/firebase/Database';
 
-
-//TODO: Allow each page to change the currentPage state in order to switch which page is being displayed.
-//TODO: Create bottom taskbar
+export const DailyContext = React.createContext({} as Daily);
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
 
 function TabGroup() {
-  
+  const [daily, setDaily] = React.useState(
+    {
+      prompt: "None",
+      quote: {
+        a: "None",
+        h: "None",
+        q: "None",
+      }
+    });
+
+  React.useEffect(() => {
+    async function retrieveDaily() {
+      const response = await getDaily();
+      setDaily(response);
+    }
+    retrieveDaily();
+  }, []);
 
   return (
-    <Tab.Navigator
-      screenOptions={({ route, navigation }) => ({
-        tabBarIcon: (focused: boolean, color: string, size: number) => {
-          let iconName;
-          if (route.name === "Home")
-            iconName = "home";
-          else if (route.name === "NewJournal")
-            iconName = "plus-square";
-          else if (route.name === "Calendar")
-            iconName = "calendar";
+    <DailyContext.Provider value={daily}>
+      <Tab.Navigator
+        screenOptions={({ route }) => ({
+          tabBarIcon: (color: string) => {
+            let iconName;
+            if (route.name === "Home")
+              iconName = "home";
+            else if (route.name === "Journals")
+              iconName = "book";
+            else if (route.name === "Calendar")
+              iconName = "calendar";
 
-          return (<FontAwesome5 name={iconName} size={20} color={color} />) ;
-        }
-      }) }
-    >
-      <Tab.Screen name="Home" component={HomeStack} options = {{headerShown:false}}/>
-      <Tab.Screen name="NewJournal" component={DailyPrompt} />
-      <Tab.Screen name="Calendar" component={HomeMenu}/>
-    </Tab.Navigator>
+            return (<FontAwesome5 name={iconName} size={20} color={color} />);
+          }
+        })}
+      >
+        <Tab.Screen name="Home" component={HomeStack} options={{ headerShown: false }} />
+        <Tab.Screen name="Journals" component={JournalStack} />
+        <Tab.Screen name="Calendar" component={HomeMenu} />
+      </Tab.Navigator>
+    </DailyContext.Provider>
   );
 }
 
 function JournalStack() {
   return (
-    <Stack.Navigator screenOptions={{headerShown: false}}>
+    <Stack.Navigator screenOptions={{ headerShown: false }}>
       <Stack.Screen name="JournalEntries" component={JournalEntries} />
+      <Stack.Screen name="Journal" component={DailyPrompt} />
     </Stack.Navigator>
   )
 }
 
 function HomeStack() {
+  return (
+    <Stack.Navigator screenOptions={{ headerShown: false }}>
+      <Stack.Screen name="Drawer" component={DrawerGroup} />
+    </Stack.Navigator>
+  )
+}
+
+function TutorialStack() {
   return(
     <Stack.Navigator screenOptions={{headerShown: false}}>
       <Stack.Screen name="Drawer" component={DrawerGroup} />
@@ -79,10 +104,10 @@ function TutorialStack() {
 }
 
 function DrawerGroup() {
-  return(
+  return (
     <Drawer.Navigator initialRouteName='HomeStack' >
       <Stack.Screen name="Home" component={HomeMenu} />
-      <Stack.Screen name="JournalStack" component={JournalStack} />
+      <Stack.Screen name="Journals" component={JournalStack} />
       <Stack.Screen name="Habits" component={HabitPage} />
       <Stack.Screen name="Create Habit" component={Create} />
       <Stack.Screen name="Tutorial" component={Slider} />
@@ -91,7 +116,7 @@ function DrawerGroup() {
 }
 
 function AuthenticationStack() {
-  return(
+  return (
     <Stack.Navigator initialRouteName='Login'>
       <Stack.Screen name="Login" component={LoginPage} />
       <Stack.Screen name="SignUp" component={SignUp} />
@@ -101,25 +126,26 @@ function AuthenticationStack() {
 }
 
 function AuthLogic() {
-  let [loggedIn, setLoggedIn ] = React.useState(getAuth().currentUser !== null);
-  onAuthStateChanged(getAuth(),(user) => {
-    setLoggedIn(user !== null);
-  })
+  let [loggedIn, setLoggedIn] = React.useState(getAuth().currentUser !== null);
+
+  React.useEffect(() => {
+    onAuthStateChanged(getAuth(), (user) => {
+      setLoggedIn(user !== null);
+    });
+  }, []);
+  
   return !loggedIn ? <AuthenticationStack /> : <TabGroup />
 }
 
 export default function App() {
-
-  
-
   const app = initializeApp(firebaseConfig);
-  const auth = initializeAuth(app, {
+  initializeAuth(app, {
     persistence: getReactNativePersistence(ReactNativeAsyncStorage)
   })
 
-  return(
+  return (
     <NavigationContainer>
       <AuthLogic />
-    </NavigationContainer>    
+    </NavigationContainer>
   );
 }
