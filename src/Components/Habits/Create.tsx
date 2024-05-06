@@ -28,7 +28,6 @@ export default function HabitPage({navigation}: any) {
     };
 
     let [timesToComplete, setTimesToComplete] = React.useState('');
-    let [endDate, setEndDate] = React.useState(new Date());
     let [afternoon, setAfternoon] = React.useState('');
     
     const handleTimeInput = (input: string)=> {
@@ -55,24 +54,29 @@ export default function HabitPage({navigation}: any) {
         return ((hours % 12) + (afternoon === 'PM' ? 12 : 0)) * 3600000 + minutes * 60000;
     };
 
-    let [isPickerShow, setIsPickerShow] = React.useState(false);
-    let [mode, setMode] = React.useState('date');
-
-    const showPicker = (pickerMode) => {
-        setIsPickerShow(true);
-        setMode(pickerMode);
-    };
-
-    const onChange = (event, selectedValue) => {
-        setIsPickerShow(Platform.OS === 'ios');
-        if (mode === 'time') {
-            const selectedTime = selectedValue || timesToComplete;
-            setTimesToComplete(selectedTime);
-        } else {
-            const selectedDate = selectedValue || endDate;
-            setEndDate(selectedDate);
-        }
-    }; 
+    
+    let [endDate, setEndDate] = React.useState(new Date());
+    const [mode, setMode] = React.useState('date');
+    const [show, setShow] = React.useState(false);
+  
+    const onChange = (event, selectedDate) => {
+        const currentDate = selectedDate;
+        setShow(false);
+        setEndDate(currentDate);
+      };
+    
+      const showMode = (currentMode) => {
+        setShow(true);
+        setMode(currentMode);
+      };
+    
+      const showDatepicker = () => {
+        showMode('date');
+      };
+    
+      const showTimepicker = () => {
+        showMode('time');
+      };
 
     const user = getAuth().currentUser?.uid;
     function handleCreateHabit() {
@@ -96,9 +100,9 @@ export default function HabitPage({navigation}: any) {
         thursday: false,
         friday: false,
         saturday: false,
-    });
+        });
+
         setTimesToComplete('');
-        setAfternoon('AM');
         console.log('Habit created:', newHabit);
     };
 
@@ -160,10 +164,12 @@ export default function HabitPage({navigation}: any) {
                     </View>
                 </View>
 
-                <View style={{flexDirection: 'row', alignItems:'center', gap: 10, marginTop: 10}}>
+                <View style={{flexDirection: 'row', alignItems:'center', gap: 10, marginTop: 20}}>
+                <Text style={styles.label}>
+                            Time:
+                    </Text>
                     <TextInput
                         style={styles.timeInput}
-                        //keyboardType="numeric"
                         onChangeText={handleTimeInput}
                         value={timesToComplete}
                         maxLength={5}
@@ -190,19 +196,20 @@ export default function HabitPage({navigation}: any) {
                     </Pressable>
                 </View>
 
-                <View>
-                <GeneralButtonDark buttonText="Set End Date" onPress={() => showPicker('date')} textStyle={styles.textStyle} />
-                {isPickerShow && (
+                <View style={{flexDirection: 'row', alignItems:'center', gap: 10, marginTop: 5}}>
+                <Text> {endDate.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</Text>
+                {show && (
                     <DateTimePicker
-                        testID="dateTimePicker"
-                        value={mode === 'time' ? timesToComplete : endDate}
-                        mode={mode}
-                        is24Hour={true}
-                        display="default"
-                        onChange={onChange}
+                    testID="datePicker"
+                    value={endDate}
+                    mode={mode}
+                    is24Hour={true}
+                    onChange={onChange}
                     />
-                )}    
+                )}
+                <GeneralButtonDark buttonText={"End Date"} onPress={showDatepicker} textStyle={styles.textStyle} containerStyle={{width: 100, height: 40 , marginTop: "4%"}}/>
                 </View>
+
                 <View style={styles.div} />
                 <GeneralButtonDark buttonText={"Create"} onPress={handleCreateHabit} textStyle={styles.textStyle} containerStyle={{width: '60%', marginTop: "1%"}}/>
 
@@ -222,7 +229,7 @@ const styles = StyleSheet.create( {
     div: {
         width: "90%",
         height: 1,
-        backgroundColor: '#E7EFFF70',
+        backgroundColor: '#8DB1F7',
         marginBottom: '5%',
         marginTop: '5%'
     },
@@ -256,8 +263,8 @@ const styles = StyleSheet.create( {
         marginBottom: 2,
         borderRadius: 5,
         backgroundColor: '#E7EFFF70',
-        padding: '3%',
-        height: '80%',
+        //padding: '3%',
+        height: '100%',
         textAlign: 'center'
     },
     timeTextBoxWithLabel: {
@@ -267,7 +274,12 @@ const styles = StyleSheet.create( {
     },
     textStyle: {
         fontSize: 20,
-        color: 'white'
+        color: 'white',
+        textAlign: 'center',
+    },
+    dateText: {
+        fontSize: 18,
+        marginTop: 10,
     },
     overlord: {
         paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0,

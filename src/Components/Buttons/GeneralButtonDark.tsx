@@ -32,7 +32,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         margin: 10,
-        backgroundColor: "#8DB1F7", //changed button color from #8EA8C3,
+        backgroundColor: "#8DB1F7", 
         justifyContent: 'space-evenly'
     },
     textStyleDefault: {
