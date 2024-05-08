@@ -47,7 +47,7 @@ export default function HomeMenu({ navigation }: any) {
         })
         return () => {ignore = true};
     }, []);
-    const [fontsLoaded] = useFonts({Inter_400Regular});
+
 
     
     
@@ -105,15 +105,6 @@ export default function HomeMenu({ navigation }: any) {
         }
     }
     
-
-
-    async function getQuote(){
-        const url:string ="https://zenquotes.io/api/random";
-        const response = await fetch(url);
-        let data = await response.json();
-        let quotes: Quotes = data[0];
-        updateQuote(quotes);
-    }
 
     let [input, onChangeInput] = React.useState('');
     return (
