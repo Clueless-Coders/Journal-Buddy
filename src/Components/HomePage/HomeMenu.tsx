@@ -1,13 +1,11 @@
 import React from 'react';
-import { Inter_400Regular, useFonts } from '@expo-google-fonts/inter';
-import { View, Text, StyleSheet, ScrollView, SafeAreaView, Platform, StatusBar, FlatList, Pressable} from 'react-native';
+import { View, Text, StyleSheet, ScrollView, SafeAreaView, Platform, StatusBar } from 'react-native';
 import GeneralButtonDark from '../Buttons/GeneralButtonDark';
-import { Quotes} from '../../Types';
 import { getAuth, signOut } from 'firebase/auth';
-import GeneralButtonLight from '../Buttons/GeneralButtonLight';
 import CheckboxButton from '../Buttons/CheckboxButton';
 import { getDatabase, onValue, ref } from 'firebase/database'
-import { Habit, addHabitTime, getHabitByID, getHabitsByCurrentUser } from '../../firebase/Database';
+import { Habit, addHabitTime, getHabitsByCurrentUser } from '../../firebase/Database';
+import { DailyContext } from '../../../App';
 import { time } from 'console';
 import { UTCToTime, UTCMidnight, isSameUTCDay, daysOfWeek} from '../times';
 //import { FlatList } from 'react-native-gesture-handler';
@@ -21,7 +19,7 @@ export default function HomeMenu({ navigation }: any) {
     //let [ data, setData ] = React.useState([] as Journal[])
     let days:string[] = ["sunday", "monday", "tuesday", "wednsday", "thursday", "friday", "sunday"];
 
-    let [quote, updateQuote] = React.useState({q: 'haiii', a: '- T'});
+    const daily = React.useContext(DailyContext);
     //let user = getAuth().currentUser?.uid;
     
     React.useEffect(() => {
@@ -44,7 +42,7 @@ export default function HomeMenu({ navigation }: any) {
             });
         }
 
-        onValue(ref(getDatabase(), `users/${getAuth().currentUser?.uid}/habits`), (data) =>{
+        onValue(ref(getDatabase(), `users/${getAuth().currentUser?.uid}/habits`), () =>{
             getHabits();
         })
         return () => {ignore = true};
@@ -125,26 +123,13 @@ export default function HomeMenu({ navigation }: any) {
             </View>*/}
             <ScrollView style={styles.wrapper}>
                 <View style={styles.container}>
-                    <Text style={styles.header2}>
-                            Hi, John!
-                    </Text>
                     <View style={styles.headerWrapper}>
                         <Text style={styles.header2}>
-                            {"\"" + quote.q + "\""}
+                            {"\"" + daily.quote.q + "\""}
                         </Text>
                         <Text style={styles.prompt}>
-                            {"-" + quote.a}
+                            {"-" + daily.quote.a}
                         </Text>
-                    </View>
-                    <View>
-                        <Text>
-                            {new Date().toDateString()}
-                        </Text>
-                    </View>
-                    
-                    <View style = {styles.buttonBox}>
-                        {/* <GeneralButton buttonText={"Start Today's Entry"} onPress = {() => null}/> */}
-                        <GeneralButtonDark onPress={() => navigation.navigate("NewJournal")} buttonText="Start Today's Entry" textStyle={styles.buttonText} containerStyle={styles.button}/>
                     </View>
                     <View>
                         <Text style={styles.header2}>
@@ -248,7 +233,6 @@ const styles = StyleSheet.create({
         paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0,
         backgroundColor: 'white',
         flex: 1,
-        fontFamily: "Inter_400Regular"
     }
 }
 )
