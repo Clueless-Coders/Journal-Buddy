@@ -6,22 +6,23 @@ import { getAuth } from 'firebase/auth';
 import GeneralButtonDark from '../Buttons/GeneralButtonDark';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import Modal from 'react-native-modal';
+import { daysOfWeek } from '../times';
 
 export default function HabitPage({navigation}: any) {
     let [title, setTitle] = React.useState('');
     let [description, setDescription] = React.useState('');
     let [daysSet, setDaysSet] = React.useState({
-      sunday: false,
-      monday: false,
-      tuesday: false,
-      wednesday: false,
-      thursday: false,
-      friday: false,
-      saturday: false,
+      Sunday: false,
+      Monday: false,
+      Tuesday: false,
+      Wednesday: false,
+      Thursday: false,
+      Friday: false,
+      Saturday: false,
     });
 
     const days = ['S', 'M', 'T', 'W', 'Th', 'F', 'S'];
-    const dayKeys = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
+    const dayKeys = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
     const toggleDay = (index) => {
         const day = dayKeys[index];
         setDaysSet(prev => ({ ...prev, [day]: !prev[day] }));
@@ -80,28 +81,44 @@ export default function HabitPage({navigation}: any) {
 
     const user = getAuth().currentUser?.uid;
     function handleCreateHabit() {
-        const newHabit: Habit = {
+        let daysToComplete:{[index: string]:boolean} = daysSet;
+        let times: {
+            [index: string]: {
+                [index: string]: number
+            } //ms from 12 am that day
+        } = {};
+        
+        for(let i = 0; i < daysOfWeek.length; i ++){
+            let timeMS: number = timeToMilliseconds(timesToComplete, afternoon);
+            let timeCounterKey: string = timeMS + '';
+            if(daysToComplete[daysOfWeek[i]] ){
+
+                times[daysOfWeek[i]] = {[timeCounterKey] : timeMS} ;
+            }
+        }
+
+        let newHabit: Habit = {
             title,
             description,
             daysToComplete: daysSet,
-            timesToComplete: { daysSet: {time: timeToMilliseconds(timesToComplete, afternoon)}},
+            timesToComplete: times,
             endDate: endDate.getTime(),
         };
-
+    
         createHabit(newHabit);
-
+    
         setTitle('');
         setDescription('');
         setDaysSet({
-        sunday: false,
-        monday: false,
-        tuesday: false,
-        wednesday: false,
-        thursday: false,
-        friday: false,
-        saturday: false,
+        Sunday: false,
+        Monday: false,
+        Tuesday: false,
+        Wednesday: false,
+        Thursday: false,
+        Friday: false,
+        Saturday: false,
         });
-
+    
         setTimesToComplete('');
         console.log('Habit created:', newHabit);
     };

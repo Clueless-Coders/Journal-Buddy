@@ -28,24 +28,22 @@ export type Journal = {
 
 export type Habit = {
     daysToComplete: {
-        sunday?: boolean,
-        monday?: boolean,
-        tuesday?: boolean, 
-        wednesday?: boolean,
-        thursday?: boolean,
-        friday?: boolean,
-        saturday?: boolean
+        Sunday?: boolean,
+        Monday?: boolean,
+        Tuesday?: boolean, 
+        Wednesday?: boolean,
+        Thursday?: boolean,
+        Friday?: boolean,
+        Saturday?: boolean
     },
     timesToComplete: {
-        [index: string]: { //
-            time: number, //ms from 12 am that day
-        }
-         //is in the afternoon?
+        [index: string]: {
+            [index: string]: number
+        } //ms from 12 am that day
     }, //can have multiple times of day to complete the task
     title: string,
     description?: string
-    uid: string //unique identifier for this specific habit
-    user: string, //unique ident for habit owner user
+    uid?: string //unique identifier for this specific habit
     endDate?: number //Unix timestamp
     timesCompleted?: {
         [index: string]: {
@@ -53,6 +51,7 @@ export type Habit = {
         }
     }
 };
+
 
 export type Daily = {
     prompt: string,
@@ -160,7 +159,7 @@ export function updateJournal(journalID: string, newJournal: Journal) {
     set(ref(db, `/journals/${journalID}`), newJournal);
 }
 
-export async function addHabitTime(habitID: string){
+export async function addHabitTime(habitID: string | undefined){
     const db = getDatabase(); 
     if(habitID === undefined){
         console.log("Undefined id");

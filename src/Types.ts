@@ -19,9 +19,4 @@ export type Quotes = {
     a: string
 }
 
-export type Habit = {
-    task: string,
-    isDone: boolean,
-    id: string,
-    index?: Number
-}
+

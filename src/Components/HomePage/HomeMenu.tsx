@@ -112,7 +112,7 @@ export default function HomeMenu({ navigation }: any) {
                                         //item.daysCompleted?.pop();w
                                         addHabitTime(item.uid);
                                     }}} buttonText={(item.uid === undefined)? "Brush teeth" : item.title} containerStyle={styles.checkButton} checked = {HabitIsDone(item)} key = {index + ""}/>;
-                            }) : <Text>:c</Text>
+                            }) : <Text>No habits made.</Text>
                         }
                     </View>
 
