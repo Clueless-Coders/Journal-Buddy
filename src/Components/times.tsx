@@ -12,4 +12,4 @@ export function isSameUTCDay(firstUTC: number, secondUTC: number){
     return UTCMidnight(firstUTC) === UTCMidnight(secondUTC);
 }
 
-export const daysOfWeek : string[] = ["Monday", "Tuesday", "Wednsday", "Thursday", "Friday"];
+export const daysOfWeek : string[] = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
