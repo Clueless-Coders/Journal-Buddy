@@ -1,5 +1,6 @@
 import { get, set, child, ref, getDatabase, push } from 'firebase/database';
 import { createUserWithEmailAndPassword, getAuth, signInWithEmailAndPassword } from 'firebase/auth';
+import { UTCMidnight } from '../Components/HomePage/times';
 
 const MILLISECONDS_IN_DAY = 86400000;
 const SUBMIT_HABIT_COOLDOWN_MILLISECONDS = 10000;
@@ -140,14 +141,14 @@ export function createHabit(newHabit: Habit){
 
 export async function addHabitTime(habitID: string, timestamp: number){
     const db = getDatabase();
-    let currentDate:string = new Date(timestamp).toDateString()
+    let dateKey:string = UTCMidnight(timestamp) + ''; 
 
     if(habitID === undefined){
         console.log("Undefined id");
         return;
     }
     
-    await push(child(ref(db), `/habits/${habitID}/timesCompleted/${currentDate}`), timestamp);
+    await push(child(ref(db), `/habits/${habitID}/timesCompleted/${dateKey}`), timestamp);
     await set(ref(db, `/habits/${habitID}/lastTimeComplete`),timestamp);
     //set(ref(db, `/users/${user}/lastJournalEntryTime`), Date.now());
     //obtains the last time the user has instantiated a new Journal entry in Unix time (stored in user profile)

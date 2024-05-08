@@ -9,6 +9,7 @@ import CheckboxButton from '../Buttons/CheckboxButton';
 import { getDatabase, onValue, ref } from 'firebase/database'
 import { Habit, addHabitTime, getHabitByID, getHabitsByCurrentUser } from '../../firebase/Database';
 import { time } from 'console';
+import { daysOfWeek } from './times';
 //import { FlatList } from 'react-native-gesture-handler';
 // import { getapi } from '../../Quotes';
 
@@ -28,16 +29,16 @@ export default function HomeMenu({ navigation }: any) {
         async function getHabits(){
             getHabitsByCurrentUser().then((habits) => {
                 if(!ignore){
-                    // let todaysHabits: Habit[] = [];
-                    // let currentDay:number = new Date().getDay();
-                    // habits.forEach(function (i) {
-                    //     i.daysToComplete[days[currentDay]];
+                    let todaysHabits: Habit[] = [];
+                    let currentDay:string = daysOfWeek[new Date().getDay()];
+                    habits.forEach(function (i) {
+                        if(i.timesToComplete[currentDay] !== undefined){
+                            todaysHabits.push(i);
+                        }
                         
-                        
-                         
-                    // });
-                    // console.log(todaysHabits);
-                    setData(habits);
+                    });
+                    console.log(todaysHabits);
+                    setData(todaysHabits);
                     //console.log("habit done:");
                     //console.log(DATA);
                 }
