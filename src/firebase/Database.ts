@@ -1,6 +1,6 @@
 import { get, set, child, ref, getDatabase, push } from 'firebase/database';
 import { createUserWithEmailAndPassword, getAuth, signInWithEmailAndPassword } from 'firebase/auth';
-import { UTCMidnight } from '../Components/times';
+import { UTCMidnight,isSameUTCDay } from '../Components/times';
 
 const MILLISECONDS_IN_DAY = 86400000;
 const SUBMIT_HABIT_COOLDOWN_MILLISECONDS = 10000;
@@ -87,7 +87,8 @@ export async function createJournal(journal: Journal) {
         }
     }).then(async () =>{
         //if the user has created a Journal entry in the last day, it will update that entry instead of creating a new one
-        if(previousJournalTime !== 0 && Date.now() - previousJournalTime < MILLISECONDS_IN_DAY){
+        let timestamp: number = Date.now();
+        if(previousJournalTime !== 0 && isSameUTCDay(timestamp, previousJournalTime)){
             get(ref(getDatabase(), `/users/${user}/lastJournalEntryID`)).then((data) => {
                 //if somehow the database managed to store the time and not the entry ID, something has gone terribly wrong
                 if(data.exists()){

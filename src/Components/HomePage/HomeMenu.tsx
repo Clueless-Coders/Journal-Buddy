@@ -31,9 +31,7 @@ export default function HomeMenu({ navigation }: any) {
                 if(!ignore){
                     let todaysHabits: Habit[] = [];
                     let currentDay:string = daysOfWeek[new Date().getDay()];
-                    console.log(currentDay);
                     habits.forEach(function (i) {
-                        console.log(i);
                         if(i.timesToComplete[currentDay] !== undefined){
                             todaysHabits.push(i);
                         }
@@ -42,8 +40,6 @@ export default function HomeMenu({ navigation }: any) {
                     console.log("finished processing");
                     console.log(todaysHabits);
                     setData(todaysHabits);
-                    //console.log("habit done:");
-                    //console.log(DATA);
                 }
             });
         }
@@ -58,48 +54,6 @@ export default function HomeMenu({ navigation }: any) {
     
     
     function HabitIsDoneCurrently(habit : Habit): boolean {
-        // return false;
-        // if(habit.timesCompleted !== undefined){
-        //     let times = Object.values(habit.timesCompleted["may3"]);
-        //     console.log(times);
-
-        // }
-        // let currentDate: string = new Date().toDateString();
-        // console.log("current date: " + currentDate);
-        // if(habit.lastTimeComplete !== undefined){
-        //     let lastDone: number = habit.lastTimeComplete;
-        //     console.log("Last UTC time done: " + lastDone);
-        //     if(currentDate === new Date(lastDone).toDateString()){
-        //         let recentTime: number = UTCToTime(lastDone);
-        //         console.log("Recent UTC to time: " + recentTime);
-        //         let currentTime = UTCToTime(Date.now());
-        //         console.log(currentTime);
-        //         console.log("Current time UTC to time: " + currentTime);
-        //         let TimeList = Object.values(habit.timesToComplete);
-                
-        //         let i: number = 0;
-        //         while(currentTime > TimeList[i]){
-        //             i++;
-        //         }
-        
-        //         let j: number = 0;
-        //         while(currentTime > TimeList[j]){
-        //             j++;
-        //         }
-        //         console.log("i: " + i);
-        //         console.log("j: " + j);
-        //         return i === j;
-        //         // return true;
-        //     } else {
-        //         console.log("no previous time logged")
-        //         return false;
-        //     }
-
-            
-
-        // } else {
-        //     return false;
-        // }
         if(habit.lastTimeComplete === undefined){
             return false;
         }
