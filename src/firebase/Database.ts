@@ -1,4 +1,4 @@
-import { get, set, child, ref, getDatabase, push } from 'firebase/database';
+import { get, set, child, ref, getDatabase, push, remove } from 'firebase/database';
 import { createUserWithEmailAndPassword, getAuth, signInWithEmailAndPassword } from 'firebase/auth';
 import { UTCMidnight,isSameUTCDay } from '../Components/times';
 
@@ -182,6 +182,11 @@ export async function addHabitTime(habit: Habit, timestamp: number){
     //set(ref(db, `/users/${user}/lastJournalEntryTime`), Date.now());
     //obtains the last time the user has instantiated a new Journal entry in Unix time (stored in user profile)
     ///push(child(ref(db), `/habits/${habitID}/timesCompleted`), Date.now());
+}
+
+export async function removeHabitTime(habitID: string, timeKey: string, UTCDay: number) {
+    const db = getDatabase();
+    await remove(ref(db, `habits/${habitID}/timesCompleted/${UTCDay}/${timeKey}`));
 }
 
 //Queries the database for all the journals created by this user
