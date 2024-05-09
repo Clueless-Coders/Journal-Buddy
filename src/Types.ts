@@ -25,3 +25,9 @@ export type Habit = {
     id: string,
     index?: Number
 }
+
+export type Slide = {
+    subtitle: string,
+    id: number,
+    ImageLocation: any,
+}

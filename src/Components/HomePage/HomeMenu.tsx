@@ -6,6 +6,8 @@ import CheckboxButton from '../Buttons/CheckboxButton';
 import { getDatabase, onValue, ref } from 'firebase/database'
 import { Habit, addHabitTime, getHabitsByCurrentUser } from '../../firebase/Database';
 import { DailyContext } from '../../../App';
+import { time } from 'console';
+import { UTCToTime, UTCMidnight, isSameUTCDay, daysOfWeek} from '../times';
 //import { FlatList } from 'react-native-gesture-handler';
 // import { getapi } from '../../Quotes';
 
@@ -15,6 +17,7 @@ export default function HomeMenu({ navigation }: any) {
     //TODO: Interface with the backend in order to save the user's response.
     let [DATA, setData] = React.useState([] as Habit[])
     //let [ data, setData ] = React.useState([] as Journal[])
+    let days:string[] = ["sunday", "monday", "tuesday", "wednsday", "thursday", "friday", "sunday"];
 
     const daily = React.useContext(DailyContext);
     //let user = getAuth().currentUser?.uid;
@@ -24,7 +27,17 @@ export default function HomeMenu({ navigation }: any) {
         async function getHabits(){
             getHabitsByCurrentUser().then((habits) => {
                 if(!ignore){
-                    setData(habits);
+                    let todaysHabits: Habit[] = [];
+                    let currentDay:string = daysOfWeek[new Date().getDay()];
+                    habits.forEach(function (i) {
+                        if(i.timesToComplete[currentDay] !== undefined){
+                            todaysHabits.push(i);
+                        }
+                        
+                    });
+                    console.log("finished processing");
+                    console.log(todaysHabits);
+                    setData(todaysHabits);
                 }
             });
         }
@@ -35,49 +48,65 @@ export default function HomeMenu({ navigation }: any) {
         return () => {ignore = true};
     }, []);
 
-    function UTCToTime(UTCms: number){
-        return UTCms%86400000;
-    }
+
     
-    function HabitIsDone(habit : Habit): boolean {
-        /*let currentDate: string = new Date().toDateString();
-        let DaysDone =  habit.timesCompleted;
-        if( DaysDone !== undefined){
-            let timeKeys: string[] = Object.keys(DaysDone);
-            //let lastDateDone: string = new Date(parseInt(timeKeys[timeKeys.length - 1])).toDateString(); //gets date of when it was last done
-            let lastDone: number = Object.values(DaysDone[timeKeys[timeKeys.length - 1]])[0];
-            
-            //if they're same date, check for specific time slot
-            if(currentDate === new Date().toDateString()){
-                //let timesObject = Object.values(DaysDone);
-                
-                //get's latest habit time completed ... i think
-                let recentTime: number = UTCToTime(Object.values(DaysDone[timeKeys[timeKeys.length - 1]])[0]);
+    
+    function HabitIsDoneCurrently(habit : Habit): boolean {
+        if(habit.lastTimeComplete === undefined){
+            return false;
+        }
+        let timestamp:number = Date.now();
+        let date:Date = new Date(timestamp);
 
-                let timesToCompleteKeys: string[] = Object.keys(habit.timesToComplete);
-                let i: number = 0;
-                let currentTime = UTCToTime(Date.now());
-                //keep going until it reaches just a past
-                while(currentTime > Object.values(habit.timesToComplete[timesToCompleteKeys[i]])[0]){
-                    i++;
-                }
+        let timeSlots: number[] = Object.values(habit.timesToComplete[daysOfWeek[date.getDay()]]).sort();
 
-                let j: number = 0;
-                while(recentTime > Object.values(habit.timesToComplete[timesToCompleteKeys[j]])[0]){
-                    j++;
-                }
+        let i: number = 0;
+        let timeOfDayUTC:number = UTCToTime(timestamp);
+        while(timeSlots[i] < timeOfDayUTC){
+            i++;
+        }
+        //not allowed to do habit yet
+        if(i === 0){
+            return false;
+        }
 
-                //if both times are in the same time slot to be done, then it's done
-                return j===i;
-            } else {
+        return HabitTimeslotDone(habit, timestamp, i - 1, (i === timeSlots.length) ? 86399999 + UTCMidnight(timestamp): timeSlots[i] + UTCMidnight(timestamp));
+
+
+    }
+
+    //timestamp: UTC timestamp (whether current time or on calender a "fake" timestamp of a timeslot the habit checkbox represents)
+    //2 UTC bounds to check for a time between beginning and end. *remember to convert time of day to full UTC
+    function HabitTimeslotDone(habit: Habit, timestamp: number, earliestCanComplete: number, latestCanComplete: number):boolean{
+        if(habit.timesCompleted === undefined){
+            return false;
+        }
+        let datekey : string = UTCMidnight(timestamp) + '';
+
+        if(habit.timesCompleted[datekey] !== undefined){
+            let times: number[] = Object.values(habit.timesCompleted[datekey]);
+            //to ensure it's all sorted
+            times = times.sort();
+            let i: number = 0;
+            //could do binary search ideally later but nah :3
+            //find first time slot that is at or after earliest time you can complete the habit
+            while(times[i] < earliestCanComplete){
+                i++;
+            }
+
+            //no slot found :(
+            if(i === times.length){
                 return false;
+            } else {
+                return (times[i] < latestCanComplete);
             }
         } else {
             return false;
-        } */
-        return false;
-    } 
+        }
+    }
+    
 
+    let [input, onChangeInput] = React.useState('');
     return (
         <SafeAreaView style={styles.overlord}>
             {/*<View style={{zIndex: 1}}>
@@ -102,16 +131,17 @@ export default function HomeMenu({ navigation }: any) {
                         {   DATA.length > 0 ?
                             DATA.map((item, index) => {
                             return <CheckboxButton  onPress={() => {
-                                    if(HabitIsDone(item)){
+                                    if(HabitIsDoneCurrently(item)){
                                         console.log("Habit is done today, switch to not done");
-                                        
-                                        //item.daysCompleted?.push(new Date().toDateString());
-                                        //add logic to update database
+                                        //uncomment later when you have habiti time removal done
+                                        //item.lastTimeComplete = undefined;
+                                        //add database logic later :3
                                     } else {
                                         console.log("habit was not done, changing to completed");
-                                        //item.daysCompleted?.pop();w
-                                        addHabitTime(item.uid);
-                                    }}} buttonText={(item.uid === undefined)? "Brush teeth" : item.title} containerStyle={styles.checkButton} checked = {HabitIsDone(item)} key = {index + ""}/>;
+                                        let timestamp: number = Date.now();
+                                        item.lastTimeComplete = timestamp;
+                                        addHabitTime(item, timestamp);
+                                    }}} buttonText={(item.uid === undefined)? ":c" : item.title} containerStyle={styles.checkButton} checked = {HabitIsDoneCurrently(item)} key = {index + ""}/>;
                             }) : <Text>:c</Text>
                         }
                     </View>

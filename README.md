@@ -1,4 +1,6 @@
-<img src="https://github.com/CSC-3380-Spring-2024/Journal-Buddy/assets/111524307/77832e73-1c0a-4fab-8173-431279ccd6e3" width="400" height="400" />
+<p align="center">
+  <img src="https://github.com/CSC-3380-Spring-2024/Journal-Buddy/assets/111524307/77832e73-1c0a-4fab-8173-431279ccd6e3" width="400" height="400" />
+</p>
 
 # Journal Buddy
 
