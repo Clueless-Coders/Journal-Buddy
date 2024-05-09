@@ -138,11 +138,10 @@ export default function HomeMenu({ navigation }: any) {
                                         //add database logic later :3
                                     } else {
                                         console.log("habit was not done, changing to completed");
-                                        let timestamp: number = Date.now();
-                                        item.lastTimeComplete = timestamp;
-                                        addHabitTime(item, timestamp);
-                                    }}} buttonText={(item.uid === undefined)? ":c" : item.title} containerStyle={styles.checkButton} checked = {HabitIsDoneCurrently(item)} key = {index + ""}/>;
-                            }) : <Text>:c</Text>
+                                        //item.daysCompleted?.pop();w
+                                        addHabitTime(item.uid);
+                                    }}} buttonText={(item.uid === undefined)? "Brush teeth" : item.title} containerStyle={styles.checkButton} checked = {HabitIsDone(item)} key = {index + ""}/>;
+                            }) : <Text>No habits made.</Text>
                         }
                     </View>
 

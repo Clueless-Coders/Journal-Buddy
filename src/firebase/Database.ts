@@ -28,15 +28,6 @@ export type Journal = {
 };
 
 export type Habit = {
-    daysToComplete: {
-        sunday: boolean,
-        monday: boolean,
-        tuesday: boolean, 
-        wednesday: boolean,
-        thursday: boolean,
-        friday: boolean,
-        saturday: boolean
-    },
     timesToComplete: {
         [index: string]: {
             [index: string]: number
@@ -44,8 +35,7 @@ export type Habit = {
     }, //can have multiple times of day to complete the task
     title: string,
     description?: string
-    uid: string //unique identifier for this specific habit
-    user: string, //unique ident for habit owner user
+    uid?: string //unique identifier for this specific habit
     endDate?: number, //Unix timestamp
     lastTimeComplete?: number,
     timesCompleted?: {
@@ -54,6 +44,7 @@ export type Habit = {
         } 
     }
 };
+
 
 export type Daily = {
     prompt: string,
