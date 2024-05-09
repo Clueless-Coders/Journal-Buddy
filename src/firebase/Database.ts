@@ -27,15 +27,6 @@ export type Journal = {
 };
 
 export type Habit = {
-    daysToComplete: {
-        Sunday?: boolean,
-        Monday?: boolean,
-        Tuesday?: boolean, 
-        Wednesday?: boolean,
-        Thursday?: boolean,
-        Friday?: boolean,
-        Saturday?: boolean
-    },
     timesToComplete: {
         [index: string]: {
             [index: string]: number

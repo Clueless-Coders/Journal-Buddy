@@ -54,7 +54,6 @@ export default function HabitPage({navigation}: any) {
         const [hours, minutes] = time.split(':').map(Number);
         return ((hours % 12) + (afternoon === 'PM' ? 12 : 0)) * 3600000 + minutes * 60000;
     };
-
     
     let [endDate, setEndDate] = React.useState(new Date());
     const [mode, setMode] = React.useState('date');
@@ -75,9 +74,9 @@ export default function HabitPage({navigation}: any) {
         showMode('date');
       };
     
-      const showTimepicker = () => {
-        showMode('time');
-      };
+    //   const showTimepicker = () => {
+    //     showMode('time');
+    //   };
 
     const user = getAuth().currentUser?.uid;
     function handleCreateHabit() {
