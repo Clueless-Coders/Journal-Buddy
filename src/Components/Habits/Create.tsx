@@ -55,15 +55,20 @@ export default function HabitPage({navigation}: any) {
         return ((hours % 12) + (afternoon === 'PM' ? 12 : 0)) * 3600000 + minutes * 60000;
     };
     
-    let [endDate, setEndDate] = React.useState(new Date());
+    let [endDate, setEndDate] = React.useState(() => {
+        const futureDate = new Date();
+        futureDate.setFullYear(futureDate.getFullYear() + 10);
+        return futureDate;
+    });
     const [mode, setMode] = React.useState('date');
     const [show, setShow] = React.useState(false);
   
     const onChange = (event, selectedDate) => {
-        const currentDate = selectedDate;
         setShow(false);
-        setEndDate(currentDate);
-      };
+        if (selectedDate) { 
+            setEndDate(selectedDate);
+        }
+    };
     
       const showMode = (currentMode) => {
         setShow(true);
