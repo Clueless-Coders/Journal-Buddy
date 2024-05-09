@@ -31,31 +31,6 @@ const rightArrowIcon = require('../Calendar/next.png');
 
 const agendaItems: any[] = [];
 
-//Database call for all habits (current user)
-let [temp, setTemp] = React.useState({});
-
-//writes to above array for all habits
-React.useEffect(() => {
-  let ignore = false;
-  async function getHabits(){
-      getHabitsByCurrentUser().then((habits) => {
-          if(!ignore){
-              let todaysHabits: Habit[] = [];
-              let i = 0;
-              habits.forEach((childsnap) => {
-                agendaItems[i] = {date: dates[i].toISOString().split('T')[0], data: childsnap};
-                i++;
-              })
-              setTemp(todaysHabits);
-          }
-      });
-  }
-
-  onValue(ref(getDatabase(), `users/${getAuth().currentUser?.uid}/habits`), () =>{
-      getHabits();
-  })
-  return () => {ignore = true};
-}, []);
 
 
 
@@ -154,6 +129,33 @@ const CalendarPage = (props: Props) => {
   //the rendering method for each AgendaItem
   const renderItem = ({ item }: any) => { return <AgendaItem item={item} />; };
 
+  //Database call for all habits (current user)
+let [temp, setTemp] = React.useState([] as Habit[]);
+
+//writes to above array for all habits
+React.useEffect(() => {
+  let ignore = false;
+  async function getHabits(){
+      getHabitsByCurrentUser().then((habits) => {
+          if(!ignore){
+              console.log("entering calender");
+              let todaysHabits: Habit[] = [];
+              let i = 0;
+              habits.forEach((childsnap) => {
+                agendaItems[i] = {date: dates[i].toISOString().split('T')[0], data: childsnap};
+                i++;
+              })
+              setTemp(habits);
+          }
+      });
+  }
+
+    onValue(ref(getDatabase(), `users/${getAuth().currentUser?.uid}/habits`), () =>{
+        getHabits();
+    })
+    return () => {ignore = true};
+}, []);
+
   return (
     <CalendarProvider date={pastAndTodayDate[pastAndTodayDate.length - 1].toISOString().split('T')[0]} theme={todayBtnTheme.current}>
       {weekView ? (<WeekCalendar testID={'menu'} firstDay={1} markedDates={marked.current} />)
@@ -162,7 +164,7 @@ const CalendarPage = (props: Props) => {
     </CalendarProvider>
   );
 };
-export default CalendarPage);
+export default CalendarPage;
 
 
 //styles. should move getTheme into here honestly
