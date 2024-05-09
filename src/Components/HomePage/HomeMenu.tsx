@@ -30,7 +30,7 @@ export default function HomeMenu({ navigation }: any) {
                     let todaysHabits: Habit[] = [];
                     let currentDay:string = daysOfWeek[new Date().getDay()];
                     habits.forEach(function (i) {
-                        if(i.timesToComplete[currentDay] !== undefined){
+                        if(i.timesToComplete !== undefined && i.timesToComplete[currentDay] !== undefined){
                             todaysHabits.push(i);
                         }
                         
