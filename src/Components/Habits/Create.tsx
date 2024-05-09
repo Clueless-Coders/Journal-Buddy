@@ -99,7 +99,6 @@ export default function HabitPage({navigation}: any) {
         let newHabit: Habit = {
             title,
             description,
-            daysToComplete: daysSet,
             timesToComplete: times,
             endDate: endDate.getTime(),
         };
