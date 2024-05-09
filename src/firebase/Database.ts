@@ -28,15 +28,6 @@ export type Journal = {
 };
 
 export type Habit = {
-    daysToComplete: {
-        sunday: boolean,
-        monday: boolean,
-        tuesday: boolean, 
-        wednesday: boolean,
-        thursday: boolean,
-        friday: boolean,
-        saturday: boolean
-    },
     timesToComplete: {
         [index: string]: {
             [index: string]: number
@@ -44,8 +35,7 @@ export type Habit = {
     }, //can have multiple times of day to complete the task
     title: string,
     description?: string
-    uid: string //unique identifier for this specific habit
-    user: string, //unique ident for habit owner user
+    uid?: string //unique identifier for this specific habit
     endDate?: number, //Unix timestamp
     lastTimeComplete?: number,
     timesCompleted?: {
@@ -54,6 +44,7 @@ export type Habit = {
         } 
     }
 };
+
 
 export type Daily = {
     prompt: string,
@@ -162,8 +153,9 @@ export function updateJournal(journalID: string, newJournal: Journal) {
     set(ref(db, `/journals/${journalID}`), newJournal);
 }
 
-export async function addHabitTime(habit: Habit, timestamp: number){
+export async function addHabitTime(habit: Habit){
     const db = getDatabase();
+    const timestamp = Date.now();
     let dateKey: number = UTCMidnight(timestamp);
 
     if(habit === undefined){
@@ -171,7 +163,7 @@ export async function addHabitTime(habit: Habit, timestamp: number){
         return;
     }
     
-    await push(child(ref(db), `/habits/${habit.uid}/timesCompleted/${dateKey}`), timestamp);
+    await set(child(ref(db), `/habits/${habit.uid}/timesCompleted/${dateKey}`), timestamp);
 
     //if there is no timestamp currently in lastTimeComplete or if the new timestamp is 
     if(habit.lastTimeComplete === undefined || habit.lastTimeComplete < timestamp){

@@ -138,7 +138,7 @@ const styles = StyleSheet.create({
         borderRadius: 5,
         backgroundColor: '#E7EFFF70',
         padding: '3%',
-        height: '100%'
+        height: '50%'
     },
     texboxWithLabel: {
         width: '78%',
