@@ -17,8 +17,14 @@ export default function DailyPrompt({ navigation, route }: any) {
         const auth = getAuth();
         if(auth.currentUser === undefined || auth.currentUser === null)
             return;
+        console.log("today");
+        console.log(new Date().getUTCDate());
+        console.log("journal day");
+        console.log(new Date(journal.dayWritten).getUTCDate());
 
-        if(route.params !== undefined && new Date().getUTCDate() === new Date(journal.dayWritten).getUTCDate()){
+
+        if(route.params !== undefined && new Date().getUTCDate() !== new Date(journal.dayWritten).getUTCDate()){
+            console.log("Editing detected! Editing journal id: " + route.params.journalID);
             updateJournal(route.params.journalID, journal);
         } else {
             console.log("New journal detected! Creating a new journal entry in the DB");
