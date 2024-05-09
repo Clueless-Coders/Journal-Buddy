@@ -17,7 +17,7 @@ import { initializeAuth, getReactNativePersistence, getAuth, onAuthStateChanged 
 import ReactNativeAsyncStorage from '@react-native-async-storage/async-storage';
 import { firebaseConfig } from './Keys';
 import Slider from './src/Components/TutorialPages/Slider';
-import { Daily, getDaily } from './src/firebase/Database';
+import { Daily, getDaily, isFirstTimeLogin } from './src/firebase/Database';
 
 export const DailyContext = React.createContext({} as Daily);
 
@@ -119,15 +119,23 @@ function AuthenticationStack() {
 
 function AuthLogic() {
   let [loggedIn, setLoggedIn] = React.useState(getAuth().currentUser !== null);
+  let [firstTime, setFirstTime] = React.useState(false);
 
   React.useEffect(() => {
+    async function checkFirstTime() {
+      setFirstTime(await isFirstTimeLogin());
+    }
+
     onAuthStateChanged(getAuth(), (user) => {
       setLoggedIn(user !== null);
     });
+    checkFirstTime();
   }, []);
   
-  return !loggedIn ? <AuthenticationStack /> : <TutorialStack />
+  return !loggedIn ? <AuthenticationStack /> : firstTime ? <TutorialStack /> : <TabGroup />;
 }
+
+
 
 export default function App() {
   const app = initializeApp(firebaseConfig);
