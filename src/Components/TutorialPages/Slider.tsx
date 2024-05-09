@@ -7,19 +7,42 @@ import Pagination from './Pagination'
 import Animated from 'react-native-reanimated';
 import type {PropsWithChildren} from 'react';
 import type {ViewStyle} from 'react-native';
+import { ButtonInput } from '../../Types'
+import GeneralButtonLight from '../Buttons/GeneralButtonLight';
 
 
 let Slides:Slide[] =  [
     {
-        subtitle: 'haiii',
+        subtitle: 'Welcome to Journal Buddy!',
         id: 1,
         ImageLocation: require('../../../assets/cat.png'),
     },
     {
-        subtitle: 'baiiiii',
+        subtitle: 'Be motivated with a daily inspiratinal quote!',
         id: 2,
+        ImageLocation: require('./DailyQuote.png'),
+    },
+    {
+        subtitle: 'Share your thoughts in our journal, using a daily journal prompt!',
+        id: 3,
+        ImageLocation: require('./JournalEntry.png'),
+    },
+    {
+        subtitle: 'Build good habits with our habit creator!',
+        id: 4,
+        ImageLocation: require('./CreateHabit.png'),
+    },
+    {
+        subtitle: 'And track your habits in your calendar!',
+        id: 5,
         ImageLocation: require('../../../assets/cat.png'),
-    }
+        /*slideButton: {
+            buttonText: 'Home',
+            onPress: () => {
+                console.log("Button pressed");
+            },
+        }*/
+    },
 ];
 
 //export default function Slider({ navigation }: any)
@@ -61,6 +84,10 @@ export default function Slider ({ navigation }: any) {
 
     return (
         <View>
+            <GeneralButtonLight
+            buttonText={'Home'} 
+            onPress={() => null}
+            />
             <FlatList 
             data = {Slides} 
             renderItem={({item}) => <SlideItem subtitle={item.subtitle} 
@@ -96,10 +123,8 @@ const styles = StyleSheet.create({
         fontFamily: "Inter_400Regular"
     },
     image: {
-
-    },
-    content: {
-        
+        flex: 0.6,
+        width: '100%',
     }
 }
 )

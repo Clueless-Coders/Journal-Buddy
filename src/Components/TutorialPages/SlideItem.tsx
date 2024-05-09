@@ -8,7 +8,7 @@ import { Slide } from '../../Types';
 //         ImageLocation: require('../../../assets/cat.png')
 const {width, height} = Dimensions.get('screen');
 
-const SlideItem =  ({subtitle,id, ImageLocation}: Slide) => {
+const SlideItem =  ({subtitle, id, ImageLocation}: Slide) => {
     return (
         <View style = {styles.container}>
             <Image source={ImageLocation}
