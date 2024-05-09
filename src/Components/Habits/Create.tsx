@@ -100,7 +100,7 @@ export default function HabitPage({navigation}: any) {
             title,
             description,
             timesToComplete: times,
-            endDate: endDate.getTime(),
+            endDate: endDate ? endDate.getTime() : new Date('2069-01-01').getTime(),
         };
     
         createHabit(newHabit);
@@ -118,6 +118,7 @@ export default function HabitPage({navigation}: any) {
         });
     
         setTimesToComplete('');
+        setAfternoon('');
         console.log('Habit created:', newHabit);
     };
 
