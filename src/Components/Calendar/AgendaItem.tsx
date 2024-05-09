@@ -7,13 +7,13 @@ import CheckboxButton from '../Buttons/CheckboxButton';
 const yes = 'green';
 const no = "red";
 
-interface AgendaItemData {
-  date: Date,
-  data: Habit[],
-}
+// export interface AgendaItemData {
+//   date: Date,
+//   data: Habit[],
+// }
 
 //actual item; change props : ItemProps to props : Habit
-const AgendaItem = (props: AgendaItemData) => {
+const AgendaItem = (props: any) => {
   let isHabitDone = false;
   let item = props;
 
@@ -26,7 +26,7 @@ const AgendaItem = (props: AgendaItemData) => {
   //Same thing for getting info for a particular habit
   const itemPressed = useCallback(() => {
     let string = isHabitDone ? "Habit: Done!" : "Habit: Not done!";
-    Alert.alert(item.data[0].title, string + "\nDuration: " + item.data[0].duration);
+    Alert.alert(item.title, string + "\nDuration: " + item.duration);
   }, []);
 
   //Return something indicating a empty list of habit if no habits made
