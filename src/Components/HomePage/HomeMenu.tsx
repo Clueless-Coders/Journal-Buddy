@@ -139,8 +139,8 @@ export default function HomeMenu({ navigation }: any) {
                                     } else {
                                         console.log("habit was not done, changing to completed");
                                         //item.daysCompleted?.pop();w
-                                        addHabitTime(item.uid);
-                                    }}} buttonText={(item.uid === undefined)? "Brush teeth" : item.title} containerStyle={styles.checkButton} checked = {HabitIsDone(item)} key = {index + ""}/>;
+                                        addHabitTime(item);
+                                    }}} buttonText={(item.uid === undefined)? "Brush teeth" : item.title} containerStyle={styles.checkButton} checked = {HabitIsDoneCurrently(item)} key = {index + ""}/>;
                             }) : <Text>No habits made.</Text>
                         }
                     </View>
