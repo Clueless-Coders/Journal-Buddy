@@ -155,6 +155,7 @@ export function updateJournal(journalID: string, newJournal: Journal) {
 
 export async function addHabitTime(habit: Habit, timestamp : number){
     const db = getDatabase();
+    //const timestamp = Date.now();
     let dateKey: number = UTCMidnight(timestamp);
 
     if(habit === undefined){
@@ -162,7 +163,7 @@ export async function addHabitTime(habit: Habit, timestamp : number){
         return;
     }
     
-    await set(child(ref(db), `/habits/${habit.uid}/timesCompleted/${dateKey}`), timestamp);
+    await push(child(ref(db), `/habits/${habit.uid}/timesCompleted/${dateKey}`), timestamp);
 
     //if there is no timestamp currently in lastTimeComplete or if the new timestamp is
     console.log(habit); 

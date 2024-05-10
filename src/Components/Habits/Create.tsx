@@ -1,11 +1,9 @@
 import React, { useContext } from 'react';
 import {View, Text, StyleSheet, TextInput, ScrollView, SafeAreaView, Platform, StatusBar, TouchableWithoutFeedback, Keyboard, KeyboardAvoidingView, TouchableHighlight, Pressable } from 'react-native';
-import { Ionicons } from "@expo/vector-icons";
 import { createHabit, Habit } from '../../firebase/Database';
 import { getAuth } from 'firebase/auth';
 import GeneralButtonDark from '../Buttons/GeneralButtonDark';
 import DateTimePicker from '@react-native-community/datetimepicker';
-import Modal from 'react-native-modal';
 import { daysOfWeek } from '../times';
 
 export default function HabitPage({navigation}: any) {
@@ -56,15 +54,24 @@ export default function HabitPage({navigation}: any) {
     };
     
     let [endDate, setEndDate] = React.useState(new Date());
+    const [endDatePicked, setEndDatePicked] = React.useState(false);
+
     const [mode, setMode] = React.useState('date');
-    const [show, setShow] = React.useState(false);
-  
-    const onChange = (event, selectedDate) => {
-        const currentDate = selectedDate;
-        setShow(false);
-        setEndDate(currentDate);
-      };
+    const [show, setShow] = React.useState(false)
     
+    const onChange = (event, selectedDate) => {
+        const currentDate = selectedDate || endDate;
+        setShow(false);
+
+        if (event.type === 'set') { 
+            setEndDate(currentDate);
+            setEndDatePicked(true);
+        }
+        else if (event.type === 'dismissed') {
+            setEndDatePicked(false);
+        }
+    };
+
       const showMode = (currentMode) => {
         setShow(true);
         setMode(currentMode);
@@ -73,10 +80,6 @@ export default function HabitPage({navigation}: any) {
       const showDatepicker = () => {
         showMode('date');
       };
-    
-    //   const showTimepicker = () => {
-    //     showMode('time');
-    //   };
 
     const user = getAuth().currentUser?.uid;
     function handleCreateHabit() {
@@ -87,7 +90,7 @@ export default function HabitPage({navigation}: any) {
             } //ms from 12 am that day
         } = {};
         
-        for(let i = 0; i < daysOfWeek.length; i ++){
+        for (let i = 0; i < daysOfWeek.length; i ++){
             let timeMS: number = timeToMilliseconds(timesToComplete, afternoon);
             let timeCounterKey: string = timeMS + '';
             if(daysToComplete[daysOfWeek[i]] ){
@@ -96,11 +99,13 @@ export default function HabitPage({navigation}: any) {
             }
         }
 
+        let useEndDate = endDatePicked ? endDate.getTime() : new Date(Date.now() + 315360000000).getTime();
+
         let newHabit: Habit = {
             title,
             description,
             timesToComplete: times,
-            endDate: endDate.getTime(),
+            endDate: useEndDate,
         };
     
         createHabit(newHabit);
@@ -118,6 +123,7 @@ export default function HabitPage({navigation}: any) {
         });
     
         setTimesToComplete('');
+        setAfternoon('');
         console.log('Habit created:', newHabit);
     };
 
@@ -128,10 +134,6 @@ export default function HabitPage({navigation}: any) {
         <View>
         <ScrollView>
             <View style={styles.container}>
-                <Text style={styles.header}>
-                    Create a Habit
-                </Text>
-                <View style={styles.div} />
                 <View style={styles.texboxWithLabel}>
                     <Text style={styles.label}>
                         Title:
@@ -189,44 +191,44 @@ export default function HabitPage({navigation}: any) {
                         value={timesToComplete}
                         maxLength={5}
                     />
-                    <Pressable style={{ 
-                                    width: 40,
-                                    height: 40,
-                                    borderRadius: 5,
-                                    justifyContent: 'center',
-                                    alignItems: 'center',
-                                    backgroundColor: afternoon === 'AM' ? '#8DB1F7' : '#ccc' }}
+                    <Pressable 
+                        style={{ 
+                            width: 40,
+                            height: 40,
+                            borderRadius: 5,
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                            backgroundColor: afternoon === 'AM' ? '#8DB1F7' : '#ccc' }}
                         onPress={() => setAfternoon('AM')}>
                         <Text style={{ color: 'white' }}>AM</Text>
                     </Pressable>
-                    <Pressable style={{ 
-                                    width: 40,
-                                    height: 40,
-                                    borderRadius: 5,
-                                    justifyContent: 'center',
-                                    alignItems: 'center', 
-                                    backgroundColor: afternoon === 'PM' ? '#8DB1F7' : '#ccc' }}
+                    <Pressable 
+                        style={{ 
+                            width: 40,
+                            height: 40,
+                            borderRadius: 5,
+                            justifyContent: 'center',
+                            alignItems: 'center', 
+                            backgroundColor: afternoon === 'PM' ? '#8DB1F7' : '#ccc' }}
                         onPress={() => setAfternoon('PM')}>
                         <Text style={{ color: 'white' }}>PM</Text>
                     </Pressable>
                 </View>
 
                 <View style={{flexDirection: 'row', alignItems:'center', gap: 10, marginTop: 5}}>
-                <Text> {endDate.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</Text>
+                {endDatePicked ? <Text> {endDate.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</Text> : null}
                 {show && (
                     <DateTimePicker
-                    testID="datePicker"
-                    value={endDate}
-                    mode={mode}
-                    is24Hour={true}
-                    onChange={onChange}
+                        testID="datePicker"
+                        value={endDate}
+                        mode={mode}
+                        is24Hour={true}
+                        onChange={onChange}
                     />
                 )}
-                <GeneralButtonDark buttonText={"End Date"} onPress={showDatepicker} textStyle={styles.textStyle} containerStyle={{width: 100, height: 40 , marginTop: "4%"}}/>
+                <GeneralButtonDark buttonText={"End Date?"} onPress={showDatepicker} textStyle={styles.small} containerStyle={{width: 100, height: 40 , marginTop: "4%"}}/>
                 </View>
-
-                <View style={styles.div} />
-                <GeneralButtonDark buttonText={"Create"} onPress={handleCreateHabit} textStyle={styles.textStyle} containerStyle={{width: '60%', marginTop: "1%"}}/>
+                <GeneralButtonDark buttonText={"Create"} onPress={handleCreateHabit} textStyle={styles.textStyle} containerStyle={{width: '60%', marginTop: 20, marginBottom: 100}}/>
 
             </View>
         </ScrollView>
@@ -239,20 +241,6 @@ export default function HabitPage({navigation}: any) {
 
 const styles = StyleSheet.create( {
     container: {
-        alignItems: 'center'
-    },
-    div: {
-        width: "90%",
-        height: 1,
-        backgroundColor: '#8DB1F7',
-        marginBottom: '5%',
-        marginTop: '5%'
-    },
-    header: {
-        marginTop: '5%',
-        fontSize: 30,
-        fontWeight: 'bold',
-        color: '#050B24',
         alignItems: 'center'
     },
     texboxWithLabel: {
@@ -292,12 +280,18 @@ const styles = StyleSheet.create( {
         color: 'white',
         textAlign: 'center',
     },
+    small: {
+        fontSize: 17,
+        color: 'white',
+        textAlign: 'center',
+    },
     dateText: {
         fontSize: 18,
         marginTop: 10,
     },
     overlord: {
-        paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0,
+        //paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight + 40: 0,
+        paddingTop: 50,
         backgroundColor: 'white',
         flex: 1
     }

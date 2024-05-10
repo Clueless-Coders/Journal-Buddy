@@ -32,7 +32,8 @@ export default function JournalEntries({ navigation }: any) {
                     <GeneralButtonDark  
                         onPress={() => navigation.navigate('Journal')} 
                         buttonText={'Start today\'s journal!'} 
-                        containerStyle={styles.containerStyle} 
+                        containerStyle={styles.containerStyle}
+                        textStyle={{ color: '050B24' }}
                     /> 
                 }
                 { data.length > 0 ? data.reverse().map((item, index) => {
