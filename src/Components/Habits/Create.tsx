@@ -228,7 +228,7 @@ export default function HabitPage({navigation}: any) {
                 )}
                 <GeneralButtonDark buttonText={"End Date?"} onPress={showDatepicker} textStyle={styles.small} containerStyle={{width: 100, height: 40 , marginTop: "4%"}}/>
                 </View>
-                <GeneralButtonDark buttonText={"Create"} onPress={handleCreateHabit} textStyle={styles.textStyle} containerStyle={{width: '60%', marginTop: 20,}}/>
+                <GeneralButtonDark buttonText={"Create"} onPress={handleCreateHabit} textStyle={styles.textStyle} containerStyle={{width: '60%', marginTop: 20, marginBottom: 100}}/>
 
             </View>
         </ScrollView>
@@ -290,7 +290,8 @@ const styles = StyleSheet.create( {
         marginTop: 10,
     },
     overlord: {
-        paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight + 40 : 0,
+        //paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight + 40: 0,
+        paddingTop: 50,
         backgroundColor: 'white',
         flex: 1
     }
