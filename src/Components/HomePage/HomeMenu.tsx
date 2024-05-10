@@ -7,7 +7,6 @@ import { getDatabase, onValue, ref } from 'firebase/database'
 import { Habit, addHabitTime, getHabitsByCurrentUser } from '../../firebase/Database';
 import { time } from 'console';
 import { DailyContext } from '../../../App';
-import { time } from 'console';
 import { UTCToTime, UTCMidnight, isSameUTCDay, daysOfWeek} from '../times';
 //import { FlatList } from 'react-native-gesture-handler';
 // import { getapi } from '../../Quotes';

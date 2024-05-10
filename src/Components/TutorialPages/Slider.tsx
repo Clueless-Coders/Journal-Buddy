@@ -1,17 +1,17 @@
-import React, {useRef, useState} from 'react';
+import React, { useRef, useState } from 'react';
 import { Inter_400Regular, useFonts } from '@expo-google-fonts/inter';
-import { View, Text, StyleSheet, ScrollView, SafeAreaView, Platform, StatusBar, FlatList, Pressable} from 'react-native';
+import { View, Text, StyleSheet, ScrollView, SafeAreaView, Platform, StatusBar, FlatList, Pressable } from 'react-native';
 import SlideItem from './SlideItem'
-import {Slide} from '../../Types'
+import { Slide } from '../../Types'
 import Pagination from './Pagination'
 import Animated from 'react-native-reanimated';
-import type {PropsWithChildren} from 'react';
-import type {ViewStyle} from 'react-native';
+import type { PropsWithChildren } from 'react';
+import type { ViewStyle } from 'react-native';
 import { ButtonInput } from '../../Types'
 import GeneralButtonLight from '../Buttons/GeneralButtonLight';
+import { toggleFirstTimeLogin } from '../../firebase/Database';
 
-
-let Slides:Slide[] =  [
+let Slides: Slide[] = [
     {
         subtitle: 'Welcome to Journal Buddy!',
         id: 1,
@@ -47,9 +47,9 @@ let Slides:Slide[] =  [
 
 //export default function Slider({ navigation }: any)
 
-export default function Slider ({ navigation }: any) {
+export default function Slider({ navigation }: any) {
     const [index, setindex] = useState(0);
-    
+
     /*const scrollX = useRef(new Animated.Value(0)).current;
     
     const handleOnScroll = (event: any) => {
@@ -70,10 +70,9 @@ export default function Slider ({ navigation }: any) {
 
     //export default Slider
 
-    const [fontsLoaded] = useFonts({Inter_400Regular});
+    const [fontsLoaded] = useFonts({ Inter_400Regular });
 
-    const handleOnViewableItemsChanged = useRef((viewableItems: any) => 
-    {
+    const handleOnViewableItemsChanged = useRef((viewableItems: any) => {
         // console.log('viewableItems', viewableItems);
         setindex(viewableItems[0]);
     }).current;
@@ -84,24 +83,26 @@ export default function Slider ({ navigation }: any) {
 
     return (
         <View>
+
+            <FlatList
+                data={Slides}
+                renderItem={({ item }) => <SlideItem subtitle={item.subtitle}
+                    ImageLocation={item.ImageLocation} id={item.id} />}
+                horizontal
+                pagingEnabled
+                snapToAlignment='center'
+                showsHorizontalScrollIndicator={false}
+                //onScroll={handleOnScroll}
+                onViewableItemsChanged={handleOnViewableItemsChanged}
+                viewabilityConfig={viewabilityConfig}
+            />
+            <Pagination data={Slides} /*scrollX={scrollX}*/ index={index} />
             <GeneralButtonLight
-            buttonText={'Home'} 
-            onPress={() => null}
+                buttonText={'Get Journaling!'}
+                onPress={toggleFirstTimeLogin}
+                containerStyle={styles.button}
             />
-            <FlatList 
-            data = {Slides} 
-            renderItem={({item}) => <SlideItem subtitle={item.subtitle} 
-            ImageLocation={item.ImageLocation} id={item.id}/>}
-            horizontal
-            pagingEnabled
-            snapToAlignment='center'
-            showsHorizontalScrollIndicator={false}
-            //onScroll={handleOnScroll}
-            onViewableItemsChanged={handleOnViewableItemsChanged}
-            viewabilityConfig={viewabilityConfig}
-            />
-                <Pagination data = {Slides} /*scrollX={scrollX}*/ index={index}/>
-            
+
         </View>
     );
 }
@@ -121,6 +122,11 @@ const styles = StyleSheet.create({
         backgroundColor: 'white',
         flex: 1,
         fontFamily: "Inter_400Regular"
+    },
+    button: {
+        position: 'absolute',
+        marginTop: '170%',
+        marginLeft: '25%'
     },
     image: {
         flex: 0.6,

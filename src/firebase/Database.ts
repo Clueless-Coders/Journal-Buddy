@@ -332,9 +332,12 @@ export async function isFirstTimeLogin(): Promise<boolean> {
     }
 
     const value = await get(ref(db, `users/${auth.currentUser.uid}/firstSignIn`));
-    if(value.exists())
+    if(value.exists()){
+        console.log(value.val());
         return value.val();
-    return true;
+    }
+
+   return true;
 }
 
 export async function toggleFirstTimeLogin(){
@@ -347,7 +350,7 @@ export async function toggleFirstTimeLogin(){
 
     const value = await get(ref(db, `users/${auth.currentUser.uid}/firstSignIn`));
     if(value.exists())
-        await set(ref(db, `users/${auth.currentUser.uid}/firstTimeSignIn`), !value.val());
+        await set(ref(db, `users/${auth.currentUser.uid}/firstSignIn`), !value.val());
     else
-        await set(ref(db, `users/${auth.currentUser.uid}/firstTimeSignIn`), true);
+        await set(ref(db, `users/${auth.currentUser.uid}/firstSignIn`), true);
 }

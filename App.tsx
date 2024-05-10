@@ -18,6 +18,7 @@ import ReactNativeAsyncStorage from '@react-native-async-storage/async-storage';
 import { firebaseConfig } from './Keys';
 import Slider from './src/Components/TutorialPages/Slider';
 import { Daily, getDaily, isFirstTimeLogin } from './src/firebase/Database';
+import { getDatabase, onValue, ref } from 'firebase/database';
 
 export const DailyContext = React.createContext({} as Daily);
 
@@ -102,7 +103,6 @@ function DrawerGroup() {
       <Stack.Screen name="Journals" component={JournalStack} />
       <Stack.Screen name="Habits" component={HabitPage} />
       <Stack.Screen name="Create Habit" component={Create} />
-      <Stack.Screen name="Tutorial" component={Slider} />
     </Drawer.Navigator>
   );
 }
@@ -119,18 +119,24 @@ function AuthenticationStack() {
 
 function AuthLogic() {
   let [loggedIn, setLoggedIn] = React.useState(getAuth().currentUser !== null);
-  let [firstTime, setFirstTime] = React.useState(false);
+  let [firstTime, setFirstTime] = React.useState(true);
+
+  React.useEffect(() => {
+
+    onAuthStateChanged(getAuth(), (user) => {
+      setLoggedIn(user !== null);
+    });
+  }, []);
 
   React.useEffect(() => {
     async function checkFirstTime() {
       setFirstTime(await isFirstTimeLogin());
     }
-
-    onAuthStateChanged(getAuth(), (user) => {
-      setLoggedIn(user !== null);
+    onValue(ref(getDatabase(), `users/${getAuth().currentUser?.uid}/firstSignIn`), () =>{
+      checkFirstTime();
     });
-    checkFirstTime();
-  }, []);
+  }, [loggedIn])
+  
   
   return !loggedIn ? <AuthenticationStack /> : firstTime ? <TutorialStack /> : <TabGroup />;
 }
