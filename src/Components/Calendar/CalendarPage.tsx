@@ -67,18 +67,15 @@ function getTheme() {
     // month
     monthTextColor: 'black',
     textMonthFontSize: 16,
-    textMonthFontFamily: 'Arial',
     textMonthFontWeight: 'bold' as const,
     // day names
     textSectionTitleColor: 'black',
     textDayHeaderFontSize: 12,
-    textDayHeaderFontFamily: 'Arial',
     textDayHeaderFontWeight: 'normal' as const,
     // dates
     dayTextColor: '#00AAAF',
     todayTextColor: '#af0078',
     textDayFontSize: 18,
-    textDayFontFamily: 'Arial',
     textDayFontWeight: '500' as const,
     textDayStyle: { marginTop: Platform.OS === 'android' ? 2 : 4 },
     // selected date

@@ -32,6 +32,7 @@
     "react-native": "0.74.1",
     "react-native-asset": "^2.1.1",
     "react-native-async-storage": "^0.0.1",
+    "react-native-calendars": "^1.1304.1",
     "react-native-date-picker": "^5.0.2",
     "react-native-gesture-handler": "~2.16.1",
     "react-native-modal": "^13.0.1",

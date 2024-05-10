@@ -67,9 +67,8 @@ function TabGroup() {
       >
         <Tab.Screen name="Home" component={HomeMenu} options={{ headerShown: false }} />
         <Tab.Screen name="Journals" component={JournalStack} />
-        <Tab.Screen name="Calendar" component={CalendarPage} />
         <Tab.Screen name="Habits" component={HabitStack} />
-        <Tab.Screen name="Calendar" component={HomeMenu} />
+        <Tab.Screen name="Calendar" component={CalendarPage} />
       </Tab.Navigator>
     </DailyContext.Provider>
   );
