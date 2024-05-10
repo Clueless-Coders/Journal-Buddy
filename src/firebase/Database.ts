@@ -153,9 +153,9 @@ export function updateJournal(journalID: string, newJournal: Journal) {
     set(ref(db, `/journals/${journalID}`), newJournal);
 }
 
-export async function addHabitTime(habit: Habit, timestamp: number){
+export async function addHabitTime(habit: Habit, timestamp : number){
     const db = getDatabase();
-    
+    //const timestamp = Date.now();
     let dateKey: number = UTCMidnight(timestamp);
 
     if(habit === undefined){
@@ -165,26 +165,67 @@ export async function addHabitTime(habit: Habit, timestamp: number){
     
     await push(child(ref(db), `/habits/${habit.uid}/timesCompleted/${dateKey}`), timestamp);
 
-    //if there is no timestamp currently in lastTimeComplete or if the new timestamp is 
+    //if there is no timestamp currently in lastTimeComplete or if the new timestamp is
+    console.log(habit); 
     if(habit.lastTimeComplete === undefined || habit.lastTimeComplete < timestamp){
         await set(ref(db, `/habits/${habit.uid}/lastTimeComplete`),timestamp);
+        
+    } else {
+        console.log("No replacing");
     }
-    
 
-    //set(ref(db, `/users/${user}/lastJournalEntryTime`), Date.now());
-    //obtains the last time the user has instantiated a new Journal entry in Unix time (stored in user profile)
-    ///push(child(ref(db), `/habits/${habitID}/timesCompleted`), Date.now());
 }
 
-export async function removeHabitTime(timeKey: string, UTCDate: number, habitID: string){
-    const auth = getAuth();
+export async function removeHabitTime(habit: Habit, timeKey: string, UTCDay: number, timestamp: number) {
     const db = getDatabase();
-    if(auth.currentUser == undefined) {
+    if(habit.uid === undefined){
+        console.log("No habit uid found");
         return;
     }
-
-    await remove(ref(db, `habits/${habitID}/timesCompleted/${UTCDate}/${timeKey}`));
+    //if you removed the latest time, set it to a new time or remove the timestamp
+    if(habit.lastTimeComplete !== undefined && habit.lastTimeComplete === timestamp){
+        //find new timestamp
+        let newLatestTime = findSecondLastDoneTime(habit);
+        if( newLatestTime === undefined){
+            await remove(ref(db, `habits/${habit.uid}/lastTimeComplete`));
+            console.log(":3 ");
+            
+        } else {
+            await set(ref(db, `/habits/${habit.uid}/lastTimeComplete`),newLatestTime);
+            
+            console.log("changing time");
+        }
+    }
+    console.log(habit);
+    await remove(ref(db, `habits/${habit.uid}/timesCompleted/${UTCDay}/${timeKey}`));
 }
+
+function findSecondLastDoneTime(habit: Habit): number|undefined{
+    if(habit.timesCompleted !== undefined){
+        //goes through date level
+        let dateKeys : string[] = Object.keys(habit.timesCompleted);
+        let lastKey : string = dateKeys[dateKeys.length - 1];
+        //gets timestamps for the last day
+        let timeStamps : number[] = Object.values(habit.timesCompleted[lastKey]);
+        //if there's only one time stamp
+        if(dateKeys.length === 1 && timeStamps.length === 1){
+            return undefined;
+        }
+
+        if(timeStamps.length === 1){
+            lastKey = dateKeys[dateKeys.length - 2];
+            timeStamps =  timeStamps.concat(Object.values(habit.timesCompleted[lastKey]));
+        }
+
+        timeStamps = timeStamps.sort();
+        return timeStamps[timeStamps.length - 2];
+
+    } else{
+        return undefined;
+    }
+}
+
+
 
 //Queries the database for all the journals created by this user
 export async function getJournalsByUserID(userID: string): Promise<Journal[]>{
@@ -226,7 +267,7 @@ export async function getHabitsByUserID(userID: string): Promise<Habit[]>{
             });
             //wait for the queries to complete, then return an array containing the Habits 
             Promise.all(promises).then((habits) => {
-                console.log(habits);
+                //console.log(habits);
                 resolve(habits);
             });
         } else{

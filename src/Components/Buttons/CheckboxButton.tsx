@@ -4,7 +4,10 @@ import { ButtonInput, CheckboxInput } from "../../Types";
 import { Button, StyleSheet, View } from "react-native";
 
 export default function CheckboxButton(props: CheckboxInput) {
-    const [isChecked, setIsChecked] = React.useState((props.checked === undefined)? false: props.checked );
+    const [isChecked, setIsChecked] = React.useState((props.checked === undefined)? false: props.checked);
+    //trying to add color interchangability when we make new checkbox
+    const color1 = (props.on === undefined)? '#95dbc0' : props.on;
+    const color2 = (props.off === undefined)? '#ffffff' : props.off;
 
     function handlePress(){
         setIsChecked(!isChecked);
@@ -12,13 +15,11 @@ export default function CheckboxButton(props: CheckboxInput) {
         props.onPress();
         
     }
-    let color = isChecked? '#95dbc0' : '#ffffff';
+    let color = isChecked? color1 : color2;
 
     return(
         <GeneralButtonLight {...props} onPress={() => handlePress()} textStyle={styles.textStyle}>
-            <View style={{...styles.checkboxStyle, backgroundColor: color}}>
-
-            </View>
+            <View style={{...styles.checkboxStyle, backgroundColor: color}}></View>
         </GeneralButtonLight>
     );
 }

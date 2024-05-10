@@ -8,6 +8,7 @@ import HomeMenu from './src/Components/HomePage/HomeMenu';
 import JournalEntries from './src/Components/Journal-Pages/JournalEntries';
 import { FontAwesome5 } from '@expo/vector-icons';
 import LoginPage from './src/Components/Login/LoginPage';
+import CalendarPage from './src/Components/Calendar/CalendarPage';
 import SignUp from './src/Components/Login/SignUp';
 import ForgotPassword from './src/Components/Login/ForgotPassword';
 import HabitPage from './src/Components/Habits/HabitPage';
@@ -66,6 +67,7 @@ function TabGroup() {
       >
         <Tab.Screen name="Home" component={HomeMenu} options={{ headerShown: false }} />
         <Tab.Screen name="Journals" component={JournalStack} />
+        <Tab.Screen name="Calendar" component={CalendarPage} />
         <Tab.Screen name="Habits" component={HabitStack} />
         <Tab.Screen name="Calendar" component={HomeMenu} />
       </Tab.Navigator>
