@@ -10,6 +10,8 @@ export interface ButtonInput {
 export interface CheckboxInput extends ButtonInput{
     checked?: boolean
     key?: string
+    on?: string
+    off?: string
 }
 
 export type Quotes = {

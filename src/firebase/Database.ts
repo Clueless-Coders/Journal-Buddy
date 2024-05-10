@@ -226,7 +226,7 @@ export async function getHabitsByUserID(userID: string): Promise<Habit[]>{
             });
             //wait for the queries to complete, then return an array containing the Habits 
             Promise.all(promises).then((habits) => {
-                console.log(habits);
+                //console.log(habits);
                 resolve(habits);
             });
         } else{
