@@ -57,17 +57,21 @@ export default function HabitPage({navigation}: any) {
     const [endDatePicked, setEndDatePicked] = React.useState(false);
 
     const [mode, setMode] = React.useState('date');
-    const [show, setShow] = React.useState(false);
-  
+    const [show, setShow] = React.useState(false)
+    
     const onChange = (event, selectedDate) => {
         const currentDate = selectedDate || endDate;
-        setEndDate(currentDate);
         setShow(false);
-        if (selectedDate) { 
+
+        if (event.type === 'set') { 
+            setEndDate(currentDate);
             setEndDatePicked(true);
         }
+        else if (event.type === 'dismissed') {
+            setEndDatePicked(false);
+        }
     };
-    
+
       const showMode = (currentMode) => {
         setShow(true);
         setMode(currentMode);
@@ -222,7 +226,7 @@ export default function HabitPage({navigation}: any) {
                         onChange={onChange}
                     />
                 )}
-                <GeneralButtonDark buttonText={"End Date"} onPress={showDatepicker} textStyle={styles.textStyle} containerStyle={{width: 100, height: 40 , marginTop: "4%"}}/>
+                <GeneralButtonDark buttonText={"End Date?"} onPress={showDatepicker} textStyle={styles.small} containerStyle={{width: 100, height: 40 , marginTop: "4%"}}/>
                 </View>
                 <GeneralButtonDark buttonText={"Create"} onPress={handleCreateHabit} textStyle={styles.textStyle} containerStyle={{width: '60%', marginTop: 20,}}/>
 
@@ -276,12 +280,17 @@ const styles = StyleSheet.create( {
         color: 'white',
         textAlign: 'center',
     },
+    small: {
+        fontSize: 17,
+        color: 'white',
+        textAlign: 'center',
+    },
     dateText: {
         fontSize: 18,
         marginTop: 10,
     },
     overlord: {
-        paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0,
+        paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight + 40 : 0,
         backgroundColor: 'white',
         flex: 1
     }
