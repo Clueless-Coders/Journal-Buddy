@@ -25,4 +25,5 @@ export type Slide = {
     subtitle: string,
     id: number,
     ImageLocation: any,
+    slideButton?: ButtonInput
 }
