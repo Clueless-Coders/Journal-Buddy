@@ -153,9 +153,8 @@ export function updateJournal(journalID: string, newJournal: Journal) {
     set(ref(db, `/journals/${journalID}`), newJournal);
 }
 
-export async function addHabitTime(habit: Habit){
+export async function addHabitTime(habit: Habit, timestamp : number){
     const db = getDatabase();
-    const timestamp = Date.now();
     let dateKey: number = UTCMidnight(timestamp);
 
     if(habit === undefined){
@@ -225,15 +224,7 @@ function findSecondLastDoneTime(habit: Habit): number|undefined{
     }
 }
 
-export async function removeHabitTime(timeKey: string, UTCDate: number, habitID: string){
-    const auth = getAuth();
-    const db = getDatabase();
-    if(auth.currentUser == undefined) {
-        return;
-    }
 
-    await remove(ref(db, `habits/${habitID}/timesCompleted/${UTCDate}/${timeKey}`));
-}
 
 //Queries the database for all the journals created by this user
 export async function getJournalsByUserID(userID: string): Promise<Journal[]>{
