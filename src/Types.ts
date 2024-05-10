@@ -1,5 +1,3 @@
-import { Button } from "react-native"
-
 export interface ButtonInput {
     buttonText: string,
     onPress: () => void,
@@ -25,4 +23,5 @@ export type Slide = {
     subtitle: string,
     id: number,
     ImageLocation: any,
+    slideButton?: ButtonInput
 }

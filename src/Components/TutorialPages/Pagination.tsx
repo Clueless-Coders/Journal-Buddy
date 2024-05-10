@@ -2,9 +2,36 @@
 
 import React from 'react';
 import { Inter_400Regular, useFonts } from '@expo-google-fonts/inter';
-import { View, Text, StyleSheet, ScrollView, SafeAreaView, Platform, StatusBar, FlatList, Pressable} from 'react-native';
+import { View, Text, Animated, StyleSheet, ScrollView, SafeAreaView, Platform, StatusBar, FlatList, Pressable, Dimensions} from 'react-native';
+import { dot } from 'node:test/reporters';
 
-export default function SliderPage({ navigation }: any) {
+const {width} = Dimensions.get('screen')
+
+const Pagination = ({data, /*scrollX,*/ index}: any) => {
+    return(
+    <SafeAreaView style={styles.content}>
+            {data.map((_ : any, idx : any) => {
+            const inputRange = [(idx - 1) * width, idx * width, (idx + 1) * width];
+                /*const dotWidth = scrollX.interpolate({
+                    inputRange,
+                    outputRange: [12, 30, 12],
+                    extrapolate: 'clamp',
+                })
+                const opacity = scrollX.interpolate({
+                    inputRange,
+                    outputRange: [0.2, 1, 0.2],
+                    extrapolate: 'clamp',
+                })*/
+                return <Animated.View key={idx.toString} style=
+            {[styles.dot, {},
+                idx === index && styles.dotActive
+            ]} />;
+        })}
+    </SafeAreaView>
+    );
+};
+
+export default Pagination/*({ navigation }: any) {
     
 
     const [fontsLoaded] = useFonts({Inter_400Regular});
@@ -13,9 +40,22 @@ export default function SliderPage({ navigation }: any) {
 
         </SafeAreaView>
     );
-}
+}*/
 
 const styles = StyleSheet.create({
+    
+    dot: {
+        width: 12,
+        height: 12,
+        borderRadius: 6,
+        backgroundColor: '#ccc',
+        marginHorizontal: 3
+    },
+    
+    dotActive: {
+        backgroundColor: '#000',
+    },
+
     wrapper: {
         flex: 1
     },
@@ -34,7 +74,12 @@ const styles = StyleSheet.create({
 
     },
     content: {
-        
+        position: 'absolute',
+        bottom: 35,
+        flexDirection: 'row',
+            width: '100%', 
+        alignItems: 'center',
+        justifyContent: 'center',
     }
 }
 )

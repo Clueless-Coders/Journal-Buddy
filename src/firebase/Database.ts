@@ -1,4 +1,4 @@
-import { get, set, child, ref, getDatabase, push } from 'firebase/database';
+import { get, set, child, ref, getDatabase, push, remove } from 'firebase/database';
 import { createUserWithEmailAndPassword, getAuth, signInWithEmailAndPassword } from 'firebase/auth';
 import { UTCMidnight,isSameUTCDay } from '../Components/times';
 
@@ -176,6 +176,16 @@ export async function addHabitTime(habit: Habit, timestamp: number){
     ///push(child(ref(db), `/habits/${habitID}/timesCompleted`), Date.now());
 }
 
+export async function removeHabitTime(timeKey: string, UTCDate: number, habitID: string){
+    const auth = getAuth();
+    const db = getDatabase();
+    if(auth.currentUser == undefined) {
+        return;
+    }
+
+    await remove(ref(db, `habits/${habitID}/timesCompleted/${UTCDate}/${timeKey}`));
+}
+
 //Queries the database for all the journals created by this user
 export async function getJournalsByUserID(userID: string): Promise<Journal[]>{
     //Grabs all the Journal data references under the user's profile
@@ -303,4 +313,36 @@ export function signup (email: string, password: string) {
     createUserWithEmailAndPassword(getAuth(), email, password).then((userCredential) => {
         createUser(userCredential.user?.uid)
     });
+}
+
+export async function isFirstTimeLogin(): Promise<boolean> {
+    const db = getDatabase();
+    const auth = getAuth();
+
+    if(auth.currentUser == undefined || auth. currentUser == null){
+        return false;
+    }
+
+    const value = await get(ref(db, `users/${auth.currentUser.uid}/firstSignIn`));
+    if(value.exists()){
+        console.log(value.val());
+        return value.val();
+    }
+
+   return true;
+}
+
+export async function toggleFirstTimeLogin(){
+    const db = getDatabase();
+    const auth = getAuth();
+
+    if(auth.currentUser == undefined || auth. currentUser == null){
+        return false;
+    }
+
+    const value = await get(ref(db, `users/${auth.currentUser.uid}/firstSignIn`));
+    if(value.exists())
+        await set(ref(db, `users/${auth.currentUser.uid}/firstSignIn`), !value.val());
+    else
+        await set(ref(db, `users/${auth.currentUser.uid}/firstSignIn`), true);
 }

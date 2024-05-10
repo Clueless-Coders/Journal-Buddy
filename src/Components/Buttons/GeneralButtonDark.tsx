@@ -26,14 +26,14 @@ export default function GeneralButtonDark(props: ButtonInput){
 
 const styles = StyleSheet.create({
     containerStyleDefault: {
+        backgroundColor: "#8DB1F7", //changed button color from #8EA8C3,
         borderRadius: 5,
-        width: '100%',
+        width: 200,
         height: 50,
         flexDirection: 'row',
         alignItems: 'center',
-        margin: 10,
-        backgroundColor: "#8DB1F7", 
-        justifyContent: 'space-evenly'
+        justifyContent: 'space-evenly',
+
     },
     textStyleDefault: {
         fontSize: 20

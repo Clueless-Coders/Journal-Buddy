@@ -16,7 +16,9 @@ import { initializeApp } from "firebase/app";
 import { initializeAuth, getReactNativePersistence, getAuth, onAuthStateChanged } from 'firebase/auth';
 import ReactNativeAsyncStorage from '@react-native-async-storage/async-storage';
 import { firebaseConfig } from './Keys';
-import { Daily, getDaily } from './src/firebase/Database';
+import Slider from './src/Components/TutorialPages/Slider';
+import { Daily, getDaily, isFirstTimeLogin } from './src/firebase/Database';
+import { getDatabase, onValue, ref } from 'firebase/database';
 
 export const DailyContext = React.createContext({} as Daily);
 
@@ -89,6 +91,26 @@ function HabitStack() {
   )
 }
 
+
+function TutorialStack() {
+  return(
+    <Stack.Navigator screenOptions={{headerShown: false}}>
+      <Stack.Screen name="Tutorial" component={Slider} />
+    </Stack.Navigator>
+  )
+}
+
+function DrawerGroup() {
+  return (
+    <Drawer.Navigator initialRouteName='HomeStack' >
+      <Stack.Screen name="Home" component={HomeMenu} />
+      <Stack.Screen name="Journals" component={JournalStack} />
+      <Stack.Screen name="Habits" component={HabitPage} />
+      <Stack.Screen name="Create Habit" component={Create} />
+    </Drawer.Navigator>
+  );
+}
+
 function AuthenticationStack() {
   return (
     <Stack.Navigator initialRouteName='Login'>
@@ -101,15 +123,29 @@ function AuthenticationStack() {
 
 function AuthLogic() {
   let [loggedIn, setLoggedIn] = React.useState(getAuth().currentUser !== null);
+  let [firstTime, setFirstTime] = React.useState(true);
 
   React.useEffect(() => {
+
     onAuthStateChanged(getAuth(), (user) => {
       setLoggedIn(user !== null);
     });
   }, []);
+
+  React.useEffect(() => {
+    async function checkFirstTime() {
+      setFirstTime(await isFirstTimeLogin());
+    }
+    onValue(ref(getDatabase(), `users/${getAuth().currentUser?.uid}/firstSignIn`), () =>{
+      checkFirstTime();
+    });
+  }, [loggedIn])
   
-  return !loggedIn ? <AuthenticationStack /> : <TabGroup />
+  
+  return !loggedIn ? <AuthenticationStack /> : firstTime ? <TutorialStack /> : <TabGroup />;
 }
+
+
 
 export default function App() {
   const app = initializeApp(firebaseConfig);
