@@ -4,10 +4,11 @@ import GeneralButtonDark from '../Buttons/GeneralButtonDark';
 import { getAuth, signOut } from 'firebase/auth';
 import CheckboxButton from '../Buttons/CheckboxButton';
 import { getDatabase, onValue, ref } from 'firebase/database'
-import { Habit, addHabitTime, getHabitsByCurrentUser } from '../../firebase/Database';
+import { Habit, addHabitTime, removeHabitTime, getHabitsByCurrentUser } from '../../firebase/Database';
 import { time } from 'console';
 import { DailyContext } from '../../../App';
 import { UTCToTime, UTCMidnight, isSameUTCDay, daysOfWeek} from '../times';
+import { it } from 'node:test';
 //import { FlatList } from 'react-native-gesture-handler';
 // import { getapi } from '../../Quotes';
 
@@ -29,8 +30,9 @@ export default function HomeMenu({ navigation }: any) {
                 if(!ignore){
                     let todaysHabits: Habit[] = [];
                     let currentDay:string = daysOfWeek[new Date().getDay()];
+                    console.log(currentDay);
                     habits.forEach(function (i) {
-                        if(i.timesToComplete[currentDay] !== undefined){
+                        if(i.timesToComplete !== undefined && i.timesToComplete[currentDay] !== undefined){
                             todaysHabits.push(i);
                         }
                         
@@ -50,14 +52,16 @@ export default function HomeMenu({ navigation }: any) {
 
 
     
+
     
     function HabitIsDoneCurrently(habit : Habit): boolean {
         if(habit.lastTimeComplete === undefined){
             return false;
         }
+
+        //find the timeSlots the timestamp is in between
         let timestamp:number = Date.now();
         let date:Date = new Date(timestamp);
-
         let timeSlots: number[] = Object.values(habit.timesToComplete[daysOfWeek[date.getDay()]]).sort();
 
         let i: number = 0;
@@ -65,8 +69,10 @@ export default function HomeMenu({ navigation }: any) {
         while(timeSlots[i] < timeOfDayUTC){
             i++;
         }
-        //not allowed to do habit yet
+
+        //not allowed to do habit yet if it's before the first allowed time
         if(i === 0){
+            console.log("not yet");
             return false;
         }
 
@@ -78,31 +84,81 @@ export default function HomeMenu({ navigation }: any) {
     //timestamp: UTC timestamp (whether current time or on calender a "fake" timestamp of a timeslot the habit checkbox represents)
     //2 UTC bounds to check for a time between beginning and end. *remember to convert time of day to full UTC
     function HabitTimeslotDone(habit: Habit, timestamp: number, earliestCanComplete: number, latestCanComplete: number):boolean{
+        let timeKey = searchHabitTime(habit, timestamp, earliestCanComplete, latestCanComplete);
+        return timeKey !== undefined ? true : false;
+        // if(habit.timesCompleted === undefined){
+        //     return false;
+        // }
+        // let datekey : string = UTCMidnight(timestamp) + '';
+
+        // if(habit.timesCompleted[datekey] !== undefined){
+        //     let times: number[] = Object.values(habit.timesCompleted[datekey]);
+        //     //to ensure it's all sorted
+        //     times = times.sort();
+        //     let i: number = 0;
+        //     //could do binary search ideally later but nah :3
+        //     //find first time slot that is at or after earliest time you can complete the habit
+        //     while(times[i] < earliestCanComplete){
+        //         i++;
+        //     }
+
+        //     //no slot found :(
+        //     if(i === times.length){
+        //         return false;
+        //     } else {
+        //         return (times[i] < latestCanComplete);
+        //     }
+        // } else {
+        //     return false;
+        // }
+    }
+
+    function searchHabitTime(habit: Habit, timestamp: number, earliestCanComplete: number, latestCanComplete: number):string|undefined{
         if(habit.timesCompleted === undefined){
-            return false;
+            return undefined;
         }
         let datekey : string = UTCMidnight(timestamp) + '';
 
         if(habit.timesCompleted[datekey] !== undefined){
-            let times: number[] = Object.values(habit.timesCompleted[datekey]);
-            //to ensure it's all sorted
-            times = times.sort();
-            let i: number = 0;
-            //could do binary search ideally later but nah :3
-            //find first time slot that is at or after earliest time you can complete the habit
-            while(times[i] < earliestCanComplete){
-                i++;
+            
+            // let objects = Object.entries(habit.timesCompleted);
+            let times = habit.timesCompleted[datekey];
+            for (let key in times) {
+                let value : number = times[key];
+                if (value >= earliestCanComplete && value < latestCanComplete) {
+                    return key; // Return the key if value is within the range
+                }
             }
-
-            //no slot found :(
-            if(i === times.length){
-                return false;
-            } else {
-                return (times[i] < latestCanComplete);
-            }
+            return undefined;
         } else {
-            return false;
+            return undefined;
         }
+    }
+
+    function getRemoveKey(habit: Habit, timestamp: number){
+        if(habit.lastTimeComplete === undefined){
+            console.log("Error with removing habit. No latest time log found");
+            return;
+        }
+        //find the timeSlots the timestamp is in between
+        
+        let date:Date = new Date(timestamp);
+        let timeSlots: number[] = Object.values(habit.timesToComplete[daysOfWeek[date.getDay()]]).sort();
+        
+        let i: number = 0;
+        let timeOfDayUTC:number = UTCToTime(timestamp);
+        while(timeSlots[i] < timeOfDayUTC){
+            i++;
+        }
+
+        //not allowed to do habit yet if it's before the first allowed time
+        if(i === 0){
+            console.log("Premature removal");
+            return;
+        }
+        let dateKey = searchHabitTime(habit, timestamp, i - 1, (i === timeSlots.length) ? 86399999 + UTCMidnight(timestamp): timeSlots[i] + UTCMidnight(timestamp));
+        
+        return dateKey;
     }
     
 
@@ -133,15 +189,24 @@ export default function HomeMenu({ navigation }: any) {
                             return <CheckboxButton  onPress={() => {
                                     if(HabitIsDoneCurrently(item)){
                                         console.log("Habit is done today, switch to not done");
+                                        let timestamp:number = Date.now();
+                                        let key = getRemoveKey(item, timestamp);
+                                        if(key !== undefined){
+                                            removeHabitTime(item, key, UTCMidnight(timestamp), timestamp);
+                                        } else {
+                                            console.log("No worky :(");
+                                        }
                                         //uncomment later when you have habiti time removal done
                                         //item.lastTimeComplete = undefined;
                                         //add database logic later :3
                                     } else {
                                         console.log("habit was not done, changing to completed");
-                                        //item.daysCompleted?.pop();w
-                                        addHabitTime(item);
-                                    }}} buttonText={(item.uid === undefined)? "Brush teeth" : item.title} containerStyle={styles.checkButton} checked = {HabitIsDoneCurrently(item)} key = {index + ""}/>;
-                            }) : <Text>No habits made.</Text>
+                                        let timestamp: number = Date.now();
+                                        
+                                        addHabitTime(item, timestamp);
+                                        
+                                    }}} buttonText={(item.uid === undefined)? ":c" : item.title} containerStyle={styles.checkButton} checked = {HabitIsDoneCurrently(item)} key = {index + ""}/>;
+                            }) : <Text>:c</Text>
                         }
                     </View>
 

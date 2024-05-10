@@ -26,4 +26,5 @@ export type Slide = {
     id: number,
     ImageLocation: any,
     slideButton?: ButtonInput
+    SlideButton?: ButtonInput
 }
