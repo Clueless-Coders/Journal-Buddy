@@ -1,5 +1,3 @@
-import { Button } from "react-native"
-
 export interface ButtonInput {
     buttonText: string,
     onPress: () => void,
