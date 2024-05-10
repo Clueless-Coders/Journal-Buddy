@@ -1,4 +1,4 @@
-import { get, set, child, ref, getDatabase, push } from 'firebase/database';
+import { get, set, child, ref, getDatabase, push, remove } from 'firebase/database';
 import { createUserWithEmailAndPassword, getAuth, signInWithEmailAndPassword } from 'firebase/auth';
 import { UTCMidnight,isSameUTCDay } from '../Components/times';
 
@@ -28,15 +28,6 @@ export type Journal = {
 };
 
 export type Habit = {
-    daysToComplete: {
-        sunday: boolean,
-        monday: boolean,
-        tuesday: boolean, 
-        wednesday: boolean,
-        thursday: boolean,
-        friday: boolean,
-        saturday: boolean
-    },
     timesToComplete: {
         [index: string]: {
             [index: string]: number
@@ -44,8 +35,7 @@ export type Habit = {
     }, //can have multiple times of day to complete the task
     title: string,
     description?: string
-    uid: string //unique identifier for this specific habit
-    user: string, //unique ident for habit owner user
+    uid?: string //unique identifier for this specific habit
     endDate?: number, //Unix timestamp
     lastTimeComplete?: number,
     timesCompleted?: {
@@ -54,6 +44,7 @@ export type Habit = {
         } 
     }
 };
+
 
 export type Daily = {
     prompt: string,
@@ -162,8 +153,9 @@ export function updateJournal(journalID: string, newJournal: Journal) {
     set(ref(db, `/journals/${journalID}`), newJournal);
 }
 
-export async function addHabitTime(habit: Habit, timestamp: number){
+export async function addHabitTime(habit: Habit){
     const db = getDatabase();
+    const timestamp = Date.now();
     let dateKey: number = UTCMidnight(timestamp);
 
     if(habit === undefined){
@@ -171,7 +163,7 @@ export async function addHabitTime(habit: Habit, timestamp: number){
         return;
     }
     
-    await push(child(ref(db), `/habits/${habit.uid}/timesCompleted/${dateKey}`), timestamp);
+    await set(child(ref(db), `/habits/${habit.uid}/timesCompleted/${dateKey}`), timestamp);
 
     //if there is no timestamp currently in lastTimeComplete or if the new timestamp is 
     if(habit.lastTimeComplete === undefined || habit.lastTimeComplete < timestamp){
@@ -182,6 +174,16 @@ export async function addHabitTime(habit: Habit, timestamp: number){
     //set(ref(db, `/users/${user}/lastJournalEntryTime`), Date.now());
     //obtains the last time the user has instantiated a new Journal entry in Unix time (stored in user profile)
     ///push(child(ref(db), `/habits/${habitID}/timesCompleted`), Date.now());
+}
+
+export async function removeHabitTime(timeKey: string, UTCDate: number, habitID: string){
+    const auth = getAuth();
+    const db = getDatabase();
+    if(auth.currentUser == undefined) {
+        return;
+    }
+
+    await remove(ref(db, `habits/${habitID}/timesCompleted/${UTCDate}/${timeKey}`));
 }
 
 //Queries the database for all the journals created by this user
@@ -311,4 +313,36 @@ export function signup (email: string, password: string) {
     createUserWithEmailAndPassword(getAuth(), email, password).then((userCredential) => {
         createUser(userCredential.user?.uid)
     });
+}
+
+export async function isFirstTimeLogin(): Promise<boolean> {
+    const db = getDatabase();
+    const auth = getAuth();
+
+    if(auth.currentUser == undefined || auth. currentUser == null){
+        return false;
+    }
+
+    const value = await get(ref(db, `users/${auth.currentUser.uid}/firstSignIn`));
+    if(value.exists()){
+        console.log(value.val());
+        return value.val();
+    }
+
+   return true;
+}
+
+export async function toggleFirstTimeLogin(){
+    const db = getDatabase();
+    const auth = getAuth();
+
+    if(auth.currentUser == undefined || auth. currentUser == null){
+        return false;
+    }
+
+    const value = await get(ref(db, `users/${auth.currentUser.uid}/firstSignIn`));
+    if(value.exists())
+        await set(ref(db, `users/${auth.currentUser.uid}/firstSignIn`), !value.val());
+    else
+        await set(ref(db, `users/${auth.currentUser.uid}/firstSignIn`), true);
 }

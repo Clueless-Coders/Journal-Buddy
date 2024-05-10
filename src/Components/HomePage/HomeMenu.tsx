@@ -5,8 +5,8 @@ import { getAuth, signOut } from 'firebase/auth';
 import CheckboxButton from '../Buttons/CheckboxButton';
 import { getDatabase, onValue, ref } from 'firebase/database'
 import { Habit, addHabitTime, getHabitsByCurrentUser } from '../../firebase/Database';
-import { DailyContext } from '../../../App';
 import { time } from 'console';
+import { DailyContext } from '../../../App';
 import { UTCToTime, UTCMidnight, isSameUTCDay, daysOfWeek} from '../times';
 //import { FlatList } from 'react-native-gesture-handler';
 // import { getapi } from '../../Quotes';
@@ -138,11 +138,10 @@ export default function HomeMenu({ navigation }: any) {
                                         //add database logic later :3
                                     } else {
                                         console.log("habit was not done, changing to completed");
-                                        let timestamp: number = Date.now();
-                                        item.lastTimeComplete = timestamp;
-                                        addHabitTime(item, timestamp);
-                                    }}} buttonText={(item.uid === undefined)? ":c" : item.title} containerStyle={styles.checkButton} checked = {HabitIsDoneCurrently(item)} key = {index + ""}/>;
-                            }) : <Text>:c</Text>
+                                        //item.daysCompleted?.pop();w
+                                        addHabitTime(item);
+                                    }}} buttonText={(item.uid === undefined)? "Brush teeth" : item.title} containerStyle={styles.checkButton} checked = {HabitIsDoneCurrently(item)} key = {index + ""}/>;
+                            }) : <Text>No habits made.</Text>
                         }
                     </View>
 

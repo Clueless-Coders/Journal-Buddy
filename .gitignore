@@ -7,4 +7,4 @@ node_modules
 /%ProgramData%
 /android
 /Keys.ts
-/google-services.json
+google-services.json
