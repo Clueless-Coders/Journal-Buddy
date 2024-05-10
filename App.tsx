@@ -83,7 +83,7 @@ function JournalStack() {
 function HabitStack() {
   return(
     <Stack.Navigator>
-      <Stack.Screen name="Habits" component={HabitPage} />
+      <Stack.Screen name="Habit Page" component={HabitPage} />
       <Stack.Screen name="Create Habit" component={Create} />
     </Stack.Navigator>
   )
