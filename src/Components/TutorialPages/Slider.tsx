@@ -14,7 +14,7 @@ import GeneralButtonDark from '../Buttons/GeneralButtonDark';
 
 let Slides: Slide[] = [
     {
-        subtitle: 'Welcome to Journal Buddy!',
+        subtitle: 'Welcome to Journal Buddy! ------>',
         id: 1,
         ImageLocation: require('../../../assets/cat.png'),
     },
