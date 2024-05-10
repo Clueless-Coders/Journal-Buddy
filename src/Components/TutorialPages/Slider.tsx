@@ -10,6 +10,7 @@ import type { ViewStyle } from 'react-native';
 import { ButtonInput } from '../../Types'
 import GeneralButtonLight from '../Buttons/GeneralButtonLight';
 import { toggleFirstTimeLogin } from '../../firebase/Database';
+import GeneralButtonDark from '../Buttons/GeneralButtonDark';
 
 let Slides: Slide[] = [
     {
@@ -35,7 +36,7 @@ let Slides: Slide[] = [
     {
         subtitle: 'And track your habits in your calendar!',
         id: 5,
-        ImageLocation: require('../../../assets/cat.png'),
+        ImageLocation: require("./CalendarPreview.jpg"),
         /*slideButton: {
             buttonText: 'Home',
             onPress: () => {
@@ -82,7 +83,7 @@ export default function Slider({ navigation }: any) {
     }).current
 
     return (
-        <View>
+        <View style={styles.wrapper}>
 
             <FlatList
                 data={Slides}
@@ -97,7 +98,7 @@ export default function Slider({ navigation }: any) {
                 viewabilityConfig={viewabilityConfig}
             />
             <Pagination data={Slides} /*scrollX={scrollX}*/ index={index} />
-            <GeneralButtonLight
+            <GeneralButtonDark
                 buttonText={'Get Journaling!'}
                 onPress={toggleFirstTimeLogin}
                 containerStyle={styles.button}
@@ -110,7 +111,8 @@ export default function Slider({ navigation }: any) {
 
 const styles = StyleSheet.create({
     wrapper: {
-        flex: 1
+        flex: 1,
+        backgroundColor: "#d5e0f7"
     },
     header: {
         fontSize: 30,
