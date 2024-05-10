@@ -17,9 +17,6 @@ import { initializeAuth, getReactNativePersistence, getAuth, onAuthStateChanged 
 import ReactNativeAsyncStorage from '@react-native-async-storage/async-storage';
 import { firebaseConfig } from './Keys';
 import { Daily, getDaily } from './src/firebase/Database';
-import { Ionicons } from '@expo/vector-icons';
-
-
 
 export const DailyContext = React.createContext({} as Daily);
 
@@ -50,17 +47,17 @@ function TabGroup() {
       <Tab.Navigator
         screenOptions={({ route }) => ({
           tabBarIcon: (color: string) => {
-            let iconName = "home";
+            let iconName;
             if (route.name === "Home")
               iconName = "home";
             else if (route.name === "Journals")
               iconName = "book";
             else if (route.name === "Habits")
-              iconName = "checkmark-done-outline";
+              iconName = "check";
             else if (route.name === "Calendar")
               iconName = "calendar";
 
-            return (<Ionicons name={iconName} size={20} color={color} />);
+            return (<FontAwesome5 name={iconName} size={20} color={color} />);
           },
           headerShown: false
         })}
@@ -86,7 +83,7 @@ function JournalStack() {
 function HabitStack() {
   return(
     <Stack.Navigator>
-      <Stack.Screen name="Habits List" component={HabitPage} />
+      <Stack.Screen name="Habit Page" component={HabitPage} />
       <Stack.Screen name="Create Habit" component={Create} />
     </Stack.Navigator>
   )
