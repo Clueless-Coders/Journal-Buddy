@@ -22,7 +22,6 @@ export const DailyContext = React.createContext({} as Daily);
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
-const Drawer = createDrawerNavigator();
 
 function TabGroup() {
   const [daily, setDaily] = React.useState(
@@ -53,15 +52,19 @@ function TabGroup() {
               iconName = "home";
             else if (route.name === "Journals")
               iconName = "book";
+            else if (route.name === "Habits")
+              iconName = "check";
             else if (route.name === "Calendar")
               iconName = "calendar";
 
             return (<FontAwesome5 name={iconName} size={20} color={color} />);
-          }
+          },
+          headerShown: false
         })}
       >
-        <Tab.Screen name="Home" component={HomeStack} options={{ headerShown: false }} />
+        <Tab.Screen name="Home" component={HomeMenu} options={{ headerShown: false }} />
         <Tab.Screen name="Journals" component={JournalStack} />
+        <Tab.Screen name="Habits" component={HabitStack} />
         <Tab.Screen name="Calendar" component={HomeMenu} />
       </Tab.Navigator>
     </DailyContext.Provider>
@@ -70,30 +73,20 @@ function TabGroup() {
 
 function JournalStack() {
   return (
-    <Stack.Navigator screenOptions={{ headerShown: false }}>
-      <Stack.Screen name="JournalEntries" component={JournalEntries} />
+    <Stack.Navigator>
+      <Stack.Screen name="Entries" component={JournalEntries} />
       <Stack.Screen name="Journal" component={DailyPrompt} />
     </Stack.Navigator>
   )
 }
 
-function HomeStack() {
-  return (
-    <Stack.Navigator screenOptions={{ headerShown: false }}>
-      <Stack.Screen name="Drawer" component={DrawerGroup} />
-    </Stack.Navigator>
-  )
-}
-
-function DrawerGroup() {
-  return (
-    <Drawer.Navigator initialRouteName='HomeStack' >
-      <Stack.Screen name="Home" component={HomeMenu} />
-      <Stack.Screen name="Journals" component={JournalStack} />
+function HabitStack() {
+  return(
+    <Stack.Navigator>
       <Stack.Screen name="Habits" component={HabitPage} />
       <Stack.Screen name="Create Habit" component={Create} />
-    </Drawer.Navigator>
-  );
+    </Stack.Navigator>
+  )
 }
 
 function AuthenticationStack() {

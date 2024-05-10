@@ -1,9 +1,26 @@
 import React, { useContext } from 'react';
 import {Image, View, Text, StyleSheet, TextInput, ScrollView, SafeAreaView, Platform, StatusBar, TouchableWithoutFeedback, Keyboard, KeyboardAvoidingView, TouchableHighlight, Pressable } from 'react-native';
-import { Ionicons } from "@expo/vector-icons";
-import GeneralButtonDark from '../Buttons/GeneralButtonDark';
+import { Ionicons } from '@expo/vector-icons';
+import { getDatabase, onValue, ref } from 'firebase/database'
+import { Habit, getHabitsByCurrentUser } from '../../firebase/Database';
+import { getAuth } from 'firebase/auth';
+import GeneralButtonLight from '../Buttons/GeneralButtonLight';
 
 export default function HabitPage({navigation}: any) {
+    let [ data, setData ] = React.useState([] as Habit[]);
+
+    React.useEffect(() => {
+        async function getHabits(){
+            const habits = await getHabitsByCurrentUser();
+            setData(habits);
+            console.log(habits);
+        }
+        
+        onValue(ref(getDatabase(), `users/${getAuth().currentUser?.uid}/habits`), async () =>{
+            getHabits();
+        })
+    }, []);
+
     return(
         <SafeAreaView style={styles.overlord}>
         <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : "height"}>
@@ -11,28 +28,25 @@ export default function HabitPage({navigation}: any) {
         <View>
         <ScrollView>
             <View style={styles.container}>
-            <Text style={styles.header}>
-                Habits
-            </Text>
-            <View style={styles.div} />
-            <View style={styles.row}>
+            
+            { data.length > 0 ? data.reverse().map((item, index) => {
+                    return <GeneralButtonLight  
+                        key={index} 
+                        onPress={() => { null }} 
+                        buttonText={item.title} 
+                        containerStyle={styles.containerStyle}
+                        textStyle={{ color: '050B24' }}
+                    />;
+                }) : <Text>You can view all your habits here!</Text>}
+
+            <View style={styles.top}>
             <Pressable
                 style={({ pressed }) => [
-                    styles.press,
+                    styles.plus,
                     {opacity: pressed ? 0.5 : 1 } 
                 ]}
                 onPress={() => navigation.navigate("Create Habit")}>
-                <Text style={styles.textStyle}>
-                        Today
-                </Text>
-            </Pressable>
-            <Pressable
-                style={({ pressed }) => [
-                    styles.press,
-                    {opacity: pressed ? 0.5 : 1 } 
-                ]}
-                onPress={() => navigation.navigate("Create Habit")}>
-                <Ionicons name="add" size={16} color="white" />
+                <Ionicons name="add" size={15} color="white" />
             </Pressable>
             </View>
         </View>
@@ -48,15 +62,14 @@ const styles = StyleSheet.create( {
     container: {
         alignItems: 'center'
     },
-    div: {
-        width: "90%",
-        height: 1,
-        backgroundColor: 'gray',
-        marginBottom: '1%'
+    containerStyle: {
+        width: '90%',
+        margin: 5
     },
-    row: {
+    top: {
         flexDirection: 'row',
-        justifyContent: 'space-between',
+        alignItems: 'flex-end',
+        justifyContent: 'flex-end',
         width: '100%',
         paddingHorizontal: 25
     },
@@ -66,13 +79,13 @@ const styles = StyleSheet.create( {
         paddingHorizontal: 10,
         paddingVertical: 10,
     },
-    header: {
-        marginTop: '1%',
-        marginBottom: '1%',
-        fontSize: 30,
-        fontWeight: 'bold',
-        color: '#050B24',
-        alignItems: 'center'
+    plus: {
+        backgroundColor: "#8DB1F7",
+        borderRadius: 20,
+        width: 35,
+        height: 35,
+        alignItems: 'center',
+        justifyContent: 'center',
     },
     textStyle: {
         alignItems: 'center',

@@ -33,7 +33,7 @@ export default function DailyPrompt({ navigation, route }: any) {
             });
         }
         setJournal({} as Journal);
-        navigation.navigate('JournalEntries');
+        navigation.navigate('Entries');
     }
 
     React.useEffect(() => {

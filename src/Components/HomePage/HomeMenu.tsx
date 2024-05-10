@@ -220,7 +220,7 @@ const styles = StyleSheet.create({
         alignItems:'center'
     },
     overlord: {
-        paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0,
+        paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight + 40 : 0,
         backgroundColor: 'white',
         flex: 1,
     }
