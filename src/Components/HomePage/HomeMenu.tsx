@@ -36,7 +36,7 @@ export default function HomeMenu({ navigation }: any) {
                         
                     });
                     console.log("finished processing");
-                    console.log(todaysHabits);
+                    //console.log(todaysHabits);
                     setData(todaysHabits);
                 }
             });

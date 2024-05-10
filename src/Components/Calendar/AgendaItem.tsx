@@ -1,22 +1,18 @@
-import isEmpty from 'lodash/isEmpty';
-import React, {memo, useCallback} from 'react';
-import {StyleSheet, Alert, View, Text, TouchableOpacity, Button} from 'react-native';
-import { Habit } from '../../firebase/Database';
+import React, {useCallback} from 'react';
+import {StyleSheet, Alert, View, Text, TouchableOpacity} from 'react-native';
 import CheckboxButton from '../Buttons/CheckboxButton';
+import { AgendaItemData } from './CalendarPage';
 
-const yes = 'green';
-const no = "red";
+//Props. Props.
+interface Props {
+  items: AgendaItemData;
+}
 
-// export interface AgendaItemData {
-//   date: Date,
-//   data: Habit[],
-// }
-
-//actual item; change props : ItemProps to props : Habit
-const AgendaItem = (props: any) => {
+const AgendaItem = (props: Props) =>  {
+  //General vars, isHabitDone-esque logic needs to be moved to the database for "saving" user habit done data.
   let isHabitDone = false;
-  let item = props;
-
+  let item = props.items;
+  
   //Show a popup when you click the "see more" button
   const buttonPressed = useCallback(() => {
     isHabitDone = !isHabitDone;
@@ -26,25 +22,26 @@ const AgendaItem = (props: any) => {
   //Same thing for getting info for a particular habit
   const itemPressed = useCallback(() => {
     let string = isHabitDone ? "Habit: Done!" : "Habit: Not done!";
-    Alert.alert(item.title, string + "\nDuration: " + item.duration);
+    Alert.alert(item.data.description == null ? "null" : item.data.description, string);
+   // +"\nDuration: " + item.data[0].description == null ? "epic" : item.data[0].description
   }, []);
 
   //Return something indicating a empty list of habit if no habits made
-  if (isEmpty(item)) {
+  if (item.data == null) {
     return (
       <View style={styles.emptyItem}>
         <Text style={styles.emptyItemText}>No Events Planned Today</Text>
       </View>
     );
   }
-
   //The actual item drawing thing
+  //currently broken since trying to implement Habit interfadce
   return (
     <TouchableOpacity onPress={itemPressed} style={styles.item} testID={'item'}>
       <View>
-          <Text style={styles.itemHourText}>{item.duration}</Text>
+          <Text style={styles.itemHourText}>{item.date}</Text>
       </View>
-      <Text style={styles.itemTitleText}>{item.title}</Text>
+      <Text style={styles.itemTitleText}>{item.data.title}</Text>
       <View style={styles.itemButtonContainer}>
           <CheckboxButton checked = {isHabitDone} onPress={buttonPressed} buttonText='Update Habit' containerStyle={styles.buttonStyle}></CheckboxButton>
       </View>
@@ -54,13 +51,16 @@ const AgendaItem = (props: any) => {
 
 export default AgendaItem;
 
+//Styles.. Styles.
 const styles = StyleSheet.create({
   item: {
+    flex: 1,
+    height: 20,
     padding: 20,
-    backgroundColor: 'white',
+    backgroundColor: 'grey',
     borderBottomWidth: 1,
     borderBottomColor: 'lightgrey',
-    flexDirection: 'row'
+    flexDirection: 'row',
   },
   itemHourText: {
     color: 'black'

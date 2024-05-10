@@ -28,15 +28,6 @@ export type Journal = {
 };
 
 export type Habit = {
-    daysToComplete: {
-        sunday: boolean,
-        monday: boolean,
-        tuesday: boolean, 
-        wednesday: boolean,
-        thursday: boolean,
-        friday: boolean,
-        saturday: boolean
-    },
     timesToComplete: {
         [index: string]: {
             [index: string]: number
@@ -224,7 +215,7 @@ export async function getHabitsByUserID(userID: string): Promise<Habit[]>{
             });
             //wait for the queries to complete, then return an array containing the Habits 
             Promise.all(promises).then((habits) => {
-                console.log(habits);
+                //console.log(habits);
                 resolve(habits);
             });
         } else{
