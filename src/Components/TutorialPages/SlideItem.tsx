@@ -1,5 +1,4 @@
 import React from 'react';
-import { Inter_400Regular, useFonts } from '@expo-google-fonts/inter';
 import {Dimensions, Image, View, Text, StyleSheet, ScrollView, SafeAreaView, Platform, StatusBar, FlatList, Pressable} from 'react-native';
 import { Slide } from '../../Types';
 
@@ -8,7 +7,7 @@ import { Slide } from '../../Types';
 //         ImageLocation: require('../../../assets/cat.png')
 const {width, height} = Dimensions.get('screen');
 
-const SlideItem =  ({subtitle,id, ImageLocation}: Slide) => {
+const SlideItem =  ({subtitle, id, ImageLocation}: Slide) => {
     return (
         <View style = {styles.container}>
             <Image source={ImageLocation}
@@ -27,26 +26,18 @@ const SlideItem =  ({subtitle,id, ImageLocation}: Slide) => {
 export default SlideItem;
 
 const styles = StyleSheet.create({
-    wrapper: {
-        flex: 1
-    },
     header: {
         fontSize: 30,
         // fontWeight: 'bold',
         color: '#050B24',
     },
-    overlord: {
-        paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0,
-        backgroundColor: 'white',
-        flex: 1,
-        fontFamily: "Inter_400Regular"
-    },
     image: {
-        width:'100%',
+        width:'95%',
         flex: 0.6,
     },
     content: {
         alignItems: 'center',
+        padding: '5%',
         flex: 0.4,
 
     },
@@ -54,7 +45,7 @@ const styles = StyleSheet.create({
         width: width,
         height: height,
         alignItems: 'center',
-
+        paddingTop: Platform.OS == "android" ? StatusBar.currentHeight : 0,
     },
     text: {
         fontSize: 18,

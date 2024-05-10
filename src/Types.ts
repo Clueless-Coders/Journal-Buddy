@@ -1,5 +1,3 @@
-import { Button } from "react-native"
-
 export interface ButtonInput {
     buttonText: string,
     onPress: () => void,
@@ -19,16 +17,12 @@ export type Quotes = {
     a: string
 }
 
-export type Habit = {
-    task: string,
-    isDone: boolean,
-    id: string,
-    index?: Number
-}
+
 
 export type Slide = {
     subtitle: string,
     id: number,
     ImageLocation: any,
+    slideButton?: ButtonInput
     SlideButton?: ButtonInput
 }

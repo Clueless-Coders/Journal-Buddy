@@ -5,8 +5,8 @@ import { getAuth, signOut } from 'firebase/auth';
 import CheckboxButton from '../Buttons/CheckboxButton';
 import { getDatabase, onValue, ref } from 'firebase/database'
 import { Habit, addHabitTime, removeHabitTime, getHabitsByCurrentUser } from '../../firebase/Database';
-import { DailyContext } from '../../../App';
 import { time } from 'console';
+import { DailyContext } from '../../../App';
 import { UTCToTime, UTCMidnight, isSameUTCDay, daysOfWeek} from '../times';
 import { it } from 'node:test';
 //import { FlatList } from 'react-native-gesture-handler';
