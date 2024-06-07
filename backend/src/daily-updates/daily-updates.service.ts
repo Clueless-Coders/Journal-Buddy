@@ -23,6 +23,7 @@ export class DailyUpdatesService implements OnModuleInit {
       apiKey: this.configService.get('OPEN_AI_KEY'),
     };
     this.openai = new OpenAI(openAiKey);
+    console.log('Initialized');
   }
 
   @Cron(CronExpression.EVERY_DAY_AT_1AM, {

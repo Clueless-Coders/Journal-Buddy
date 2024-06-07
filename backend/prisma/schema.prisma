@@ -24,22 +24,51 @@ model User {
   firstName String?
   lastName  String?
 
-  bookmarks Bookmark[]
+  habits   Habit[]
+  journals Journal[]
 
   @@map("users")
 }
 
-model Bookmark {
+model Habit {
   id        Int      @id @default(autoincrement())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   title       String
   description String?
-  link        String
+  startDate   DateTime
+  endDate     DateTime
 
   userId Int
   user   User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  @@map("bookmark")
+  @@map("habit")
+}
+
+model Journal {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  entry String
+
+  userID Int
+  user   User @relation(fields: [userID], references: [id], onDelete: Cascade)
+
+  @@map("journal")
+}
+
+model Daily {
+  createdAt DateTime @id @default(now())
+  prompt    String
+  quote     Quote?
+}
+
+model Quote {
+  createdOn DateTime @id
+  author    String
+  quote     String
+
+  daily Daily @relation(fields: [createdOn], references: [createdAt], onDelete: Cascade)
 }
