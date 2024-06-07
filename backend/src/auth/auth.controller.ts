@@ -6,7 +6,6 @@ import {
   ParseIntPipe,
   Post,
 } from '@nestjs/common';
-import { User } from '@prisma/client';
 import { AuthService } from './auth.service';
 import { AuthDto } from './dto';
 
