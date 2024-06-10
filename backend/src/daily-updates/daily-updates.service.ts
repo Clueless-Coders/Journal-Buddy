@@ -1,9 +1,18 @@
-import { Injectable, OnModuleInit } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  InternalServerErrorException,
+  NotFoundException,
+  OnModuleInit,
+} from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Cron, CronExpression } from '@nestjs/schedule';
-import { Quote } from '@prisma/client';
+import { Daily, Quote } from '@prisma/client';
 import OpenAI from 'openai';
 import { PrismaService } from 'src/prisma/prisma.service';
+import { DailyUpdatesDto } from './dto';
+import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
+import { InternalServerError } from 'openai/error';
 
 @Injectable()
 export class DailyUpdatesService implements OnModuleInit {
@@ -24,6 +33,7 @@ export class DailyUpdatesService implements OnModuleInit {
     };
     this.openai = new OpenAI(openAiKey);
     console.log('Initialized');
+    this.createDaily();
   }
 
   @Cron(CronExpression.EVERY_DAY_AT_1AM, {
@@ -44,6 +54,7 @@ export class DailyUpdatesService implements OnModuleInit {
       data: {
         prompt,
         createdAt: quote.createdOn,
+        dayCreated: quote.dayCreated,
       },
     });
 
@@ -59,10 +70,13 @@ export class DailyUpdatesService implements OnModuleInit {
     const resp = await fetch(this.quoteURL);
     const respJSON = await resp.json();
     console.log(respJSON);
+    const now = new Date();
+    now.setUTCHours(0, 0, 0, 0);
     const newQuote: Quote = {
       quote: respJSON[0].q,
       author: respJSON[0].a,
-      createdOn: new Date(),
+      dayCreated: now.toUTCString(),
+      createdOn: now,
     };
     return newQuote;
   }
@@ -84,5 +98,20 @@ export class DailyUpdatesService implements OnModuleInit {
       model: 'gpt-3.5-turbo',
     });
     return completion.choices[0].message.content;
+  }
+
+  async getCertainDay(day: Date): Promise<Daily> {
+    const data = await this.prismaService.daily.findFirst({
+      where: {
+        createdAt: day,
+      },
+    });
+    console.log(day);
+    console.log(data);
+
+    if (!data) {
+      throw new NotFoundException('No entry for this day');
+    }
+    return data;
   }
 }
