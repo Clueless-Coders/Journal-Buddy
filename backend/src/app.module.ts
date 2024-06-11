@@ -5,6 +5,7 @@ import { PrismaModule } from './prisma/prisma.module';
 import { ConfigModule } from '@nestjs/config';
 import { ScheduleModule } from '@nestjs/schedule';
 import { DailyUpdatesModule } from './daily-updates/daily-updates.module';
+import { GuardsModule } from './guards/guards.module';
 
 @Module({
   imports: [
@@ -12,6 +13,7 @@ import { DailyUpdatesModule } from './daily-updates/daily-updates.module';
     UserModule,
     PrismaModule,
     DailyUpdatesModule,
+    GuardsModule,
     ScheduleModule.forRoot(),
     ConfigModule.forRoot({
       isGlobal: true,
