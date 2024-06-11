@@ -1,5 +1,6 @@
 import {
   BadRequestException,
+  ConsoleLogger,
   Injectable,
   InternalServerErrorException,
   NotFoundException,
@@ -32,7 +33,6 @@ export class DailyUpdatesService implements OnModuleInit {
       apiKey: this.configService.get('OPEN_AI_KEY'),
     };
     this.openai = new OpenAI(openAiKey);
-    console.log('Initialized');
     this.createDaily();
   }
 
@@ -40,38 +40,48 @@ export class DailyUpdatesService implements OnModuleInit {
     name: 'CreateDaily',
   })
   async createDaily() {
-    console.log(new Date().toISOString() + ' updating daily data');
+    const now = new Date();
+    now.setUTCHours(0, 0, 0, 0);
+
+    console.log(now.toISOString() + ' updating daily data');
+
+    const latestDaily = await this.prismaService.daily.findFirst({
+      where: {
+        createdAt: now,
+      },
+    });
+
+    if (latestDaily) {
+      console.log('Daily already created today');
+      return;
+    }
+
     const quote = await this.getQuote();
-    console.log({
-      quote,
-    });
     const prompt = await this.getPrompt();
-    console.log({
-      prompt,
-    });
 
     await this.prismaService.daily.create({
       data: {
         prompt,
-        createdAt: quote.createdOn,
-        dayCreated: quote.dayCreated,
+        createdAt: now,
+        dayCreated: now.toUTCString(),
       },
     });
 
     await this.prismaService.quote.create({
       data: {
         ...quote,
+        dayCreated: now.toUTCString(),
+        createdOn: now,
       },
     });
-    console.log(await this.prismaService.daily.findFirst());
   }
 
   async getQuote() {
     const resp = await fetch(this.quoteURL);
     const respJSON = await resp.json();
-    console.log(respJSON);
     const now = new Date();
     now.setUTCHours(0, 0, 0, 0);
+
     const newQuote: Quote = {
       quote: respJSON[0].q,
       author: respJSON[0].a,
@@ -106,8 +116,6 @@ export class DailyUpdatesService implements OnModuleInit {
         createdAt: day,
       },
     });
-    console.log(day);
-    console.log(data);
 
     if (!data) {
       throw new NotFoundException('No entry for this day');
