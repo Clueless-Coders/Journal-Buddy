@@ -5,6 +5,7 @@ import * as argon from 'argon2';
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
+import { Role } from 'src/Types';
 
 @Injectable({})
 export class AuthService {
@@ -41,6 +42,7 @@ export class AuthService {
         data: {
           email: dto.email,
           hash: hash,
+          roles: [Role.user],
         },
       });
 

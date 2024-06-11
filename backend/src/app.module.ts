@@ -11,9 +11,8 @@ import { GuardsModule } from './guards/guards.module';
   imports: [
     AuthModule,
     UserModule,
-    PrismaModule,
     DailyUpdatesModule,
-    GuardsModule,
+    PrismaModule,
     ScheduleModule.forRoot(),
     ConfigModule.forRoot({
       isGlobal: true,

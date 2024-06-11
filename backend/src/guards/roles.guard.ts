@@ -1,9 +1,10 @@
-import { CanActivate, ExecutionContext } from '@nestjs/common';
+import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
 import { Observable } from 'rxjs';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { Reflector } from '@nestjs/core';
 import { Role } from 'src/Types';
 
+@Injectable()
 export class RolesGuard implements CanActivate {
   constructor(
     private prismaService: PrismaService,
@@ -11,13 +12,11 @@ export class RolesGuard implements CanActivate {
   ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
-    const userFromRequest: JWTPayload = context
-      .switchToHttp()
-      .getRequest().user;
+    const request = context.switchToHttp().getRequest();
 
     const currUser = await this.prismaService.user.findUniqueOrThrow({
       where: {
-        email: userFromRequest.email,
+        email: request.user.email,
       },
     });
 
@@ -29,11 +28,4 @@ export class RolesGuard implements CanActivate {
 
     return requiredRoles.some((role) => currUser.roles.includes(role));
   }
-}
-
-interface JWTPayload {
-  sub: number;
-  email: string;
-  iat: number;
-  exp: number;
 }

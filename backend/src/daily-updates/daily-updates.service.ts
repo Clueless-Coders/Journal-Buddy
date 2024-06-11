@@ -64,16 +64,15 @@ export class DailyUpdatesService implements OnModuleInit {
         prompt,
         createdAt: now,
         dayCreated: now.toUTCString(),
+        quote: {
+          create: {
+            quote: quote.quote,
+            author: quote.author,
+          },
+        },
       },
     });
-
-    await this.prismaService.quote.create({
-      data: {
-        ...quote,
-        dayCreated: now.toUTCString(),
-        createdOn: now,
-      },
-    });
+    console.log();
   }
 
   async getQuote() {
@@ -115,11 +114,37 @@ export class DailyUpdatesService implements OnModuleInit {
       where: {
         createdAt: day,
       },
+      include: { quote: true },
     });
+
+    console.log(data);
 
     if (!data) {
       throw new NotFoundException('No entry for this day');
     }
     return data;
+  }
+
+  async updateDay(
+    day: Date,
+    prompt: string,
+    quote: { quote: string; author: string },
+  ) {
+    await this.prismaService.daily.update({
+      where: {
+        createdAt: day,
+        dayCreated: day.toUTCString(),
+      },
+      data: {
+        quote: {
+          update: {
+            quote: quote.quote,
+            author: quote.author,
+          },
+        },
+        prompt,
+      },
+      include: { quote: true },
+    });
   }
 }
