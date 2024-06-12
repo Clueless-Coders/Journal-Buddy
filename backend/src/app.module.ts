@@ -6,6 +6,7 @@ import { ConfigModule } from '@nestjs/config';
 import { ScheduleModule } from '@nestjs/schedule';
 import { DailyUpdatesModule } from './daily-updates/daily-updates.module';
 import { GuardsModule } from './guards/guards.module';
+import { JournalsModule } from './journals/journals.module';
 
 @Module({
   imports: [
@@ -13,6 +14,7 @@ import { GuardsModule } from './guards/guards.module';
     UserModule,
     DailyUpdatesModule,
     PrismaModule,
+    JournalsModule,
     ScheduleModule.forRoot(),
     ConfigModule.forRoot({
       isGlobal: true,

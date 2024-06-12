@@ -4,8 +4,8 @@ import {
   Get,
   HttpCode,
   HttpStatus,
-  Param,
   Patch,
+  Post,
   Req,
   UseGuards,
 } from '@nestjs/common';
@@ -20,6 +20,24 @@ import { Role } from 'src/Types';
 @Controller('daily')
 export class DailyUpdatesController {
   constructor(private DailyUpdateService: DailyUpdatesService) {}
+
+  @Roles(Role.admin)
+  @UseGuards(AuthGuard('jwt'), RolesGuard)
+  @HttpCode(HttpStatus.CREATED)
+  @Post('today')
+  createToday(@Body() dto: UpdateTodayDto) {
+    const day = new Date();
+    return this.DailyUpdateService.createDaily(dto, day);
+  }
+
+  @Roles(Role.admin)
+  @UseGuards(AuthGuard('jwt'), RolesGuard)
+  @HttpCode(HttpStatus.CREATED)
+  @Post('today/generate')
+  generateToday() {
+    const day = new Date();
+    return this.DailyUpdateService.createDaily(undefined, day);
+  }
 
   @Roles(Role.user, Role.admin)
   @UseGuards(AuthGuard('jwt'), RolesGuard)
@@ -45,9 +63,6 @@ export class DailyUpdatesController {
   @UseGuards(AuthGuard('jwt'), RolesGuard)
   @Get()
   getCertainDay(@Body() dto: DailyUpdatesDto) {
-    console.log({
-      date: dto.date,
-    });
     const day = new Date(dto.date);
     day.setUTCHours(0, 0, 0, 0);
     return this.DailyUpdateService.getCertainDay(day);
@@ -61,5 +76,22 @@ export class DailyUpdatesController {
     const day = new Date(dto.date);
     day.setUTCHours(0, 0, 0, 0);
     return this.DailyUpdateService.updateDay(day, dto.prompt, dto.quote);
+  }
+
+  @Roles(Role.admin)
+  @UseGuards(AuthGuard('jwt'), RolesGuard)
+  @HttpCode(HttpStatus.CREATED)
+  @Post()
+  createDaily(@Body() dto: UpdateDailyDto) {
+    const day = new Date(dto.date);
+    return this.DailyUpdateService.createDaily(dto, day);
+  }
+
+  @Roles(Role.admin)
+  @UseGuards(AuthGuard('jwt'), RolesGuard)
+  @Get('/generate')
+  generateCertainDay(@Body() dto: DailyUpdatesDto) {
+    const day = new Date(dto.date);
+    return this.DailyUpdateService.createDaily(undefined, day);
   }
 }

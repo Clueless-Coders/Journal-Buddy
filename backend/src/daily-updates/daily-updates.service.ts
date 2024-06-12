@@ -1,19 +1,10 @@
-import {
-  BadRequestException,
-  ConsoleLogger,
-  Injectable,
-  InternalServerErrorException,
-  NotFoundException,
-  OnModuleInit,
-} from '@nestjs/common';
+import { Injectable, NotFoundException, OnModuleInit } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Cron, CronExpression } from '@nestjs/schedule';
 import { Daily, Quote } from '@prisma/client';
 import OpenAI from 'openai';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { DailyUpdatesDto } from './dto';
-import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
-import { InternalServerError } from 'openai/error';
+import { UpdateTodayDto } from './dto';
 
 @Injectable()
 export class DailyUpdatesService implements OnModuleInit {
@@ -36,14 +27,19 @@ export class DailyUpdatesService implements OnModuleInit {
     this.createDaily();
   }
 
+  /***
+   * Creates a new entry for daily data with a daily quote and a daily journal prompt.
+   * This is set by either parameters or fetched from ZenQuotes and ChatGPT. Automatically excecuted every day at 1 AM
+   *
+   * @param newDaily The daily data to be set. Fetches data if not provided.
+   * @param day The day this record will be created for. Defaults to the day this was requested.
+   */
   @Cron(CronExpression.EVERY_DAY_AT_1AM, {
     name: 'CreateDaily',
   })
-  async createDaily() {
-    const now = new Date();
+  async createDaily(newDaily?: UpdateTodayDto, day?: Date) {
+    const now = day ? day : new Date();
     now.setUTCHours(0, 0, 0, 0);
-
-    console.log(now.toISOString() + ' updating daily data');
 
     const latestDaily = await this.prismaService.daily.findFirst({
       where: {
@@ -53,13 +49,21 @@ export class DailyUpdatesService implements OnModuleInit {
 
     if (latestDaily) {
       console.log('Daily already created today');
-      return;
+      return { message: 'Daily already created today' };
     }
 
-    const quote = await this.getQuote();
-    const prompt = await this.getPrompt();
+    console.log(now.toISOString() + ' updating daily data...');
 
-    await this.prismaService.daily.create({
+    let quote: { quote: string; author: string };
+    let prompt: string;
+    if (!newDaily) {
+      quote = await this.getQuote();
+      prompt = await this.getPrompt();
+    } else {
+      prompt = newDaily.prompt;
+      quote = newDaily.quote;
+    }
+    return await this.prismaService.daily.create({
       data: {
         prompt,
         createdAt: now,
@@ -72,9 +76,13 @@ export class DailyUpdatesService implements OnModuleInit {
         },
       },
     });
-    console.log();
   }
 
+  /***
+   * Fetches quote of the day from the ZenQuotes API
+   *
+   * @returns Quote and author data that it fetches
+   */
   async getQuote() {
     const resp = await fetch(this.quoteURL);
     const respJSON = await resp.json();
@@ -90,6 +98,11 @@ export class DailyUpdatesService implements OnModuleInit {
     return newQuote;
   }
 
+  /***
+   * Fetches daily journal prompt by asking ChatGPT
+   *
+   * @returns String of the response from ChatGPT
+   */
   async getPrompt() {
     const completion = await this.openai.chat.completions.create({
       messages: [
@@ -109,7 +122,14 @@ export class DailyUpdatesService implements OnModuleInit {
     return completion.choices[0].message.content;
   }
 
+  /***
+   * Looks up date provided and returns the daily data for that day
+   *
+   * @param day the day for which the data was created on (can be any time)
+   * @returns the daily data for that date
+   */
   async getCertainDay(day: Date): Promise<Daily> {
+    day.setUTCHours(0, 0, 0, 0);
     const data = await this.prismaService.daily.findFirst({
       where: {
         createdAt: day,
@@ -117,19 +137,25 @@ export class DailyUpdatesService implements OnModuleInit {
       include: { quote: true },
     });
 
-    console.log(data);
-
     if (!data) {
       throw new NotFoundException('No entry for this day');
     }
     return data;
   }
 
+  /***
+   * Updates the data for the day provided with the daily data provided
+   *
+   * @param day the day for which the data was created on (can be any time)
+   * @param prompt string of the prompt to be set
+   * @param quote object containing the quote and the author
+   */
   async updateDay(
     day: Date,
     prompt: string,
     quote: { quote: string; author: string },
   ) {
+    day.setUTCHours(0, 0, 0, 0);
     await this.prismaService.daily.update({
       where: {
         createdAt: day,
