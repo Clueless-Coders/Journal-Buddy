@@ -5,9 +5,13 @@ import {
   HttpStatus,
   ParseIntPipe,
   Post,
+  UseGuards,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { AuthDto } from './dto';
+import { AuthGuard } from '@nestjs/passport';
+import { GetUser } from './decorator';
+import { User } from '@prisma/client';
 
 @Controller('auth')
 export class AuthController {
@@ -25,5 +29,12 @@ export class AuthController {
       dto,
     });
     return this.authService.signup(dto);
+  }
+
+  @Post('refresh')
+  @UseGuards(AuthGuard('refresh-jwt'))
+  refresh(@GetUser() user: any) {
+    console.log('refresh user ' + JSON.stringify(user));
+    return this.authService.createTokenById(user.sub);
   }
 }

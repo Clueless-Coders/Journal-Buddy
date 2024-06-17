@@ -30,7 +30,10 @@ export class AuthService {
       throw new ForbiddenException('Invalid Credentials');
     //same? return user. otherwise throw exception
 
-    return this.signToken(user.id, user.email);
+    return {
+      access_token: await this.signToken(user.id, user.email),
+      refresh_token: await this.generateRefreshToken(user.id, user.email),
+    };
   }
 
   async signup(dto: AuthDto) {
@@ -46,7 +49,10 @@ export class AuthService {
         },
       });
 
-      return this.signToken(user.id, user.email);
+      return {
+        access_token: await this.signToken(user.id, user.email),
+        refresh_token: await this.generateRefreshToken(user.id, user.email),
+      };
     } catch (error) {
       if (
         error instanceof PrismaClientKnownRequestError &&
@@ -55,27 +61,42 @@ export class AuthService {
         throw new ForbiddenException('User already exists');
       }
     }
-
-    // return new user
   }
 
-  async signToken(
-    userId: number,
-    email: string,
-  ): Promise<{ access_token: string }> {
+  async signToken(userId: number, email: string): Promise<string> {
     const payload = {
       sub: userId,
       email,
     };
     const secret: string = this.configService.get('JWT_SECRET');
 
-    const token = await this.jwtService.signAsync(payload, {
+    return await this.jwtService.signAsync(payload, {
       expiresIn: '15m',
       secret,
     });
+  }
 
+  async generateRefreshToken(userID: number, email: string) {
+    const secret: string = this.configService.get('REFRESH_JWT_SECRET');
+    const payload = {
+      sub: userID,
+      email,
+    };
+
+    return await this.jwtService.signAsync(payload, {
+      expiresIn: '60m',
+      secret,
+    });
+  }
+
+  async createTokenById(userId: number) {
+    const user = await this.prismaService.user.findUnique({
+      where: {
+        id: userId,
+      },
+    });
     return {
-      access_token: token,
+      access_token: await this.signToken(user.id, user.email),
     };
   }
 }
